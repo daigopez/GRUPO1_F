@@ -16,9 +16,26 @@
             color: white;
             padding: 10px 20px;
             text-align: center;
+            position: relative; /* Para posicionar el botón */
         }
         h1 {
             margin: 0;
+        }
+        .btn-primary {
+            position: absolute; /* Posicionamiento absoluto */
+            left: 20px; /* Espaciado desde la izquierda */
+            top: 50%; /* Centrado vertical */
+            transform: translateY(-50%); /* Ajuste para centrar */
+            background-color: #ff6f00; /* Naranja intenso */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none; /* Sin subrayado */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        .btn-primary:hover {
+            background-color: #e65c00; /* Naranja más oscuro al pasar el mouse */
         }
         .container {
             width: 80%;
@@ -93,6 +110,7 @@
 <body>
     {% load static %}
     <header>
+        <a href="{% url 'iniciada' %}" class="btn-primary">Volver</a> <!-- Botón para ir a iniciada -->
         <h1>Lista de Platos</h1>
         <a href="{% url 'plato_create' %}" style="color: white; font-weight: bold;">Agregar Nuevo Plato</a>
     </header>
