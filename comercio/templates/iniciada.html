@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% block conten %}
+<style>
+    body {
+        background-color: #EAEAEA;
+        font-family: Arial, sans-serif;
+        margin: 0; /* Eliminar márgenes predeterminados del body */
+    }
+    .container {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        max-width: 600px;
+        margin: 20px auto; /* Espacio entre el contenedor y el borde superior */
+        text-align: center;
+    }
+    h1 {
+        color: #333;
+        margin: 0; /* Eliminar margen superior del h1 */
+    }
+    .link-cancel {
+        color: #007BFF;
+        text-decoration: none;
+        margin-top: 10px;
+        display: inline-block;
+        transition: text-decoration 0.3s;
+    }
+    .link-cancel:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container">
+    <h1>Hola, {{ user }}.</h1>
+</div>
+{% endblock %}

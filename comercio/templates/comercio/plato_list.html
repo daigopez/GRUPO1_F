@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Platos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #EAEAEA; /* Fondo en color #EAEAEA */
+        }
+        header {
+            background-color: #ff9e1b; /* Color del navbar */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: white; /* Fondo blanco para el contenedor */
+            border-radius: 8px; /* Bordes redondeados */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+        }
+        .plato-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .plato {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            width: calc(33% - 40px); /* 3 items per row */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .plato img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .plato h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+        }
+        .plato p {
+            color: #555;
+        }
+        .plato .description {
+            font-size: 0.9em;
+            color: #777; /* Color más suave para la descripción */
+            margin-top: 5px;
+        }
+        .actions {
+            margin-top: 10px;
+        }
+        .actions a {
+            margin-right: 10px;
+            padding: 5px 10px;
+            border: 1px solid #ff9e1b; /* Color del enlace */
+            border-radius: 5px;
+            color: #ff9e1b; /* Color del enlace */
+            text-decoration: none;
+            transition: background-color 0.3s, color 0.3s; /* Transición suave */
+        }
+        .actions a:hover {
+            background-color: #ff9e1b; /* Color del enlace al pasar el mouse */
+            color: white;
+        }
+        .add-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #28a745; /* Color del botón */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        .add-button:hover {
+            background-color: #218838; /* Color del botón al pasar el mouse */
+        }
+    </style>
+</head>
+<body>
+    {% load static %}
+    <header>
+        <h1>Lista de Platos</h1>
+        <a href="{% url 'plato_create' %}" style="color: white; font-weight: bold;">Agregar Nuevo Plato</a>
+    </header>
+    <div class="container">
+        <div class="plato-list">
+            {% for plato in platos %}
+                <div class="plato">
+                    {% if plato.imagen %}
+                        <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}">
+                    {% else %}
+                        <img src="{% static 'default_image.jpg' %}" alt="Sin imagen disponible"> <!-- Imagen por defecto -->
+                    {% endif %}
+                    <h2>{{ plato.nombre }}</h2>
+                    <p>Precio: ${{ plato.precio }}</p>
+                    <p class="description">{{ plato.descripcion }}</p> <!-- Descripción del plato -->
+                    <div class="actions">
+                        <a href="{% url 'plato_update' plato.pk %}">Editar</a>
+                        <a href="{% url 'plato_delete' plato.pk %}">Eliminar</a> <!-- Color para eliminar -->
+                    </div>
+                </div>
+            {% empty %}
+                <p>No hay platos disponibles.</p>
+            {% endfor %}
+        </div>
+        <button class="add-button" onclick="confirmAdd()">Agregar Otro Plato</button>
+    </div>
+    <script>
+        function confirmAdd() {
+            if (confirm("¿Quieres agregar otro plato?")) {
+                window.location.href = "{% url 'plato_create' %}";
+            }
+        }
+    </script>
+</body>
+</html>

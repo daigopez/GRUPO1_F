@@ -1,0 +1,30 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=, initial-scale=1.0">
+    <link rel="stylesheet" href="{%static 'css/style.css'%}">
+</head>
+<body>    
+    <form action="/iniciar/" method="POST"class="login-box">
+        {% csrf_token %}
+        <div class="login-header">
+            <header>Login</header>
+        </div>
+        <div class="input-box">
+            <input type="text" class="input-field" placeholder="usuario" id="username" name="username" autocomplete="off" required>
+        </div>
+        <div class="input-box">
+            <input type="password" class="input-field" placeholder="Password" id="password" name="password" autocomplete="off" required>
+    </div>
+    {{error}}
+    <div class="input-submit">
+        <button class="submit-btn" style="color:white" >iniciar sesion</button>    
+    </div>
+    <div class="sign-up-link">
+        <p>Don't have account? <a href="#">Sign Up</a></p>
+    </div>
+</form>
+</body>
+</html>

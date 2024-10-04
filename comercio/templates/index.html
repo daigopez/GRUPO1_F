@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platos Congelados</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Inicio</a></li>
+            {% if user.is_authenticated %}
+                <li><a href="/cerrar">Cerrar sesión</a></li>
+            {% else %}
+                <li><a href="/registro">Registrarse</a></li>
+                <li><a href="/iniciar">Iniciar sesión</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% block conten %}
+    {% endblock %}
+
+    {% if user.is_staff %}
+    <div class="container mt-5">
+        <h1>Bienvenido a la gestión de platos</h1>
+        <a href="{% url 'plato_list' %}" class="btn">Agregar, editar o eliminar platos</a>
+    </div>
+    <div class="container mt-5">
+        <a href="{% url 'visualizar_encuestas' %}" class="btn">Ver encuestas realizadas</a>
+    </div>
+    {% endif %}
+
+    <div class="container mt-5">
+        <h1>Ve nuestros platos disponibles</h1>
+        <a href="{% url 'pagina_venta' %}" class="btn">Ir a la lista de platos</a>
+    </div>    
+
+</body>
+</html>

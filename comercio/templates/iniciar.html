@@ -1,0 +1,36 @@
+<nav>
+    <ul>
+        <li>
+            <a href="/">inicio</a>
+        </li>
+        {% if user.is_authenticated %}
+        <li>
+            <a href="/cerrar">cerrar sesión</a>
+        </li>
+        {% else %}
+        <li>
+            <a href="/registro">registrarse</a>
+        </li>
+        <li>
+            <a href="/iniciar">iniciar sesión</a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+{% block content %}
+<h1 style="text-align: center; color: #ff9e1b;">Iniciar Sesión</h1>
+
+<div style="max-width: 400px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+    {{ error }}
+    <form action="/iniciar/" method="POST">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button style="background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+            Iniciar Sesión
+        </button>
+    </form>
+</div>
+{% endblock %}

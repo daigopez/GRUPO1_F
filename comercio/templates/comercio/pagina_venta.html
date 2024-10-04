@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página de Venta de Platos</title>
+    <style>
+        body {
+            background-color: #EAEAEA; /* Fondo gris claro */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #ff9e1b; /* Color de la navbar */
+            padding: 15px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Alinear verticalmente */
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+        }
+        .container {
+            display: flex; /* Usamos flexbox */
+            margin: 20px auto;
+            max-width: 1200px; /* Aumenta el ancho máximo */
+            padding: 20px;
+        }
+        .plato-list {
+            flex: 3; /* Toma 3 partes del espacio */
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .plato-item {
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            transition: transform 0.2s; /* Animación al pasar el mouse */
+        }
+        .plato-item:hover {
+            transform: scale(1.05); /* Efecto de zoom */
+        }
+        .plato-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        button {
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px; /* Bordes redondeados */
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049; /* Verde más oscuro */
+        }
+        .encuesta-form {
+            margin-top: 10px;
+            background-color: #f1f1f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .edit-link {
+            margin-top: 10px;
+            display: inline-block;
+            color: #007BFF; /* Color azul para el enlace */
+            text-decoration: none;
+        }
+        .edit-link:hover {
+            text-decoration: underline;
+        }
+        .carrito {
+            flex: 1; /* Toma 1 parte del espacio */
+            margin-left: 20px; /* Espacio entre el contenido y el carrito */
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .carrito-item {
+            margin-bottom: 15px; /* Espacio entre cada plato en el carrito */
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .carrito h3 {
+            margin-top: 0; /* Eliminar margen superior del título */
+        }
+        .carrito-actions {
+            display: flex;
+            justify-content: space-between; /* Espacio entre botones */
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <a href="{% url 'iniciar' %}">Iniciar Sesión</a>
+            <a href="{% url 'logout' %}">Cerrar Sesión</a>
+            <a href="{% url 'registro' %}">Registrarse</a>
+        </div>
+        <h1 style="margin: 0; font-size: 24px;">Página de Venta de Platos</h1> <!-- Título en el navbar -->
+    </div>
+
+    <div class="container">
+        <div class="plato-list">
+            {% for plato in platos %}
+                <div class="plato-item">
+                    <h2>{{ plato.nombre }}</h2>
+                    <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}">
+                    <p>{{ plato.descripcion }}</p>
+                    <p>Precio: ${{ plato.precio }}</p>
+                    <form action="{% url 'agregar_al_carrito' plato.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit">Agregar al Carrito</button>
+                    </form>
+
+                    <!-- Formulario de Encuesta -->
+                    <div class="encuesta-form">
+                        <h3>Deja tu opinión</h3>
+                        <form method="POST" action="{% url 'pagina_venta' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="plato_id" value="{{ plato.id }}">
+                            <label for="rating">Calificación (1-5):</label>
+                            <select name="rating" required>
+                                <option value="">Selecciona</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select><br>
+                            <label for="comentario">Comentario:</label><br>
+                            <textarea name="comentario" rows="3" cols="20"></textarea><br>
+                            <button type="submit">Enviar Encuesta</button>
+                        </form>
+
+                        {% if plato.encuesta %}
+                            <a class="edit-link" href="{% url 'editar_encuesta' plato.encuesta.id %}">Editar Encuesta</a>
+                        {% else %}
+                            <p>No hay encuesta asociada a este plato.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% empty %}
+                <p>No hay platos disponibles.</p>
+            {% endfor %}
+        </div>
+
+        <div class="carrito">
+            <h2>Carrito de Compras</h2>
+            {% if platos_carrito %}
+                {% for item in platos_carrito %}
+                <div class="carrito-item">
+                    <h3>{{ item.plato.nombre }}</h3>
+                    <p>Cantidad: {{ item.cantidad }}</p>
+                    <p>Subtotal: ${{ item.subtotal|floatformat:2 }}</p>
+                    <div class="carrito-actions">
+                        <a href="{% url 'restar_del_carrito' item.plato.id %}">-</a>
+                        <a href="{% url 'agregar_al_carrito' item.plato.id %}">+</a>
+                    </div>
+                </div>
+                {% endfor %}
+                <h3>Total: ${{ total|floatformat:2 }}</h3>
+                <a href="#" class="btn">Realizar Compra</a>
+            {% else %}
+                <p>No hay platos en el carrito.</p>
+            {% endif %}
+        </div>
+
+        {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+</body>
+</html>
