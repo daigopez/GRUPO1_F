@@ -5,12 +5,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Platos Congelados</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+        body {
+            background-color: #EAEAEA; /* Fondo gris claro */
+            font-family: Arial, sans-serif;
+            margin: 0; /* Eliminar márgenes predeterminados del body */
+        }
+        .navbar {
+            background-color: #ff9e1b; /* Color de la navbar */
+            padding: 15px;
+            display: flex;
+            align-items: center; /* Alinear verticalmente */
+        }
+        .navbar ul {
+            list-style-type: none; /* Eliminar puntos de la lista */
+            margin: 0;
+            padding: 0;
+            display: flex; /* Usar flexbox para alinear elementos */
+            flex-grow: 1; /* Hacer que la lista ocupe el espacio disponible */
+            justify-content: flex-end; /* Alinear a la derecha */
+        }
+        .navbar li {
+            margin: 0 15px; /* Espaciado entre elementos de la lista */
+        }
+        .navbar a {
+            color: white; /* Color del texto */
+            text-decoration: none; /* Sin subrayado */
+            padding: 10px; /* Espaciado interno */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        .navbar a:hover {
+            background-color: #e65c00; /* Color al pasar el mouse */
+        }
+        .container {
+            background-color: white; /* Fondo blanco */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 800px; /* Ancho máximo */
+            margin: 20px auto; /* Espacio entre el contenedor y el borde superior */
+            text-align: center; /* Centrar texto */
+        }
+        h1 {
+            color: #333; /* Color del texto del título */
+            margin: 0; /* Eliminar margen superior del h1 */
+        }
+        .btn {
+            background-color: #4CAF50; /* Verde */
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px; /* Bordes redondeados */
+            text-decoration: none; /* Sin subrayado */
+            cursor: pointer;
+            display: inline-block; /* Asegurar que el botón ocupe solo el espacio necesario */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        .btn:hover {
+            background-color: #45a049; /* Verde más oscuro */
+        }
+    </style>
 </head>
 <body>
-    <nav>
+    <nav class="navbar">
         <ul>
-            <li><a href="/">Inicio</a></li>
             {% if user.is_authenticated %}
                 <li><a href="/cerrar">Cerrar sesión</a></li>
             {% else %}

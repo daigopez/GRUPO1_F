@@ -6,15 +6,42 @@
     <title>Visualización de Encuestas</title>
     <style>
         body {
-            background-color: #EAEAEA;
+            background-color: #EAEAEA; /* Fondo en color #EAEAEA */
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+        }
+        header {
+            background-color: #ff9e1b; /* Color del navbar */
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            position: relative; /* Para posicionar el botón */
+        }
+        h1 {
+            margin: 0;
+        }
+        .btn-primary {
+            position: absolute; /* Posicionamiento absoluto */
+            left: 20px; /* Espaciado desde la izquierda */
+            top: 50%; /* Centrado vertical */
+            transform: translateY(-50%); /* Ajuste para centrar */
+            background-color: #ff6f00; /* Naranja intenso */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none; /* Sin subrayado */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        .btn-primary:hover {
+            background-color: #e65c00; /* Naranja más oscuro al pasar el mouse */
         }
         .plato-list {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-top: 20px;
         }
         .plato-item {
             border: 1px solid #ccc;
@@ -32,14 +59,17 @@
     </style>
 </head>
 <body>
-    <h1>Encuestas Realizadas</h1>
+    <header>
+        <a href="{% url 'iniciada' %}" class="btn-primary">Volver</a> <!-- Botón para ir a iniciada -->
+        <h1>Encuestas Realizadas</h1>
+    </header>
     <div class="plato-list">
         {% for resultado in resultados %}
             <div class="plato-item">
                 <h2>{{ resultado.plato.nombre }}</h2>
                 <img src="{{ resultado.plato.imagen.url }}" alt="{{ resultado.plato.nombre }}">
-                <p>Puntuación Total: {{ resultado.total_rating }}</p>
-                <p>Promedio de Calificación: {{ resultado.promedio_rating|floatformat:1 }}</p>
+                <p>Puntuación Total ⭐: {{ resultado.total_rating }}</p>
+                <p>Promedio de Calificación ⭐: {{ resultado.promedio_rating|floatformat:1 }}</p>
                 <p>Cantidad de Votos: {{ resultado.cantidad_encuestas }}</p>
             </div>
         {% empty %}

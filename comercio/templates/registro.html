@@ -1,22 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .header {
+            padding: 10px;
+            background-color: #ff9e1b; /* Cambiado a #ff9e1b */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn-back {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-back:hover {
+            opacity: 0.9;
+        }
+
+        .title {
+            text-align: center;
+            color: #ff9e1b;
+            margin-top: 20px;
+        }
+
+        .form-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            text-align: center;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <a href="{% url 'iniciar_sesion' %}" class="btn btn-back">Regresar</a>
+</div>
+
 {% block conten %}
-<h1 style="text-align: center; color: #ff9e1b;">Registro</h1>
-<div style="max-width: 400px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+<h1 class="title">Registro</h1>
+
+<div class="form-container">
     {{ error }}
     <form action="/registro/" method="POST">
         {% csrf_token %}
         
         {{ form.as_p }}
         
-        <button style="background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+        <button class="btn btn-success" style="background-color: #28a745; color: white;">
             Registrarse
         </button>
     </form>
 </div>
 
-<div class="container mt-5" style="text-align: center;">
-    <h1 style="color: #ff9e1b;">Volver al inicio</h1>
-    <a href="{% url 'iniciar_sesion' %}" class="btn" style="background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s; text-decoration: none; display: inline-block;">
-        Regresar
-    </a>
-</div>
 {% endblock %}
+
+</body>
+</html>
