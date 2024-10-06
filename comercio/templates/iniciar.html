@@ -1,36 +1,103 @@
 <nav>
     <ul>
-        <li>
-            <a href="/">inicio</a>
-        </li>
         {% if user.is_authenticated %}
         <li>
-            <a href="/cerrar">cerrar sesión</a>
+            <a href="/cerrar">Cerrar sesión</a>
         </li>
         {% else %}
-        <li>
-            <a href="/registro">registrarse</a>
-        </li>
-        <li>
-            <a href="/iniciar">iniciar sesión</a>
-        </li>
+        <div class="message">No estás registrado, clic en el botón azul para registrarte!</div>
         {% endif %}
     </ul>
 </nav>
 
 {% block content %}
-<h1 style="text-align: center; color: #ff9e1b;">Iniciar Sesión</h1>
+<h1 class="title">Iniciar Sesión</h1>
 
-<div style="max-width: 400px; margin: 20px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+<div class="form-container">
     {{ error }}
     <form action="/iniciar/" method="POST">
         {% csrf_token %}
         
         {{ form.as_p }}
         
-        <button style="background-color: #28a745; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; transition: background-color 0.3s;">
+        <button class="btn btn-success">
             Iniciar Sesión
-        </button>
+        </button>        
     </form>
+    <!-- botón de registro -->
+    <a href="/registro" class="btn-link">
+        <button class="btn btn-register">
+            Registrarse
+        </button>
+    </a>
+    <!-- botón de registro -->
 </div>
+
+<style>
+    nav {
+        background-color: #f8f9fa;
+        padding: 10px;
+        text-align: right;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        display: inline;
+        margin-left: 20px;
+    }
+
+    .message {
+        color: #dc3545;
+        text-align: center;
+        margin-top: 15px;
+    }
+
+    .title {
+        text-align: center;
+        color: #ff9e1b;
+        margin-top: 20px;
+    }
+
+    .form-container {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn {
+        border: none;
+        padding: 10px 15px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-register {
+        background-color: #284ca7;
+        color: white;
+    }
+
+    .btn-link {
+        text-decoration: none;
+    }
+
+    .btn:hover {
+        opacity: 0.9;
+    }
+</style>
 {% endblock %}

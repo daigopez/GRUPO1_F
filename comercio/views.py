@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .models import Plato, Encuesta
+from .models import Plato, Encuesta, Carrito, ItemCarrito  # Asegúrate de importar el modelo ItemCarrito
 from .forms import PlatoForm, EncuestaForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
@@ -67,20 +67,22 @@ def lista_de_platos(request):
 
 def pagina_venta(request):
     platos = Plato.objects.all()
-    carrito = request.session.get('carrito', {})
-    platos_carrito = []
     total = 0
+    platos_carrito = []
 
-    # Procesar cada plato en el carrito
-    for plato_id, cantidad in carrito.items():
-        plato = get_object_or_404(Plato, id=plato_id)
-        subtotal = plato.precio * cantidad
-        total += subtotal
-        platos_carrito.append({
-            'plato': plato,
-            'cantidad': cantidad,
-            'subtotal': subtotal,
-        })
+    # Obtener los platos del carrito desde la base de datos
+    if request.user.is_authenticated:
+        carrito, created = Carrito.objects.get_or_create(user=request.user)
+
+        items = ItemCarrito.objects.filter(carrito=carrito)
+        for item in items:
+            subtotal = item.plato.precio * item.cantidad
+            total += subtotal
+            platos_carrito.append({
+                'plato': item.plato,
+                'cantidad': item.cantidad,
+                'subtotal': subtotal,
+            })
 
     # Manejo de encuestas
     form = EncuestaForm()
@@ -101,19 +103,45 @@ def pagina_venta(request):
     })
 
 def agregar_al_carrito(request, plato_id):
-    carrito = request.session.get('carrito', {})
-    carrito[plato_id] = carrito.get(plato_id, 0) + 1  # Aumentar cantidad o inicializar a 1
-    request.session['carrito'] = carrito
+    if request.user.is_authenticated:
+        plato = get_object_or_404(Plato, id=plato_id)
+        
+        # Obtener o crear el carrito para el usuario
+        carrito, created = Carrito.objects.get_or_create(user=request.user)
+
+        # Manejar el item del carrito
+        item, created = ItemCarrito.objects.get_or_create(carrito=carrito, plato=plato)
+
+        if not created:
+            item.cantidad += 1  # Incrementar cantidad si ya existe
+        item.save()  # Guardar en la base de datos
+
+
+    else:
+        messages.error(request, 'Debes iniciar sesión para agregar platos al carrito.')
+    
     return redirect('pagina_venta')
 
 def restar_del_carrito(request, plato_id):
-    carrito = request.session.get('carrito', {})
-    if plato_id in carrito:
-        if carrito[plato_id] > 1:
-            carrito[plato_id] -= 1
+    if request.user.is_authenticated:
+        carrito = get_object_or_404(Carrito, user=request.user)
+        item = get_object_or_404(ItemCarrito, carrito=carrito, plato_id=plato_id)
+
+        if item.cantidad > 1:
+            item.cantidad -= 1
+  
         else:
-            del carrito[plato_id]
-    request.session['carrito'] = carrito
+            item.delete()
+    
+        item.save()
+    return redirect('pagina_venta')
+
+def eliminar_del_carrito(request, plato_id):
+    if request.user.is_authenticated:
+        carrito = get_object_or_404(Carrito, user=request.user)
+        item = get_object_or_404(ItemCarrito, carrito=carrito, plato_id=plato_id)
+        item.delete()
+
     return redirect('pagina_venta')
 
 def editar_encuesta(request, encuesta_id):
@@ -169,6 +197,7 @@ def plato_create(request):
         form = PlatoForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Plato creado con éxito.')
             return redirect('plato_list')
     else:
         form = PlatoForm()
@@ -182,6 +211,7 @@ def plato_update(request, pk):
         form = PlatoForm(request.POST, instance=plato)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Plato actualizado con éxito.')
             return redirect('plato_list')
     else:
         form = PlatoForm(instance=plato)
@@ -193,5 +223,6 @@ def plato_delete(request, pk):
     plato = get_object_or_404(Plato, pk=pk)
     if request.method == "POST":
         plato.delete()
+        messages.success(request, 'Plato eliminado con éxito.')
         return redirect('plato_list')
     return render(request, 'comercio/plato_confirm_delete.html', {'plato': plato})

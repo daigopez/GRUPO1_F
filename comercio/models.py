@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Plato(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
@@ -17,3 +18,15 @@ class Encuesta(models.Model):
 
     def __str__(self):
         return f'Encuesta para {self.plato.nombre} - Rating: {self.rating}'
+    
+class Carrito(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    platos = models.ManyToManyField(Plato, through='ItemCarrito')
+
+class ItemCarrito(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    plato = models.ForeignKey(Plato, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ('carrito', 'plato')  # Asegura que un plato no se repita en el carritov
