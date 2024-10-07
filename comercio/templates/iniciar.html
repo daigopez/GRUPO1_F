@@ -6,12 +6,19 @@
         </li>
         {% else %}
         <div class="message">No estás registrado, clic en el botón azul para registrarte!</div>
+        <h1 class="title">Iniciar Sesión</h1>
         {% endif %}
     </ul>
+
 </nav>
 
 {% block content %}
-<h1 class="title">Iniciar Sesión</h1>
+
+
+    <!-- Logo en el header -->
+    <div class="nav-logo">
+        <img src="/media/platos/logo2.png" alt="Logo">
+    </div>
 
 <div class="form-container">
     {{ error }}
@@ -53,7 +60,7 @@
 
     .message {
         color: #dc3545;
-        text-align: center;
+        text-align: left;
         margin-top: 15px;
     }
 
@@ -99,5 +106,27 @@
     .btn:hover {
         opacity: 0.9;
     }
+
+        /* Estilos para la imagen */
+        .nav-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px; /* Espacio debajo de la imagen */
+        }
+
+        .nav-logo img {
+            max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
+             
+            transition: transform 0.3s ease; /* Transición suave para animaciones */
+        }
+
+        .nav-logo img:hover {
+            transform: scale(1.1); /* Agranda ligeramente la imagen al pasar el ratón */
+        }
+
+
+
+
 </style>
+
 {% endblock %}
