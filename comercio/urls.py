@@ -10,9 +10,9 @@ from .views import (
     comprar_plato,
     editar_encuesta,
     visualizacion_encuestas,
-    agregar_al_carrito,  # Asegúrate de incluir esto
-    restar_del_carrito,   # Asegúrate de incluir esto
-    eliminar_del_carrito, # Ruta para eliminar del carrito
+    agregar_al_carrito,  
+    restar_del_carrito,   
+    eliminar_del_carrito, 
 )
 
 urlpatterns = [

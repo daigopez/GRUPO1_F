@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 class PlatoForm(forms.ModelForm):
     class Meta:
         model = Plato
-        fields = ['nombre', 'descripcion', 'precio', 'disponible', 'imagen']  # Agrega la imagen
+        fields = ['nombre', 'descripcion', 'precio', 'disponible', 'imagen']
 
 class EncuestaForm(forms.ModelForm):
     class Meta:
