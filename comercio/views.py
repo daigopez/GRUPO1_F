@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .models import Plato, Encuesta, Carrito, ItemCarrito  # Asegúrate de importar el modelo ItemCarrito
+from .models import Plato, Encuesta, Carrito, ItemCarrito
 from .forms import PlatoForm, EncuestaForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
@@ -70,7 +70,7 @@ def pagina_venta(request):
     total = 0
     platos_carrito = []
 
-    # Obtener los platos del carrito desde la base de datos
+# Obtener los platos del carrito desde la base de datos
     if request.user.is_authenticated:
         carrito, created = Carrito.objects.get_or_create(user=request.user)
 
@@ -84,7 +84,7 @@ def pagina_venta(request):
                 'subtotal': subtotal,
             })
 
-    # Manejo de encuestas
+# Manejo de encuestas
     form = EncuestaForm()
     if request.method == 'POST':
         form = EncuestaForm(request.POST)
