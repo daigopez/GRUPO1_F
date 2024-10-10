@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto  # Asegúrate de que Voto esté definido en tus modelos
+from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto  # Manteniendo Voto
 from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
@@ -16,8 +16,7 @@ def es_administrador(user):
 def index(request):
     return render(request, 'index.html')
 
-def logueo(request):
-    return render(request, 'logueo.html')
+
 
 def registro(request):
     if request.method == 'POST':

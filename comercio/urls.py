@@ -5,7 +5,7 @@ from .views import (
     plato_create,
     plato_update,
     plato_delete,
-    logueo,
+    
     pagina_venta,
     comprar_plato,
     editar_encuesta,
@@ -26,7 +26,7 @@ urlpatterns = [
     path('nuevo/', plato_create, name='plato_create'),  # Ruta para crear un nuevo plato
     path('editar/<int:pk>/', plato_update, name='plato_update'),  # Ruta para editar un plato
     path('eliminar/<int:pk>/', plato_delete, name='plato_delete'),  # Ruta para eliminar un plato
-    path('logueo/', logueo, name='logueo'),  # Ruta para el logueo
+  
     path('venta/', pagina_venta, name='pagina_venta'),  # Ruta para la página de venta
     path('comprar/<int:plato_id>/', comprar_plato, name='comprar_plato'),  # Ruta para comprar un plato
     path('agregar/<int:plato_id>/', agregar_al_carrito, name='agregar_al_carrito'),  # Ruta para agregar al carrito

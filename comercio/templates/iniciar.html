@@ -9,35 +9,51 @@
         <h1 class="title">Iniciar Sesión</h1>
         {% endif %}
     </ul>
-
 </nav>
 
 {% block content %}
 
-
-    <!-- Logo en el header -->
-    <div class="nav-logo">
-        <img src="/media/platos/logo2.png" alt="Logo">
-    </div>
+<!-- Logo en el header -->
+<div class="nav-logo">
+    <img src="/media/platos/logo2.png" alt="Logo">
+</div>
 
 <div class="form-container">
     {{ error }}
     <form action="/iniciar/" method="POST">
         {% csrf_token %}
         
-        {{ form.as_p }}
+        {% load widget_tweaks %}  <!-- Carga el tag widget_tweaks -->
+
+        <div class="form-group">
+            <input type="text" name="username" placeholder="Nombre de Usuario" class="form-control" required>
+            {% for error in form.username.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
         
-        <button class="btn btn-success">
-            Iniciar Sesión
-        </button>        
+        <div class="form-group">
+            <input type="password" name="password" placeholder="Contraseña" class="form-control" required>
+            {% for error in form.password.errors %}
+                <div class="error">{{ error }}</div>
+            {% endfor %}
+        </div>
+        
+        <div class="button-container">
+            <button class="btn btn-success">
+                Iniciar Sesión
+            </button>
+        </div>
     </form>
+    
     <!-- botón de registro -->
-    <a href="/registro" class="btn-link">
-        <button class="btn btn-register">
-            Registrarse
-        </button>
-    </a>
-    <!-- botón de registro -->
+    <div class="button-container">
+        <a href="/registro" class="btn-link">
+            <button class="btn btn-register">
+                Registrarse
+            </button>
+        </a>
+    </div>
 </div>
 
 <style>
@@ -79,13 +95,28 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
 
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;  /* Asegura que el campo ocupe todo el ancho disponible */
+        padding: 10px;  /* Añade un poco de padding para mejor apariencia */
+        border: 1px solid #ccc;  /* Agrega un borde */
+        border-radius: 5px;  /* Bordes redondeados */
+    }
+
+    .button-container {
+        text-align: center;  /* Centra los botones */
+    }
+
     .btn {
         border: none;
-        padding: 10px 15px;
+        padding: 8px;  /* Reduce el padding lateral aún más */
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s;
-        width: 100%;
+        width: 40%;  /* Reduce el ancho del botón al 40% */
         margin-top: 10px;
     }
 
@@ -107,26 +138,26 @@
         opacity: 0.9;
     }
 
-        /* Estilos para la imagen */
-        .nav-logo {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px; /* Espacio debajo de la imagen */
-        }
+    /* Estilos para la imagen */
+    .nav-logo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px; /* Espacio debajo de la imagen */
+    }
 
-        .nav-logo img {
-            max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
-             
-            transition: transform 0.3s ease; /* Transición suave para animaciones */
-        }
+    .nav-logo img {
+        max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
+        transition: transform 0.3s ease; /* Transición suave para animaciones */
+    }
 
-        .nav-logo img:hover {
-            transform: scale(1.1); /* Agranda ligeramente la imagen al pasar el ratón */
-        }
+    .nav-logo img:hover {
+        transform: scale(1.1); /* Agranda ligeramente la imagen al pasar el ratón */
+    }
 
-
-
-
+    .error {
+        color: red; /* Color para errores de validación */
+        font-size: 0.9em; /* Tamaño de fuente más pequeño */
+    }
 </style>
 
 {% endblock %}
