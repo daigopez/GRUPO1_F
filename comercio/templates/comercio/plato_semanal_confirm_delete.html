@@ -1,0 +1,53 @@
+{% extends 'comercio/base.html' %}
+
+{% block title %}Eliminar Plato Semanal{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #EAEAEA; /* Color gris de fondo */
+        margin: 0;
+        padding: 20px;
+    }
+    h2 {
+        color: #ff9e1b; /* Color Papaya McLaren */
+        text-align: center;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+    }
+    button {
+        background-color: #ff9e1b; /* Botón en Papaya McLaren */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+    button:hover {
+        background-color: #e68a00; /* Color más oscuro al pasar el ratón */
+    }
+    a {
+        color: #ff9e1b; /* Enlace en Papaya McLaren */
+        text-decoration: none;
+        margin-top: 10px;
+    }
+    a:hover {
+        text-decoration: underline; /* Subrayar enlaces al pasar el ratón */
+    }
+</style>
+
+<h2>¿Estás seguro de que quieres eliminar {{ plato_semanal.plato.nombre }}?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar Eliminación</button>
+</form>
+<a href="{% url 'lista_platos_semanales' %}">Cancelar</a>
+
+{% endblock %}

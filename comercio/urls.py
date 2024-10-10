@@ -13,11 +13,16 @@ from .views import (
     agregar_al_carrito,  
     restar_del_carrito,   
     eliminar_del_carrito, 
+    lista_platos_semanales,
+    crear_plato_semanal,
+    editar_plato_semanal,
+    eliminar_plato_semanal,
+    votar_plato_semanal,
 )
 
 urlpatterns = [
-    path('', views.iniciar_sesion, name='iniciar_sesion'),
-    path('plato_list/', plato_list, name='plato_list'),  # Ruta principal para listar platos
+    path('', views.iniciar_sesion, name='iniciar_sesion'),  # Ruta de inicio de sesión
+    path('plato_list/', plato_list, name='plato_list'),  # Ruta para listar platos
     path('nuevo/', plato_create, name='plato_create'),  # Ruta para crear un nuevo plato
     path('editar/<int:pk>/', plato_update, name='plato_update'),  # Ruta para editar un plato
     path('eliminar/<int:pk>/', plato_delete, name='plato_delete'),  # Ruta para eliminar un plato
@@ -29,4 +34,11 @@ urlpatterns = [
     path('eliminar-del-carrito/<int:plato_id>/', eliminar_del_carrito, name='eliminar_del_carrito'), # Ruta para eliminar del carrito
     path('editar_encuesta/<int:encuesta_id>/', editar_encuesta, name='editar_encuesta'),  # Ruta para editar encuestas
     path('visualizar-encuestas/', visualizacion_encuestas, name='visualizar_encuestas'),  # Ruta para visualizar encuestas
+
+    # Rutas para platos semanales
+    path('platos/semanales/', lista_platos_semanales, name='lista_platos_semanales'),
+    path('platos/semanales/nuevo/', crear_plato_semanal, name='crear_plato_semanal'),
+    path('platos/semanales/editar/<int:pk>/', editar_plato_semanal, name='editar_plato_semanal'),
+    path('platos/semanales/eliminar/<int:pk>/', eliminar_plato_semanal, name='eliminar_plato_semanal'),
+    path('platos/semanales/votar/<int:plato_semanal_id>/', votar_plato_semanal, name='votar_plato_semanal'),
 ]

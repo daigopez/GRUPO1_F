@@ -1,5 +1,5 @@
 from django import forms
-from .models import Plato, Encuesta
+from .models import Plato, Encuesta, PlatoSemanal
 from django.core.exceptions import ValidationError
 
 class PlatoForm(forms.ModelForm):
@@ -17,3 +17,8 @@ class EncuestaForm(forms.ModelForm):
         if rating < 1 or rating > 5:
             raise forms.ValidationError("La calificación debe estar entre 1 y 5.")
         return rating
+
+class PlatoSemanalForm(forms.ModelForm):
+    class Meta:
+        model = PlatoSemanal
+        fields = ['dia', 'plato', 'comentario']

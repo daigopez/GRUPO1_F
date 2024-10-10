@@ -1,0 +1,31 @@
+{% load static %}  <!-- Asegúrate de que esta línea esté al principio -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mi Aplicación{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- Asegúrate de tener un archivo CSS si es necesario -->
+</head>
+<body>
+    <header>
+        <h1>Delicias Caseras</h1>
+        <nav>
+            <ul>
+                <li><a href="{% url 'lista_platos_semanales' %}">Platos Semanales</a></li>
+                <li><a href="{% url 'logueo' %}">Iniciar Sesión</a></li>
+                <li><a href="{% url 'crear_plato_semanal' %}">Agregar Plato Semanal</a></li> <!-- Agregado -->
+                <!-- Agrega más enlaces según sea necesario -->
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2024 Delicias Caseras</p>
+    </footer>
+</body>
+</html>

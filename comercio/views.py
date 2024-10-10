@@ -4,8 +4,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .models import Plato, Encuesta, Carrito, ItemCarrito
-from .forms import PlatoForm, EncuestaForm
+from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto  # Asegúrate de que Voto esté definido en tus modelos
+from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
@@ -70,7 +70,7 @@ def pagina_venta(request):
     total = 0
     platos_carrito = []
 
-# Obtener los platos del carrito desde la base de datos
+    # Obtener los platos del carrito desde la base de datos
     if request.user.is_authenticated:
         carrito, created = Carrito.objects.get_or_create(user=request.user)
 
@@ -84,7 +84,7 @@ def pagina_venta(request):
                 'subtotal': subtotal,
             })
 
-# Manejo de encuestas
+    # Manejo de encuestas
     form = EncuestaForm()
     if request.method == 'POST':
         form = EncuestaForm(request.POST)
@@ -116,7 +116,6 @@ def agregar_al_carrito(request, plato_id):
             item.cantidad += 1  # Incrementar cantidad si ya existe
         item.save()  # Guardar en la base de datos
 
-
     else:
         messages.error(request, 'Debes iniciar sesión para agregar platos al carrito.')
     
@@ -129,7 +128,6 @@ def restar_del_carrito(request, plato_id):
 
         if item.cantidad > 1:
             item.cantidad -= 1
-  
         else:
             item.delete()
     
@@ -226,3 +224,51 @@ def plato_delete(request, pk):
         messages.success(request, 'Plato eliminado con éxito.')
         return redirect('plato_list')
     return render(request, 'comercio/plato_confirm_delete.html', {'plato': plato})
+
+# Función para votar por un plato semanal
+
+def votar_plato_semanal(request, plato_semanal_id):
+    plato_semanal = get_object_or_404(PlatoSemanal, pk=plato_semanal_id)
+    
+    if request.method == 'POST':
+        # Aquí puedes implementar la lógica para manejar el voto
+        # Por ejemplo, podrías almacenar el voto en una base de datos
+        messages.success(request, '¡Gracias por tu voto!')
+        return redirect('lista_platos_semanales')
+    
+    return render(request, 'comercio/votar_plato_semanal.html', {'plato_semanal': plato_semanal})
+
+
+def lista_platos_semanales(request):
+    platos_semanales = PlatoSemanal.objects.all()
+    return render(request, 'comercio/platosemana.html', {'platos_semanales': platos_semanales})
+
+
+def crear_plato_semanal(request):
+    if request.method == 'POST':
+        form = PlatoSemanalForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_platos_semanales')
+    else:
+        form = PlatoSemanalForm()
+    return render(request, 'comercio/plato_semanal_form.html', {'form': form})
+
+
+def editar_plato_semanal(request, pk):
+    plato_semanal = get_object_or_404(PlatoSemanal, pk=pk)
+    if request.method == 'POST':
+        form = PlatoSemanalForm(request.POST, instance=plato_semanal)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_platos_semanales')
+    else:
+        form = PlatoSemanalForm(instance=plato_semanal)
+    return render(request, 'comercio/plato_semanal_form.html', {'form': form})
+
+def eliminar_plato_semanal(request, pk):
+    plato_semanal = get_object_or_404(PlatoSemanal, pk=pk)
+    if request.method == 'POST':
+        plato_semanal.delete()
+        return redirect('lista_platos_semanales')
+    return render(request, 'comercio/plato_semanal_confirm_delete.html', {'plato_semanal': plato_semanal})

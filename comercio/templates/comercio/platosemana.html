@@ -1,0 +1,102 @@
+{% extends 'comercio/base.html' %}
+
+{% block content %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #EAEAEA; /* Color gris de fondo */
+        margin: 0;
+        padding: 20px;
+    }
+    h1 {
+        color: #ff9e1b; /* Color Papaya McLaren */
+        text-align: center;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    th, td {
+        padding: 15px;
+        text-align: left;
+        border: 1px solid #ccc;
+    }
+    th {
+        background-color: #ff9e1b; /* Cabecera de tabla en Papaya McLaren */
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2; /* Color alternativo para filas */
+    }
+    a {
+        color: #ff9e1b; /* Enlaces en Papaya McLaren */
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline; /* Subrayar enlaces al pasar el ratón */
+    }
+    button {
+        background-color: #ff9e1b; /* Botones en Papaya McLaren */
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    button:hover {
+        background-color: #e68a00; /* Color más oscuro al pasar el ratón */
+    }
+    .message-list {
+        background-color: #fff; /* Fondo blanco para mensajes */
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 20px;
+        border-radius: 5px;
+    }
+</style>
+
+<h1>Platos Semanales</h1>
+<table>
+    <tr>
+        <th>Día</th>
+        <th>Plato</th>
+        <th>Precio</th>
+        <th>Comentario</th>
+        <th>Acciones</th>
+        <th>Votar</th>
+    </tr>
+    {% for plato_semanal in platos_semanales %}
+    <tr>
+        <td>{{ plato_semanal.dia }}</td>
+        <td>{{ plato_semanal.plato.nombre }}</td>
+        <td>${{ plato_semanal.plato.precio }}</td>
+        <td>{{ plato_semanal.comentario }}</td>
+        <td>
+            <a href="{% url 'editar_plato_semanal' plato_semanal.pk %}">Editar</a>
+            <a href="{% url 'eliminar_plato_semanal' plato_semanal.pk %}">Eliminar</a>
+        </td>
+        <td>
+            <form action="{% url 'votar_plato_semanal' plato_semanal.pk %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Votar</button>
+            </form>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<a href="{% url 'crear_plato_semanal' %}">Agregar Plato Semanal</a>
+
+<!-- Mensaje de éxito o error -->
+{% if messages %}
+    <div class="message-list">
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+
+{% endblock %}
