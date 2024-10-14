@@ -48,6 +48,9 @@ class PlatoSemanal(models.Model):
     def __str__(self):
         return f"{self.dia}: {self.plato.nombre}"
 
+    def total_votos(self):
+        return Voto.objects.filter(plato_semanal=self).count()  # Cuenta los votos para este plato semanal
+
 class Voto(models.Model):
     plato_semanal = models.ForeignKey(PlatoSemanal, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

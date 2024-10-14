@@ -64,6 +64,7 @@
         <th>Precio</th>
         <th>Comentario</th>
         <th>Acciones</th>
+        <th>Total de Votos</th>  <!-- Nueva columna para mostrar el total de votos -->
         <th>Votar</th>
     </tr>
     {% for plato_semanal in platos_semanales %}
@@ -76,6 +77,7 @@
             <a href="{% url 'editar_plato_semanal' plato_semanal.pk %}">Editar</a>
             <a href="{% url 'eliminar_plato_semanal' plato_semanal.pk %}">Eliminar</a>
         </td>
+        <td>{{ plato_semanal.total_votos }} </td>  <!-- Mostrar total de votos -->
         <td>
             <form action="{% url 'votar_plato_semanal' plato_semanal.pk %}" method="post">
                 {% csrf_token %}

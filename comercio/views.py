@@ -5,16 +5,13 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
-from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm
+from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-from .forms import RegistroForm  # Importa el nuevo formulario
 
 # Verificación de usuario administrador
 def es_administrador(user):
     return user.is_staff
-
-# Otras vistas...
 
 # Función para votar por un plato semanal
 @login_required
@@ -38,20 +35,18 @@ def lista_platos_semanales(request):
     platos_semanales = PlatoSemanal.objects.all()
     return render(request, 'comercio/platosemana.html', {'platos_semanales': platos_semanales})
 
-# Otras vistas...
-
+# Vista principal
 def index(request):
     return render(request, 'index.html')
 
-#Se actualiza el registro
+# Registro de usuario
 def registro(request):
     if request.method == 'POST':
-        form = RegistroForm(request.POST)  # Usa el nuevo formulario
+        form = RegistroForm(request.POST)
         if form.is_valid():
             try:
-                # Guarda el usuario y el correo
-                user = form.save()  # Esto guarda el usuario y el correo
-                login(request, user)  # Inicia sesión al usuario
+                user = form.save()
+                login(request, user)
                 return redirect('iniciada')
             except IntegrityError:
                 return render(request, 'registro.html', {
@@ -63,9 +58,8 @@ def registro(request):
             "error": 'Las contraseñas no coinciden.'
         })
     else:
-        form = RegistroForm()  # Crea una instancia vacía del formulario
+        form = RegistroForm()
     return render(request, 'registro.html', {'form': form})
-#Fin registro actualizado
 
 @login_required
 def iniciada(request):
