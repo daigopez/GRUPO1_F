@@ -9,6 +9,9 @@ from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
+
+from .forms import RegistroForm  # Importa el nuevo formulario
+
 # Verificación de usuario administrador
 def es_administrador(user):
     return user.is_staff
@@ -17,28 +20,29 @@ def index(request):
     return render(request, 'index.html')
 
 
-
+#Se actualiza el registro
 def registro(request):
     if request.method == 'POST':
-        if request.POST['password1'] == request.POST['password2']:
+        form = RegistroForm(request.POST)  # Usa el nuevo formulario
+        if form.is_valid():
             try:
-                user = User.objects.create_user(
-                    username=request.POST['username'],
-                    password=request.POST['password1']
-                )
-                user.save()
-                login(request, user)
+                # Guarda el usuario y el correo
+                user = form.save()  # Esto guarda el usuario y el correo
+                login(request, user)  # Inicia sesión al usuario
                 return redirect('iniciada')
             except IntegrityError:
                 return render(request, 'registro.html', {
-                    'form': UserCreationForm(),
+                    'form': form,
                     "error": 'El usuario ya existe.'
                 })
         return render(request, 'registro.html', {
-            'form': UserCreationForm(),
+            'form': form,
             "error": 'Las contraseñas no coinciden.'
         })
-    return render(request, 'registro.html', {'form': UserCreationForm()})
+    else:
+        form = RegistroForm()  # Crea una instancia vacía del formulario
+    return render(request, 'registro.html', {'form': form})
+#Fin registro actualizado
 
 @login_required
 def iniciada(request):

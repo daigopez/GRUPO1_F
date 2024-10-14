@@ -22,3 +22,15 @@ class PlatoSemanalForm(forms.ModelForm):
     class Meta:
         model = PlatoSemanal
         fields = ['dia', 'plato', 'comentario']
+
+# Se actualiza el formulario con el nuevo campo de correo electronico
+
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
+
+class RegistroForm(UserCreationForm):
+    email = forms.EmailField(required=True, label='Correo')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password1', 'password2']
