@@ -13,9 +13,49 @@
         }
 
         .header {
-            padding: 10px;
-            background-color: #ff9e1b; /* Cambiado a #ff9e1b */
+            padding: 3px; /* Reducir el padding para hacer la barra más delgada */
+            background-color: #ff9e1b; /* Color de fondo */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            display: flex; /* Usar flexbox para alinear elementos */
+            align-items: flex-end; /* Alinear el botón en la parte inferior */
+            justify-content: flex-start; /* Alinear a la izquierda */
+        }
+
+        .btn-back {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 7px 10px; /* Hacer el botón un 10% más delgado */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none; /* Eliminar subrayado */
+            margin-bottom: 5px; /* Añadir margen inferior para moverlo hacia arriba */
+        }
+
+        .title-container {
+            flex-grow: 1; /* Permitir que el contenedor del título ocupe el espacio restante */
+            text-align: center; /* Centrar el texto del título */
+        }
+
+        .header .title {
+            color: white; /* Cambiar el color a blanco */
+            margin: 0; /* Eliminar margen superior e inferior */
+        }
+
+        .nav-logo {
+            display: flex;
+            justify-content: center; /* Centrar el logo */
+            margin-bottom: 20px; /* Espacio debajo de la imagen */
+        }
+
+        .nav-logo img {
+            max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
+            transition: transform 0.3s ease; /* Transición suave para animaciones */
+        }
+
+        .nav-logo img:hover {
+            transform: scale(1.1); /* Agranda ligeramente la imagen al pasar el ratón */
         }
 
         .btn {
@@ -25,22 +65,12 @@
             cursor: pointer;
             transition: background-color 0.3s;
             text-decoration: none;
+            display: inline-block; /* Asegura que el botón se centre */
             margin-top: 10px;
-        }
-
-        .btn-back {
-            background-color: #28a745;
-            color: white;
         }
 
         .btn-back:hover {
             opacity: 0.9;
-        }
-
-        .title {
-            text-align: center;
-            color: #ff9e1b;
-            margin-top: 20px;
         }
 
         .form-container {
@@ -50,11 +80,42 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Centra el contenido del formulario */
+        }
+
+        form div {
+            margin-bottom: 15px; /* Espaciado entre los campos */
+        }
+
+        form input {
+            width: 100%; /* Asegura que los campos ocupen el ancho completo */
+            max-width: 200px; /* Limitar el ancho a un 50% de 400px */
+            padding: 10px; /* Espaciado interno en los campos */
+            border: 1px solid #ccc; /* Bordes suaves */
+            border-radius: 5px; /* Bordes redondeados */
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 600px) {
+            .form-container {
+                width: 90%; /* Hacer el contenedor más ancho en pantallas pequeñas */
+            }
+
+            form input {
+                max-width: 100%; /* Campos ocupan el 100% en pantallas más pequeñas */
+            }
         }
 
         .container {
             text-align: center;
             margin-top: 40px;
+        }
+
+        .title {
+            color: #ff9e1b; /* Color naranja */
+            margin: 20px 0; /* Espacio alrededor del título */
+            font-size: 1.5em; /* Tamaño de fuente */
+            text-align: center; /* Centra el texto */
         }
     </style>
 </head>
@@ -62,25 +123,47 @@
 
 <div class="header">
     <a href="{% url 'iniciar_sesion' %}" class="btn btn-back">Regresar</a>
+    <div class="title-container">
+        <!-- Se eliminó el título aquí -->
+    </div>
 </div>
 
-{% block conten %}
-<h1 class="title">Registro</h1>
+<div class="nav-logo">
+    <img src="/media/platos/logo2.png" alt="Logo">
+</div>
+
+<h1 class="title">Registro</h1> <!-- Título centrado debajo del logo -->
 
 <div class="form-container">
     {{ error }}
     <form action="/registro/" method="POST">
         {% csrf_token %}
         
-        {{ form.as_p }}
+        <div>
+            <input type="text" name="username" placeholder="Nombre de usuario" required>
+            {{ form.username.errors }}
+        </div>
         
+        <div>
+            <input type="email" name="email" placeholder="Correo" required>
+            {{ form.email.errors }}
+        </div>
+        
+        <div>
+            <input type="password" name="password1" placeholder="Contraseña" required>
+            {{ form.password1.errors }}
+        </div>
+        
+        <div>
+            <input type="password" name="password2" placeholder="Confirmar contraseña" required>
+            {{ form.password2.errors }}
+        </div>
+
         <button class="btn btn-success" style="background-color: #28a745; color: white;">
             Registrarse
         </button>
     </form>
 </div>
-
-{% endblock %}
 
 </body>
 </html>
