@@ -4,41 +4,68 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto  # Manteniendo Voto
+from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
 from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from .forms import RegistroForm  # Importa el nuevo formulario
 
 # Verificación de usuario administrador
 def es_administrador(user):
     return user.is_staff
 
+# Otras vistas...
+
+# Función para votar por un plato semanal
+@login_required
+def votar_plato_semanal(request, plato_semanal_id):
+    plato_semanal = get_object_or_404(PlatoSemanal, pk=plato_semanal_id)
+    
+    # Verificar si el usuario ya ha votado por este plato semanal
+    if request.method == 'POST':
+        if Voto.objects.filter(plato_semanal=plato_semanal, user=request.user).exists():
+            messages.warning(request, 'Ya has votado por este plato.')
+        else:
+            # Crear un nuevo voto
+            Voto.objects.create(plato_semanal=plato_semanal, user=request.user)
+            messages.success(request, '¡Gracias por tu voto!')
+        return redirect('lista_platos_semanales')
+    
+    return render(request, 'comercio/votar_plato_semanal.html', {'plato_semanal': plato_semanal})
+
+# Lista de platos semanales
+def lista_platos_semanales(request):
+    platos_semanales = PlatoSemanal.objects.all()
+    return render(request, 'comercio/platosemana.html', {'platos_semanales': platos_semanales})
+
+# Otras vistas...
+
 def index(request):
     return render(request, 'index.html')
 
-
-
+#Se actualiza el registro
 def registro(request):
     if request.method == 'POST':
-        if request.POST['password1'] == request.POST['password2']:
+        form = RegistroForm(request.POST)  # Usa el nuevo formulario
+        if form.is_valid():
             try:
-                user = User.objects.create_user(
-                    username=request.POST['username'],
-                    password=request.POST['password1']
-                )
-                user.save()
-                login(request, user)
+                # Guarda el usuario y el correo
+                user = form.save()  # Esto guarda el usuario y el correo
+                login(request, user)  # Inicia sesión al usuario
                 return redirect('iniciada')
             except IntegrityError:
                 return render(request, 'registro.html', {
-                    'form': UserCreationForm(),
+                    'form': form,
                     "error": 'El usuario ya existe.'
                 })
         return render(request, 'registro.html', {
-            'form': UserCreationForm(),
+            'form': form,
             "error": 'Las contraseñas no coinciden.'
         })
-    return render(request, 'registro.html', {'form': UserCreationForm()})
+    else:
+        form = RegistroForm()  # Crea una instancia vacía del formulario
+    return render(request, 'registro.html', {'form': form})
+#Fin registro actualizado
 
 @login_required
 def iniciada(request):
@@ -69,10 +96,8 @@ def pagina_venta(request):
     total = 0
     platos_carrito = []
 
-    # Obtener los platos del carrito desde la base de datos
     if request.user.is_authenticated:
         carrito, created = Carrito.objects.get_or_create(user=request.user)
-
         items = ItemCarrito.objects.filter(carrito=carrito)
         for item in items:
             subtotal = item.plato.precio * item.cantidad
@@ -83,7 +108,6 @@ def pagina_venta(request):
                 'subtotal': subtotal,
             })
 
-    # Manejo de encuestas
     form = EncuestaForm()
     if request.method == 'POST':
         form = EncuestaForm(request.POST)
@@ -104,17 +128,12 @@ def pagina_venta(request):
 def agregar_al_carrito(request, plato_id):
     if request.user.is_authenticated:
         plato = get_object_or_404(Plato, id=plato_id)
-        
-        # Obtener o crear el carrito para el usuario
         carrito, created = Carrito.objects.get_or_create(user=request.user)
-
-        # Manejar el item del carrito
         item, created = ItemCarrito.objects.get_or_create(carrito=carrito, plato=plato)
 
         if not created:
-            item.cantidad += 1  # Incrementar cantidad si ya existe
-        item.save()  # Guardar en la base de datos
-
+            item.cantidad += 1
+        item.save()
     else:
         messages.error(request, 'Debes iniciar sesión para agregar platos al carrito.')
     
@@ -224,25 +243,6 @@ def plato_delete(request, pk):
         return redirect('plato_list')
     return render(request, 'comercio/plato_confirm_delete.html', {'plato': plato})
 
-# Función para votar por un plato semanal
-
-def votar_plato_semanal(request, plato_semanal_id):
-    plato_semanal = get_object_or_404(PlatoSemanal, pk=plato_semanal_id)
-    
-    if request.method == 'POST':
-        # Aquí puedes implementar la lógica para manejar el voto
-        # Por ejemplo, podrías almacenar el voto en una base de datos
-        messages.success(request, '¡Gracias por tu voto!')
-        return redirect('lista_platos_semanales')
-    
-    return render(request, 'comercio/votar_plato_semanal.html', {'plato_semanal': plato_semanal})
-
-
-def lista_platos_semanales(request):
-    platos_semanales = PlatoSemanal.objects.all()
-    return render(request, 'comercio/platosemana.html', {'platos_semanales': platos_semanales})
-
-
 def crear_plato_semanal(request):
     if request.method == 'POST':
         form = PlatoSemanalForm(request.POST)
@@ -252,7 +252,6 @@ def crear_plato_semanal(request):
     else:
         form = PlatoSemanalForm()
     return render(request, 'comercio/plato_semanal_form.html', {'form': form})
-
 
 def editar_plato_semanal(request, pk):
     plato_semanal = get_object_or_404(PlatoSemanal, pk=pk)
