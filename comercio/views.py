@@ -12,6 +12,10 @@ from django.contrib.auth.decorators import login_required, permission_required, 
 
 from .forms import RegistroForm  # Importa el nuevo formulario
 
+
+from .forms import UserUpdateForm  # Asegúrate de crear el formulario correspondiente
+
+
 # Verificación de usuario administrador
 def es_administrador(user):
     return user.is_staff
@@ -43,6 +47,26 @@ def registro(request):
         form = RegistroForm()  # Crea una instancia vacía del formulario
     return render(request, 'registro.html', {'form': form})
 #Fin registro actualizado
+
+#Modificacion de registro de usuarios:
+@login_required
+def modificar_datos(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            if password:
+                user.set_password(password)
+            user.save()
+            return redirect('/')  # Se redirecciona a la pagina de iniciar sesion
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    return render(request, 'modificar_datos.html', {'form': form})
+
+# Fin Modificacion de registro de usuarios
+
 
 @login_required
 def iniciada(request):

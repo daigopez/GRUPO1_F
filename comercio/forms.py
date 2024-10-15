@@ -34,3 +34,23 @@ class RegistroForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+
+# modificación de los datos del usuario registrado:
+
+class UserUpdateForm(forms.ModelForm):
+    password = forms.CharField(widget=forms.PasswordInput, required=False, label='Nueva contraseña')
+
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']  # Incluye la contraseña
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        # Comprobar si el nombre de usuario ya existe en la base de datos
+        if User.objects.filter(username=username).exclude(id=self.instance.id).exists():
+            raise ValidationError("No se puede cambiar a ese nombre de usuario porque ya está ocupado.")
+        return username
+
+#Control de modifcacion de usuario si ya existe
+
