@@ -18,6 +18,9 @@ from .views import (
     editar_plato_semanal,
     eliminar_plato_semanal,
     votar_plato_semanal,
+
+    #Modificacion de usuarios
+    modificar_datos,
 )
 
 urlpatterns = [
@@ -41,4 +44,7 @@ urlpatterns = [
     path('platos/semanales/editar/<int:pk>/', editar_plato_semanal, name='editar_plato_semanal'),
     path('platos/semanales/eliminar/<int:pk>/', eliminar_plato_semanal, name='eliminar_plato_semanal'),
     path('platos/semanales/votar/<int:plato_semanal_id>/', votar_plato_semanal, name='votar_plato_semanal'),
+
+    # Modificacion de registro de usuarios
+    path('modificar_datos/', modificar_datos, name='modificar_datos'),
 ]

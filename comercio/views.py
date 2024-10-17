@@ -9,6 +9,13 @@ from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
+
+from .forms import RegistroForm  # Importa el nuevo formulario
+
+
+from .forms import UserUpdateForm  # Asegúrate de crear el formulario correspondiente
+
+
 # Verificación de usuario administrador
 def es_administrador(user):
     return user.is_staff
@@ -17,28 +24,49 @@ def index(request):
     return render(request, 'index.html')
 
 
-
+#Se actualiza el registro
 def registro(request):
     if request.method == 'POST':
-        if request.POST['password1'] == request.POST['password2']:
+        form = RegistroForm(request.POST)  # Usa el nuevo formulario
+        if form.is_valid():
             try:
-                user = User.objects.create_user(
-                    username=request.POST['username'],
-                    password=request.POST['password1']
-                )
-                user.save()
-                login(request, user)
+                # Guarda el usuario y el correo
+                user = form.save()  # Esto guarda el usuario y el correo
+                login(request, user)  # Inicia sesión al usuario
                 return redirect('iniciada')
             except IntegrityError:
                 return render(request, 'registro.html', {
-                    'form': UserCreationForm(),
+                    'form': form,
                     "error": 'El usuario ya existe.'
                 })
         return render(request, 'registro.html', {
-            'form': UserCreationForm(),
+            'form': form,
             "error": 'Las contraseñas no coinciden.'
         })
-    return render(request, 'registro.html', {'form': UserCreationForm()})
+    else:
+        form = RegistroForm()  # Crea una instancia vacía del formulario
+    return render(request, 'registro.html', {'form': form})
+#Fin registro actualizado
+
+#Modificacion de registro de usuarios:
+@login_required
+def modificar_datos(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            if password:
+                user.set_password(password)
+            user.save()
+            return redirect('/')  # Se redirecciona a la pagina de iniciar sesion
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    return render(request, 'modificar_datos.html', {'form': form})
+
+# Fin Modificacion de registro de usuarios
+
 
 @login_required
 def iniciada(request):
