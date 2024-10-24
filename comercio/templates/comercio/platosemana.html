@@ -56,14 +56,16 @@
     }
 </style>
 
-<h1>Platos Semanales</h1>
 <table>
     <tr>
         <th>Día</th>
         <th>Plato</th>
         <th>Precio</th>
         <th>Comentario</th>
+        {% if user.is_staff %}
         <th>Acciones</th>
+        {% endif %}
+        <th>Total de Votos</th>  <!-- Nueva columna para mostrar el total de votos -->
         <th>Votar</th>
     </tr>
     {% for plato_semanal in platos_semanales %}
@@ -72,10 +74,13 @@
         <td>{{ plato_semanal.plato.nombre }}</td>
         <td>${{ plato_semanal.plato.precio }}</td>
         <td>{{ plato_semanal.comentario }}</td>
+        {% if user.is_staff %}
         <td>
             <a href="{% url 'editar_plato_semanal' plato_semanal.pk %}">Editar</a>
             <a href="{% url 'eliminar_plato_semanal' plato_semanal.pk %}">Eliminar</a>
         </td>
+        {% endif %}
+        <td>{{ plato_semanal.total_votos }} </td>  <!-- Mostrar total de votos -->
         <td>
             <form action="{% url 'votar_plato_semanal' plato_semanal.pk %}" method="post">
                 {% csrf_token %}
@@ -85,9 +90,9 @@
     </tr>
     {% endfor %}
 </table>
-
+{% if user.is_staff %}
 <a href="{% url 'crear_plato_semanal' %}">Agregar Plato Semanal</a>
-
+{% endif %}
 <!-- Mensaje de éxito o error -->
 {% if messages %}
     <div class="message-list">

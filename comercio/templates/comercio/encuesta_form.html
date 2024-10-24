@@ -1,17 +1,18 @@
+<!-- Código en revision para ser borrado -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Encuesta</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Asegúrate de tener tu CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <div class="container">
         <h1>Editar Encuesta</h1>
         <form method="POST">
             {% csrf_token %}
-            {{ form.as_p }}  <!-- Renderiza el formulario aquí -->
+            {{ form.as_p }}  <!-- Acá se está renderizando el formulario (no olvidar) -->
             <button type="submit">Actualizar Encuesta</button>
         </form>
         <a href="{% url 'pagina_venta' %}">Volver a la página de venta</a>

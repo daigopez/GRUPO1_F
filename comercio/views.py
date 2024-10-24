@@ -5,15 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto  # Manteniendo Voto
-from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm
+from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
-
-
-from .forms import RegistroForm  # Importa el nuevo formulario
-
-
-from .forms import UserUpdateForm  # Asegúrate de crear el formulario correspondiente
 
 
 # Verificación de usuario administrador
@@ -253,24 +247,28 @@ def plato_delete(request, pk):
     return render(request, 'comercio/plato_confirm_delete.html', {'plato': plato})
 
 # Función para votar por un plato semanal
-
+@login_required
 def votar_plato_semanal(request, plato_semanal_id):
     plato_semanal = get_object_or_404(PlatoSemanal, pk=plato_semanal_id)
     
+    # Verificar si el usuario ya ha votado por este plato semanal
     if request.method == 'POST':
-        # Aquí puedes implementar la lógica para manejar el voto
-        # Por ejemplo, podrías almacenar el voto en una base de datos
-        messages.success(request, '¡Gracias por tu voto!')
+        if Voto.objects.filter(plato_semanal=plato_semanal, user=request.user).exists():
+            messages.warning(request, 'Ya has votado por este plato.')
+        else:
+            # Crear un nuevo voto
+            Voto.objects.create(plato_semanal=plato_semanal, user=request.user)
+            messages.success(request, '¡Gracias por tu voto!')
         return redirect('lista_platos_semanales')
     
     return render(request, 'comercio/votar_plato_semanal.html', {'plato_semanal': plato_semanal})
 
-
+@login_required
 def lista_platos_semanales(request):
     platos_semanales = PlatoSemanal.objects.all()
     return render(request, 'comercio/platosemana.html', {'platos_semanales': platos_semanales})
 
-
+@user_passes_test(es_administrador)
 def crear_plato_semanal(request):
     if request.method == 'POST':
         form = PlatoSemanalForm(request.POST)

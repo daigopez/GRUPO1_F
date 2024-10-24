@@ -193,3 +193,29 @@ cursor: pointer;
 .yellow { background-color: #ffeb3b; color: black; } 
 .gray { background-color: #9E9E9E; color: white; }
 .purple { background-color: #9C27B0; color: white; }
+
+
+/* Css del nav de base.html */
+
+.btn-back {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 7px 10px; 
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: none; 
+    margin-bottom: 5px; 
+}
+
+.title-container {
+    flex-grow: 1; 
+    text-align: center; 
+}
+
+.nav-logo {
+    display: flex;
+    justify-content: center; 
+    margin-bottom: 20px; 
+}
