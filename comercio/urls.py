@@ -21,6 +21,9 @@ from .views import (
 
     #Modificacion de usuarios
     modificar_datos,
+
+    #Agregar metodo de pago
+    procesar_pago,
 )
 
 urlpatterns = [
@@ -47,4 +50,8 @@ urlpatterns = [
 
     # Modificacion de registro de usuarios
     path('modificar_datos/', modificar_datos, name='modificar_datos'),
+
+
+    # Se agrega el procesar_pago para la funcionalidad
+    path('pagar/', views.procesar_pago, name='procesar_pago'),
 ]

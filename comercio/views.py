@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto  # Manteniendo Voto
-from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
+from .forms import DireccionEnvioForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
@@ -297,3 +297,36 @@ def eliminar_plato_semanal(request, pk):
         plato_semanal.delete()
         return redirect('lista_platos_semanales')
     return render(request, 'comercio/plato_semanal_confirm_delete.html', {'plato_semanal': plato_semanal})
+
+
+##############################
+
+
+
+# Funcion de procesar pago actualizada
+
+#Se agrega la funcion de procesar el pago
+
+@login_required
+def procesar_pago(request):
+    carrito, created = Carrito.objects.get_or_create(user=request.user)
+    items = ItemCarrito.objects.filter(carrito=carrito)
+    total = sum(item.plato.precio * item.cantidad for item in items)
+
+    if request.method == 'POST':
+        form = DireccionEnvioForm(request.POST)
+        if form.is_valid():
+            direccion = form.cleaned_data['direccion']
+            # Aquí puedes agregar lógica para almacenar el pedido si es necesario
+            # Por ejemplo, crear un modelo de Pedido
+
+            # Limpiar el carrito después del pago
+            carrito.platos.clear()
+            messages.success(request, 'Pago procesado con éxito. ¡Gracias por tu compra!')
+            return redirect('pagina_venta')
+    else:
+        form = DireccionEnvioForm()
+
+    return render(request, 'comercio/procesar_pago.html', {'form': form, 'items': items, 'total': total})
+
+# Fin funcion de procesar el pago

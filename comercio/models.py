@@ -58,3 +58,17 @@ class Voto(models.Model):
 
     def __str__(self):
         return f'Voto de {self.user.username} para {self.plato_semanal.plato.nombre} en {self.plato_semanal.dia}'
+    
+
+#Se agrega el método de pago
+from django.db import models
+
+class Pago(models.Model):
+    total = models.DecimalField(max_digits=10, decimal_places=2)
+    fecha = models.DateTimeField(auto_now_add=True)
+    # Otros campos que consideres necesarios, como el usuario, métodos de pago, etc.
+
+class Item(models.Model):
+    plato = models.ForeignKey('Plato', on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField()
+    pago = models.ForeignKey(Pago, related_name='items', on_delete=models.CASCADE)

@@ -54,3 +54,6 @@ class UserUpdateForm(forms.ModelForm):
 
 #Control de modifcacion de usuario si ya existe
 
+#Se agrega el formulariode la dirección para el envío en la implementación del pago
+class DireccionEnvioForm(forms.Form):
+    direccion = forms.CharField(max_length=255, required=True, label='Dirección de Envío')

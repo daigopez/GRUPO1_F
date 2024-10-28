@@ -122,8 +122,8 @@
 </head>
 <body>
     <div class="navbar">
-        <a href="{% url 'iniciada' %}" class="btn-primary">Volver</a> <!-- Botón para ir a iniciada -->
-        <h1>Página de Venta de Platos</h1> <!-- Título en el navbar -->
+        <a href="{% url 'iniciada' %}" class="btn-primary">Volver</a>
+        <h1>Página de Venta de Platos</h1>
         <div>
             <a href="{% url 'logout' %}">Cerrar Sesión</a>
         </div>
@@ -199,7 +199,9 @@
                 </div>
                 {% endfor %}
                 <h3>Total: ${{ total|floatformat:2 }}</h3>
-                <a href="#" class="btn">Realizar Compra</a>
+                <form action="{% url 'procesar_pago' %}" method="GET">
+                    <button type="submit">Realizar Compra</button>
+                </form>
             {% else %}
                 <p>No hay platos en el carrito.</p>
             {% endif %}
