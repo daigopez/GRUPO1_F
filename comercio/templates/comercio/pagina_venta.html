@@ -199,7 +199,7 @@
                 </div>
                 {% endfor %}
                 <h3>Total: ${{ total|floatformat:2 }}</h3>
-                <a href="#" class="btn">Realizar Compra</a>
+                <a href="{% url 'pago' %}" class="btn">Realizar Compra</a> <!-- Enlace para realizar la compra -->
             {% else %}
                 <p>No hay platos en el carrito.</p>
             {% endif %}
@@ -213,5 +213,12 @@
             </ul>
         {% endif %}
     </div>
+    
+
+
+
+
+
+
 </body>
 </html>

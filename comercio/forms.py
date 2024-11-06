@@ -34,3 +34,37 @@ class RegistroForm(UserCreationForm):
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']
+
+
+#### Formulario tarjeta de credito/debito:
+
+from django import forms
+
+class PagoForm(forms.Form):
+    direccion_envio = forms.CharField(max_length=255, required=True)
+    hora_entrega = forms.ChoiceField(choices=[
+        ('12:00-13:00', '12:00 a 13:00'),
+        ('13:01-14:00', '13:01 a 14:00'),
+        ('14:01-15:00', '14:01 a 15:00'),
+    ])
+    numero_tarjeta = forms.CharField(max_length=16, required=True)
+    fecha_expiracion = forms.CharField(max_length=5, required=True)
+    cvc = forms.CharField(max_length=3, required=True)
+
+    def clean_fecha_expiracion(self):
+        fecha_expiracion = self.cleaned_data['fecha_expiracion']
+        # Validar el formato MM/AA
+        try:
+            mes, anio = map(int, fecha_expiracion.split('/'))
+            if not (1 <= mes <= 12):
+                raise forms.ValidationError("El mes debe estar entre 01 y 12.")
+        except ValueError:
+            raise forms.ValidationError("Formato inválido. Use MM/AA.")
+        
+        # Validar que la tarjeta no haya expirado
+        from datetime import datetime
+        ahora = datetime.now()
+        if anio < ahora.year % 100 or (anio == ahora.year % 100 and mes < ahora.month):
+            raise forms.ValidationError("La tarjeta ha expirado.")
+
+        return fecha_expiracion

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Pedidos</title>
+</head>
+<body>
+    <h1>Lista de Pedidos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Dirección de Envío</th>
+                <th>Hora de Entrega</th>
+                <th>Número de Tarjeta</th>
+                <th>Fecha de Expiración</th>
+                <th>CVC</th>
+                <th>Fecha del Pedido</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for pedido in pedidos %}
+            <tr>
+                <td>{{ pedido.id }}</td>
+                <td>{{ pedido.direccion_envio }}</td>
+                <td>{{ pedido.hora_entrega }}</td>
+                <td>{{ pedido.numero_tarjeta }}</td>
+                <td>{{ pedido.fecha_expiracion }}</td>
+                <td>{{ pedido.cvc }}</td>
+                <td>{{ pedido.fecha_pedido }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7">No hay pedidos registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{% url 'pagina_venta' %}">Volver a la Página de Venta</a>
+</body>
+</html>

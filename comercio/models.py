@@ -57,3 +57,19 @@ class Voto(models.Model):
 
     def __str__(self):
         return f'Voto de {self.user.username} para {self.plato_semanal.plato.nombre} en {self.plato_semanal.dia}'
+    
+
+######### Modelo para guardar la info del pedido
+
+class Pedido(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
+    direccion_envio = models.CharField(max_length=255)
+    hora_entrega = models.CharField(max_length=20)
+    pagado = models.BooleanField(default=False)
+    fecha_pedido = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Pedido {self.id} - {"Pagado" if self.pagado else "Pendiente"}'
+    
+
+

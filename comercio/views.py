@@ -4,8 +4,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .models import Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
-from .forms import PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm
+from .models import Pedido, Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
+from .forms import PagoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
@@ -264,3 +264,54 @@ def eliminar_plato_semanal(request, pk):
         plato_semanal.delete()
         return redirect('lista_platos_semanales')
     return render(request, 'comercio/plato_semanal_confirm_delete.html', {'plato_semanal': plato_semanal})
+
+
+
+###################### pagos
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import Pedido, Carrito
+from .forms import PagoForm
+
+@login_required
+def pago(request):
+    carrito = get_object_or_404(Carrito, user=request.user)
+    if request.method == 'POST':
+        form = PagoForm(request.POST)
+        if form.is_valid():
+            direccion_envio = form.cleaned_data['direccion_envio']
+            hora_entrega = form.cleaned_data['hora_entrega']
+
+            # Crear el pedido
+            pedido = Pedido.objects.create(
+                carrito=carrito,
+                direccion_envio=direccion_envio,
+                hora_entrega=hora_entrega,
+                pagado=True  # Asumimos que el pago se ha realizado
+            )
+
+            # Limpiar el carrito después de la compra
+            carrito.itemcarrito_set.all().delete()  # Eliminar todos los ítems del carrito
+
+            messages.success(request, 'Tu pedido ha sido realizado con éxito.')
+            return redirect('confirmacion_pedido', pedido_id=pedido.id)
+    else:
+        form = PagoForm()
+
+    return render(request, 'comercio/pago.html', {'form': form})
+
+@login_required
+def confirmacion_pedido(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+    return render(request, 'comercio/confirmacion_pedido.html', {'pedido': pedido})
+
+
+# Vista de pedidos para el admin
+
+from django.shortcuts import render
+from .models import Pedido
+
+def lista_pedidos(request):
+    pedidos = Pedido.objects.all()
+    return render(request, 'lista_pedidos.html', {'pedidos': pedidos})
+
