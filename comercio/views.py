@@ -341,7 +341,7 @@ def lista_pedidos(request):
 
 #### Vista admin para ver lista de pedidos:
 
-
+##
 
 ######### Almacenar la info de lo que se está comprando
 
