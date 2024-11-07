@@ -72,4 +72,18 @@ class Pedido(models.Model):
         return f'Pedido {self.id} - {"Pagado" if self.pagado else "Pendiente"}'
     
 
+############### Para guardar el pedido:
+# models.py
 
+from django.db import models
+from django.contrib.auth.models import User
+
+class DetallePedido(models.Model):
+    pedido = models.ForeignKey('Pedido', on_delete=models.CASCADE, related_name='detalles')
+    plato = models.ForeignKey('Plato', on_delete=models.CASCADE)  # Asegúrate de que este modelo exista
+    cantidad = models.PositiveIntegerField()
+    precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
+    subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.cantidad} x {self.plato.nombre} - {self.subtotal}"

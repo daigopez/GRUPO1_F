@@ -18,7 +18,7 @@ from .views import (
     editar_plato_semanal,
     eliminar_plato_semanal,
     votar_plato_semanal,
-# Visualización admin de la lista
+# Visualización admin de la lista de pedidos
     lista_pedidos,
 )
 
@@ -51,5 +51,5 @@ urlpatterns = [
 
     # Vista pedidos admin
 
-    path('admin/pedidos/', lista_pedidos, name='lista_pedidos'),
+    path('pedidos/', lista_pedidos, name='lista_pedidos'),
 ]

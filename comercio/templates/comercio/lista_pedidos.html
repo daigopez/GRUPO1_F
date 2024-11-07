@@ -4,39 +4,97 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Pedidos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #ddd;
+        }
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            th {
+                display: none;
+            }
+            td {
+                text-align: right;
+                position: relative;
+                padding-left: 50%;
+            }
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 50%;
+                padding-left: 10px;
+                text-align: left;
+                font-weight: bold;
+            }
+        }
+    </style>
 </head>
 <body>
     <h1>Lista de Pedidos</h1>
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <th>ID del Pedido</th>
                 <th>Dirección de Envío</th>
                 <th>Hora de Entrega</th>
-                <th>Número de Tarjeta</th>
-                <th>Fecha de Expiración</th>
-                <th>CVC</th>
+                <th>Total</th>
+                <th>Estado de Pago</th>
                 <th>Fecha del Pedido</th>
             </tr>
         </thead>
         <tbody>
-            {% for pedido in pedidos %}
+            {% for pedido_info in pedidos_info %}
             <tr>
-                <td>{{ pedido.id }}</td>
-                <td>{{ pedido.direccion_envio }}</td>
-                <td>{{ pedido.hora_entrega }}</td>
-                <td>{{ pedido.numero_tarjeta }}</td>
-                <td>{{ pedido.fecha_expiracion }}</td>
-                <td>{{ pedido.cvc }}</td>
-                <td>{{ pedido.fecha_pedido }}</td>
+                <td data-label="ID del Pedido">{{ pedido_info.pedido.id }}</td>
+                <td data-label="Dirección de Envío">{{ pedido_info.pedido.direccion_envio }}</td>
+                <td data-label="Hora de Entrega">{{ pedido_info.pedido.hora_entrega }}</td>
+                <td data-label="Total">${{ pedido_info.total }}</td>
+                <td data-label="Estado de Pago">{{ pedido_info.pedido.pagado|yesno:"Pagado,Pendiente" }}</td>
+                <td data-label="Fecha del Pedido">{{ pedido_info.pedido.fecha_pedido }}</td>
             </tr>
-            {% empty %}
             <tr>
-                <td colspan="7">No hay pedidos registrados.</td>
+                <td colspan="6" style="padding: 0;">
+                    <div style="background-color: #f2f2f2; padding: 10px;">
+                        <strong>Detalles del Pedido:</strong>
+                        <ul>
+                            {% for detalle in pedido_info.detalles %}
+                            <li>{{ detalle.cantidad }} x {{ detalle.plato.nombre }} - ${{ detalle.subtotal }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <a href="{% url 'pagina_venta' %}">Volver a la Página de Venta</a>
 </body>
 </html>

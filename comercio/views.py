@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .models import Pedido, Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
+from .models import DetallePedido, Pedido, Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
 from .forms import PagoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
@@ -273,6 +273,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pedido, Carrito
 from .forms import PagoForm
 
+from django.contrib import messages
+
 @login_required
 def pago(request):
     carrito = get_object_or_404(Carrito, user=request.user)
@@ -289,6 +291,16 @@ def pago(request):
                 hora_entrega=hora_entrega,
                 pagado=True  # Asumimos que el pago se ha realizado
             )
+
+            # Guardar los detalles del pedido antes de limpiar el carrito
+            for item in carrito.itemcarrito_set.all():
+                DetallePedido.objects.create(
+                    pedido=pedido,
+                    plato=item.plato,
+                    cantidad=item.cantidad,
+                    precio_unitario=item.plato.precio,
+                    subtotal=item.plato.precio * item.cantidad
+                )
 
             # Limpiar el carrito después de la compra
             carrito.itemcarrito_set.all().delete()  # Eliminar todos los ítems del carrito
@@ -311,7 +323,26 @@ def confirmacion_pedido(request, pedido_id):
 from django.shortcuts import render
 from .models import Pedido
 
+@login_required
+@user_passes_test(es_administrador)
 def lista_pedidos(request):
     pedidos = Pedido.objects.all()
-    return render(request, 'lista_pedidos.html', {'pedidos': pedidos})
+    pedidos_info = []
+
+    for pedido in pedidos:
+        total = sum(detalle.subtotal for detalle in pedido.detalles.all())
+        pedidos_info.append({
+            'pedido': pedido,
+            'total': total,
+            'detalles': pedido.detalles.all(),  # Añadir detalles del pedido
+        })
+
+    return render(request, 'comercio/lista_pedidos.html', {'pedidos_info': pedidos_info})
+
+#### Vista admin para ver lista de pedidos:
+
+
+
+######### Almacenar la info de lo que se está comprando
+
 
