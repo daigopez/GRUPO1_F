@@ -18,6 +18,10 @@ from .views import (
     editar_plato_semanal,
     eliminar_plato_semanal,
     votar_plato_semanal,
+
+    #Modificacion de usuarios
+    modificar_datos,
+
 # Visualización admin de la lista de pedidos
     lista_pedidos,
 )
@@ -48,6 +52,10 @@ urlpatterns = [
     #Metodo de pagos
     path('pago/', views.pago, name='pago'),
     path('confirmacion/<int:pedido_id>/', views.confirmacion_pedido, name='confirmacion_pedido'),
+
+    # Modificacion de registro de usuarios
+    path('modificar_datos/', modificar_datos, name='modificar_datos'),
+
 
     # Vista pedidos admin
 

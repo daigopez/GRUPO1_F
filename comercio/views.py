@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .models import DetallePedido, Pedido, Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
-from .forms import PagoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm
+from .forms import PagoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
@@ -265,6 +265,24 @@ def eliminar_plato_semanal(request, pk):
         return redirect('lista_platos_semanales')
     return render(request, 'comercio/plato_semanal_confirm_delete.html', {'plato_semanal': plato_semanal})
 
+#Modificacion de registro de usuarios:
+@login_required
+def modificar_datos(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        if form.is_valid():
+            user = form.save(commit=False)
+            password = form.cleaned_data.get('password')
+            if password:
+                user.set_password(password)
+            user.save()
+            return redirect('/')  # Se redirecciona a la pagina de iniciar sesion
+    else:
+        form = UserUpdateForm(instance=request.user)
+
+    return render(request, 'modificar_datos.html', {'form': form})
+
+# Fin Modificacion de registro de usuarios
 
 
 ###################### pagos
