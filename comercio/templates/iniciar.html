@@ -181,9 +181,11 @@
                 </button>
             </a>
         </div>
-        
+
+        {% if not user.is_authenticated %}
         <!-- Mensaje de registro -->
         <div class="message">No estás registrado, clic en el botón azul para registrarte!</div>
+        {% endif %}
     </div>
     {% endblock %}
 </body>
