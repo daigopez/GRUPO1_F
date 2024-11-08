@@ -5,8 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     <style>
+        body {
+            background-image: url('/media/platos/fondo2.jpg');
+            background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+            background-position: center; /* Centra la imagen de fondo */
+            background-repeat: no-repeat; /* Evita que la imagen se repita */
+            margin: 0; /* Elimina márgenes por defecto */
+            font-family: Arial, sans-serif; /* Establece una fuente por defecto */
+            min-height: 100vh; /* Asegura que el body tenga al menos la altura de la ventana */
+        }
+
         nav {
-            background-color: #f8f9fa;
+            background-color: rgba(248, 249, 250, 0.8); /* Fondo semi-transparente para el navbar */
             padding: 10px;
             text-align: right;
         }
@@ -124,7 +134,6 @@
                 <a href="/cerrar">Cerrar sesión</a>
             </li>
             {% else %}
-            <div class="message">No estás registrado, clic en el botón azul para registrarte!</div>
             <h1 class="title">Iniciar Sesión</h1>
             {% endif %}
         </ul>
@@ -172,6 +181,9 @@
                 </button>
             </a>
         </div>
+        
+        <!-- Mensaje de registro -->
+        <div class="message">No estás registrado, clic en el botón azul para registrarte!</div>
     </div>
     {% endblock %}
 </body>
