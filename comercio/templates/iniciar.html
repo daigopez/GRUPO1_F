@@ -1,163 +1,178 @@
-<nav>
-    <ul>
-        {% if user.is_authenticated %}
-        <li>
-            <a href="/cerrar">Cerrar sesión</a>
-        </li>
-        {% else %}
-        <div class="message">No estás registrado, clic en el botón azul para registrarte!</div>
-        <h1 class="title">Iniciar Sesión</h1>
-        {% endif %}
-    </ul>
-</nav>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <style>
+        nav {
+            background-color: #f8f9fa;
+            padding: 10px;
+            text-align: right;
+        }
 
-{% block content %}
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
 
-<!-- Logo en el header -->
-<div class="nav-logo">
-    <img src="/media/platos/logo2.png" alt="Logo">
-</div>
+        li {
+            display: inline;
+            margin-left: 20px;
+        }
 
-<div class="form-container">
-    {{ error }}
-    <form action="/iniciar/" method="POST">
-        {% csrf_token %}
-        
-        {% load widget_tweaks %}  <!-- Carga el tag widget_tweaks -->
+        .message {
+            color: #dc3545;
+            text-align: left;
+            margin-top: 15px;
+        }
 
-        <div class="form-group">
-            <input type="text" name="username" placeholder="Nombre de Usuario" class="form-control" required>
-            {% for error in form.username.errors %}
-                <div class="error">{{ error }}</div>
-            {% endfor %}
-        </div>
-        
-        <div class="form-group">
-            <input type="password" name="password" placeholder="Contraseña" class="form-control" required>
-            {% for error in form.password.errors %}
-                <div class="error">{{ error }}</div>
-            {% endfor %}
-        </div>
-        
-        <div class="button-container">
-            <button class="btn btn-success">
-                Iniciar Sesión
-            </button>
-        </div>
-    </form>
-    
-    <!-- botón de registro -->
-    <div class="button-container">
-        <a href="/registro" class="btn-link">
-            <button class="btn btn-register">
-                Registrarse
-            </button>
-        </a>
+        .title {
+            text-align: center;
+            color: #ff9e1b;
+            margin-top: 20px;
+        }
+
+        .form-container {
+            max-width: 400px; /* Ancho máximo en pantallas grandes */
+            width: 90%; /* Ancho del 90% en pantallas pequeñas */
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
+        }
+
+        .button-container {
+            text-align: center;
+        }
+
+        .btn {
+            border: none;
+            padding: 10px; /* Mantén el padding para mayor área de clic */
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 50%; /* Cambia a 50% para que el botón ocupe el 50% del ancho del contenedor */
+            margin-top: 10px;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-register {
+            background-color: #284ca7;
+            color: white;
+        }
+
+        .btn-link {
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .nav-logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .nav-logo img {
+            max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
+            transition: transform 0.3s ease; /* Transición suave para animaciones */
+        }
+
+        .nav-logo img:hover {
+            transform: scale(1.1); /* Agranda ligeramente la imagen al pasar el ratón */
+        }
+
+        .error {
+            color: red; /* Color para errores de validación */
+            font-size: 0.9em; /* Tamaño de fuente más pequeño */
+        }
+
+        /* Media query para dispositivos móviles */
+        @media (max-width: 600px) {
+            .form-container {
+                width: 80%; /* Puedes ajustar este valor según sea necesario */
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            {% if user.is_authenticated %}
+            <li>
+                <a href="/cerrar">Cerrar sesión</a>
+            </li>
+            {% else %}
+            <div class="message">No estás registrado, clic en el botón azul para registrarte!</div>
+            <h1 class="title">Iniciar Sesión</h1>
+            {% endif %}
+        </ul>
+    </nav>
+
+    {% block content %}
+    <!-- Logo en el header -->
+    <div class="nav-logo">
+        <img src="/media/platos/logo2.png" alt="Logo">
     </div>
-</div>
 
-<style>
-    nav {
-        background-color: #f8f9fa;
-        padding: 10px;
-        text-align: right;
-    }
+    <div class="form-container">
+        {{ error }}
+        <form action="/iniciar/" method="POST">
+            {% csrf_token %}
+            
+            {% load widget_tweaks %}  <!-- Carga el tag widget_tweaks -->
 
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    li {
-        display: inline;
-        margin-left: 20px;
-    }
-
-    .message {
-        color: #dc3545;
-        text-align: left;
-        margin-top: 15px;
-    }
-
-    .title {
-        text-align: center;
-        color: #ff9e1b;
-        margin-top: 20px;
-    }
-
-    .form-container {
-        max-width: 400px;
-        margin: 20px auto;
-        padding: 20px;
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .form-group {
-        margin-bottom: 15px;
-    }
-
-    .form-control {
-        width: 100%;  /* Asegura que el campo ocupe todo el ancho disponible */
-        padding: 10px;  /* Añade un poco de padding para mejor apariencia */
-        border: 1px solid #ccc;  /* Agrega un borde */
-        border-radius: 5px;  /* Bordes redondeados */
-    }
-
-    .button-container {
-        text-align: center;  /* Centra los botones */
-    }
-
-    .btn {
-        border: none;
-        padding: 8px;  /* Reduce el padding lateral aún más */
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        width: 40%;  /* Reduce el ancho del botón al 40% */
-        margin-top: 10px;
-    }
-
-    .btn-success {
-        background-color: #28a745;
-        color: white;
-    }
-
-    .btn-register {
-        background-color: #284ca7;
-        color: white;
-    }
-
-    .btn-link {
-        text-decoration: none;
-    }
-
-    .btn:hover {
-        opacity: 0.9;
-    }
-
-    /* Estilos para la imagen */
-    .nav-logo {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 20px; /* Espacio debajo de la imagen */
-    }
-
-    .nav-logo img {
-        max-width: 300px; /* Ajusta el tamaño máximo de la imagen */
-        transition: transform 0.3s ease; /* Transición suave para animaciones */
-    }
-
-    .nav-logo img:hover {
-        transform: scale(1.1); /* Agranda ligeramente la imagen al pasar el ratón */
-    }
-
-    .error {
-        color: red; /* Color para errores de validación */
-        font-size: 0.9em; /* Tamaño de fuente más pequeño */
-    }
-</style>
-
-{% endblock %}
+            <div class="form-group">
+                <input type="text" name="username" placeholder="Nombre de Usuario" class="form-control" required>
+                {% for error in form.username.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="form-group">
+                <input type="password" name="password" placeholder="Contraseña" class="form-control" required>
+                {% for error in form.password.errors %}
+                    <div class="error">{{ error }}</div>
+                {% endfor %}
+            </div>
+            
+            <div class="button-container">
+                <button class="btn btn-success">
+                    Iniciar Sesión
+                </button>
+            </div>
+        </form>
+        
+        <!-- botón de registro -->
+        <div class="button-container">
+            <a href="/registro" class="btn-link">
+                <button class="btn btn-register">
+                    Registrarse
+                </button>
+            </a>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>
