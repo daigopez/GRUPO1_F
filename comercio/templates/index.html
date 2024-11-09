@@ -7,62 +7,62 @@
     <title>Platos Congelados</title>
     <style>
         body {
-            background-color: #f0f0f0; /* Cambia este color por el que desees */
+            background-color: #f0f0f0;
             font-family: Arial, sans-serif;
-            margin: 0; /* Eliminar márgenes predeterminados del body */
+            margin: 0;
         }
         .navbar {
-            background-color: rgba(255, 158, 27, 0.8); /* Color de la navbar semitransparente */
+            background-color: rgba(255, 158, 27, 0.8);
             padding: 15px;
             display: flex;
-            align-items: center; /* Alinear verticalmente */
+            align-items: center;
         }
         .navbar ul {
-            list-style-type: none; /* Eliminar puntos de la lista */
+            list-style-type: none;
             margin: 0;
             padding: 0;
-            display: flex; /* Usar flexbox para alinear elementos */
-            flex-grow: 1; /* Hacer que la lista ocupe el espacio disponible */
-            justify-content: flex-end; /* Alinear a la derecha */
+            display: flex;
+            flex-grow: 1;
+            justify-content: flex-end;
         }
         .navbar li {
-            margin: 0 15px; /* Espaciado entre elementos de la lista */
+            margin: 0 15px;
         }
         .navbar a {
-            color: white; /* Color del texto */
-            text-decoration: none; /* Sin subrayado */
-            padding: 10px; /* Espaciado interno */
-            transition: background-color 0.3s; /* Transición suave */
+            color: white;
+            text-decoration: none;
+            padding: 10px;
+            transition: background-color 0.3s;
         }
         .navbar a:hover {
-            background-color: #e65c00; /* Color al pasar el mouse */
+            background-color: #e65c00;
         }
         .container {
-            background-color: white; /* Fondo blanco */
+            background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            max-width: 800px; /* Ancho máximo */
-            margin: 20px auto; /* Espacio entre el contenedor y el borde superior */
-            text-align: center; /* Centrar texto */
+            max-width: 800px;
+            margin: 20px auto;
+            text-align: center;
         }
         h1 {
-            color: #333; /* Color del texto del título */
-            margin: 0; /* Eliminar margen superior del h1 */
+            color: #333;
+            margin: 0;
         }
         .btn {
-            background-color: #4CAF50; /* Verde */
+            background-color: #4CAF50;
             color: white;
             padding: 10px 15px;
             border: none;
-            border-radius: 5px; /* Bordes redondeados */
-            text-decoration: none; /* Sin subrayado */
+            border-radius: 5px;
+            text-decoration: none;
             cursor: pointer;
-            display: inline-block; /* Asegurar que el botón ocupe solo el espacio necesario */
-            transition: background-color 0.3s; /* Transición suave */
+            display: inline-block;
+            transition: background-color 0.3s;
         }
         .btn:hover {
-            background-color: #45a049; /* Verde más oscuro */
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -111,6 +111,35 @@
     <div class="container mt-5">
         <h1>Modifica tus datos</h1>
         <a href="{% url 'modificar_datos' %}" class="btn">Modificar datos</a>
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="container mt-5">
+        <h1>Ver Detalle de tu Último Pedido</h1>
+        {% with ultimo_pedido=user.pedidos.last %}
+            {% if ultimo_pedido %}
+                <a href="{% url 'ver_detalle_pedido' ultimo_pedido.id %}" class="btn">Ver Detalle del Pedido</a>
+            {% else %}
+                <p>No tienes pedidos registrados.</p>
+            {% endif %}
+        {% endwith %}
+    </div>
+    {% endif %}
+
+    <div class="container mt-5">
+        <h1>Ver mis pedidos</h1>
+        <a href="{% url 'mis_pedidos' %}" class="btn">Mis Pedidos</a>
+    </div>
+
+    <div class="container mt-5">
+        <h1>Ver estado de mi pedidito</h1>
+        {% with ultimo_pedido=user.pedidos.last %}
+            {% if ultimo_pedido %}
+                <a href="/pedidos/detalle/{{ ultimo_pedido.id }}/" class="btn">Ver estado de mi pedidito</a>
+            {% else %}
+                <p>No tienes pedidos registrados.</p>
+            {% endif %}
+        {% endwith %}
     </div>
 
 </body>

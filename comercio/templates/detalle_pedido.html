@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle del Pedido</title>
+    <style>
+        /* Estilos aquí */
+    </style>
+</head>
+<body>
+    <h1>Detalle del Pedido #{{ pedido.id }}</h1>
+    <p>Estado: {{ pedido.estado }}</p>
+    <p>Total: ${{ pedido.total }}</p>
+    <h2>Detalles:</h2>
+    <ul>
+        {% for detalle in detalles %}
+            <li>{{ detalle.cantidad }} x {{ detalle.plato.nombre }} - Subtotal: ${{ detalle.subtotal }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'mis_pedidos' %}">Volver a Mis Pedidos</a>
+</body>
+</html>

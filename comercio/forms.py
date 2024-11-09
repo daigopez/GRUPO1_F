@@ -1,5 +1,5 @@
 from django import forms
-from .models import Plato, Encuesta, PlatoSemanal
+from .models import Pedido, Plato, Encuesta, PlatoSemanal
 from django.core.exceptions import ValidationError
 
 class PlatoForm(forms.ModelForm):
@@ -87,3 +87,20 @@ class PagoForm(forms.Form):
             raise forms.ValidationError("La tarjeta ha expirado.")
 
         return fecha_expiracion
+    
+
+
+## formulario estado pedido
+
+class EstadoPedidoForm(forms.ModelForm):
+    class Meta:
+        model = Pedido
+        fields = ['estado']
+
+# crear pedido
+
+
+
+class PedidoForm(forms.Form):
+    direccion_envio = forms.CharField(max_length=255)
+    hora_entrega = forms.CharField(max_length=20)

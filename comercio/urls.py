@@ -1,6 +1,11 @@
 from django.urls import path
 from . import views
 from .views import (
+    # Estado de pedidos
+    actualizar_estado_pedido,
+    crear_pedido,
+    mis_pedidos,
+    # Fin estado de pedidos
     plato_list,
     plato_create,
     plato_update,
@@ -9,6 +14,9 @@ from .views import (
     pagina_venta,
     comprar_plato,
     editar_encuesta,
+    # Vista usuario estado pedidos
+    ver_detalle_pedido,
+    # FIn vista usuario estado pedidos
     visualizacion_encuestas,
     agregar_al_carrito,  
     restar_del_carrito,   
@@ -60,4 +68,16 @@ urlpatterns = [
     # Vista pedidos admin
 
     path('pedidos/', lista_pedidos, name='lista_pedidos'),
+
+    path('pedidos/actualizar/<int:pedido_id>/', actualizar_estado_pedido, name='actualizar_estado_pedido'),
+    # Vista pedidos usuario
+    path('pedidos/detalle/<int:pedido_id>/', ver_detalle_pedido, name='ver_detalle_pedido'),
+
+    
+    
+    path('mis_pedidos/', mis_pedidos, name='mis_pedidos'),
+
+
+    path('crear_pedido/', crear_pedido, name='crear_pedido'),
+    
 ]

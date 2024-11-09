@@ -1,0 +1,41 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Pedidos</title>
+    <style>
+        /* Estilos aquí */
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <ul>
+            {% if user.is_authenticated %}
+                <li><a href="/cerrar">Cerrar sesión</a></li>
+            {% else %}
+                <li><a href="/registro">Registrarse</a></li>
+                <li><a href="/iniciar">Iniciar sesión</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="container">
+        <h1>Mis Pedidos</h1>
+        {% if pedidos %}
+            <ul>
+                {% for pedido in pedidos %}
+                    <li>
+                        <a href="{% url 'ver_detalle_pedido' pedido.id %}">
+                            Pedido #{{ pedido.id }} - Estado: {{ pedido.estado }} - Total: ${{ pedido.total }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No tienes pedidos registrados.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

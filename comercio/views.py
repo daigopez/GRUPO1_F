@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .models import DetallePedido, Pedido, Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
-from .forms import PagoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
+from .forms import EstadoPedidoForm, PagoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
@@ -302,15 +302,16 @@ def pago(request):
             direccion_envio = form.cleaned_data['direccion_envio']
             hora_entrega = form.cleaned_data['hora_entrega']
 
-            # Crear el pedido
+            # Crear el pedido y asociarlo al usuario
             pedido = Pedido.objects.create(
+                usuario=request.user,  # Asociar el pedido al usuario actual
                 carrito=carrito,
                 direccion_envio=direccion_envio,
                 hora_entrega=hora_entrega,
                 pagado=True  # Asumimos que el pago se ha realizado
             )
 
-            # Guardar los detalles del pedido antes de limpiar el carrito
+            # Guardar los detalles del pedido
             for item in carrito.itemcarrito_set.all():
                 DetallePedido.objects.create(
                     pedido=pedido,
@@ -333,8 +334,8 @@ def pago(request):
 @login_required
 def confirmacion_pedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
-    return render(request, 'comercio/confirmacion_pedido.html', {'pedido': pedido})
-
+#    return render(request, 'comercio/confirmacion_pedido.html', {'pedido': pedido})
+    return redirect(f'/pedidos/detalle/{pedido_id}/')
 
 # Vista de pedidos para el admin
 
@@ -357,10 +358,91 @@ def lista_pedidos(request):
 
     return render(request, 'comercio/lista_pedidos.html', {'pedidos_info': pedidos_info})
 
-#### Vista admin para ver lista de pedidos:
-
-##
-
-######### Almacenar la info de lo que se está comprando
 
 
+
+#### Estado de pedidos:
+
+@login_required
+@user_passes_test(es_administrador)
+def actualizar_estado_pedido(request, pedido_id):
+    pedido = get_object_or_404(Pedido, id=pedido_id)
+    if request.method == 'POST':
+        form = EstadoPedidoForm(request.POST, instance=pedido)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Estado del pedido actualizado con éxito.')
+            return redirect('lista_pedidos')
+    else:
+        form = EstadoPedidoForm(instance=pedido)
+    
+    return render(request, 'comercio/actualizar_estado_pedido.html', {'form': form, 'pedido': pedido})
+
+
+###### Vista pedidos por usuario:
+
+def ver_detalle_pedido(request, pedido_id):
+    pedido = Pedido.objects.get(id=pedido_id)
+    detalles = pedido.detalles.all()  # Obtiene los detalles del pedido
+    return render(request, 'detalle_pedido.html', {'pedido': pedido, 'detalles': detalles})
+
+# vista para el usuario
+# views.py
+from django.shortcuts import render
+from .models import Pedido
+
+def mis_pedidos(request):
+    if request.user.is_authenticated:
+        pedidos = request.user.pedidos.all()  # Obtiene todos los pedidos del usuario
+    else:
+        pedidos = []  # Si no está autenticado, no hay pedidos
+
+    return render(request, 'mis_pedidos.html', {'pedidos': pedidos})
+
+
+#Crear pedidos:
+
+from django.shortcuts import render, redirect
+from .models import Pedido, DetallePedido, Carrito
+from .forms import PedidoForm
+
+def crear_pedido(request):
+    if request.method == 'POST':
+        form = PedidoForm(request.POST)
+        if form.is_valid():
+            # Obtener datos del formulario
+            direccion_envio = form.cleaned_data['direccion_envio']
+            hora_entrega = form.cleaned_data['hora_entrega']
+
+            # Obtener el carrito del usuario autenticado
+            carrito = Carrito.objects.get(user=request.user)  # Asumiendo que hay un carrito por usuario
+
+            # Crear el nuevo pedido asociado al usuario
+            nuevo_pedido = Pedido(
+                usuario=request.user,  # Asociar el pedido al usuario actual
+                carrito=carrito,
+                direccion_envio=direccion_envio,
+                hora_entrega=hora_entrega
+            )
+            nuevo_pedido.save()
+
+            # Agregar detalles al pedido (supongamos que ya tienes platos en el carrito)
+            for item in carrito.itemcarrito_set.all():  # Recorre los items del carrito
+                DetallePedido.objects.create(
+                    pedido=nuevo_pedido,
+                    plato=item.plato,
+                    cantidad=item.cantidad,
+                    precio_unitario=item.plato.precio,
+                    subtotal=item.cantidad * item.plato.precio
+                )
+
+            # Opcional: Vaciar el carrito después de crear el pedido
+            carrito.platos.clear()
+
+            # Redirigir a la lista de pedidos
+            return redirect('mis_pedidos')  # Nombre de la URL para ver los pedidos
+
+    else:
+        form = PedidoForm()
+
+    return render(request, 'crear_pedido.html', {'form': form})

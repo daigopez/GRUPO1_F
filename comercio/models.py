@@ -9,11 +9,11 @@ class Plato(models.Model):
     imagen = models.ImageField(upload_to='platos/', blank=True, null=True)
 
     def __str__(self):
-        return f"{self.nombre} - ${self.precio:.2f}"  # Formato con dos decimales
+        return f"{self.nombre} - ${self.precio:.2f}"
 
 class Encuesta(models.Model):
     plato = models.ForeignKey(Plato, on_delete=models.CASCADE, related_name='encuestas')
-    rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])  # 1 a 5 estrellas
+    rating = models.IntegerField(choices=[(i, str(i)) for i in range(1, 6)])
     comentario = models.TextField(blank=True)
 
     def __str__(self):
@@ -29,7 +29,7 @@ class ItemCarrito(models.Model):
     cantidad = models.PositiveIntegerField(default=1)
 
     class Meta:
-        unique_together = ('carrito', 'plato')  # Asegura que un plato no se repita en el carrito
+        unique_together = ('carrito', 'plato')
 
 class PlatoSemanal(models.Model):
     DIA_SEMANA_CHOICES = [
@@ -49,7 +49,7 @@ class PlatoSemanal(models.Model):
         return f"{self.dia}: {self.plato.nombre}"
 
     def total_votos(self):
-        return Voto.objects.filter(plato_semanal=self).count()  # Cuenta los votos para este plato semanal
+        return Voto.objects.filter(plato_semanal=self).count()
 
 class Voto(models.Model):
     plato_semanal = models.ForeignKey(PlatoSemanal, on_delete=models.CASCADE)
@@ -57,33 +57,46 @@ class Voto(models.Model):
 
     def __str__(self):
         return f'Voto de {self.user.username} para {self.plato_semanal.plato.nombre} en {self.plato_semanal.dia}'
-    
-
-######### Modelo para guardar la info del pedido
 
 class Pedido(models.Model):
+    ESTADO_CHOICES = [
+        ('preparando', 'Preparando'),
+        ('en_entrega', 'En entrega'),
+        ('entregado', 'Entregado'),
+    ]
+    usuario = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='pedidos')
     carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
     direccion_envio = models.CharField(max_length=255)
     hora_entrega = models.CharField(max_length=20)
     pagado = models.BooleanField(default=False)
     fecha_pedido = models.DateTimeField(auto_now_add=True)
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='preparando')
 
     def __str__(self):
-        return f'Pedido {self.id} - {"Pagado" if self.pagado else "Pendiente"}'
-    
-
-############### Para guardar el pedido:
-# models.py
-
-from django.db import models
-from django.contrib.auth.models import User
+        return f'Pedido {self.id} - {self.estado}'
 
 class DetallePedido(models.Model):
-    pedido = models.ForeignKey('Pedido', on_delete=models.CASCADE, related_name='detalles')
-    plato = models.ForeignKey('Plato', on_delete=models.CASCADE)  # Asegúrate de que este modelo exista
+    pedido = models.ForeignKey(Pedido, on_delete=models.CASCADE, related_name='detalles')
+    plato = models.ForeignKey(Plato, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField()
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
-        return f"{self.cantidad} x {self.plato.nombre} - {self.subtotal}"
+        return f"{self.cantidad} x {self.plato.nombre} - {self.subtotal:.2f}"
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
