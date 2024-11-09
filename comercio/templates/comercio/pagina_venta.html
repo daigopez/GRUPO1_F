@@ -6,13 +6,16 @@
     <title>Página de Venta de Platos</title>
     <style>
         body {
-            background-color: #EAEAEA; /* Fondo gris claro */
-            font-family: Arial, sans-serif;
+            background-image: url('/media/platos/fondo2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             margin: 0;
-            padding: 0;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
         }
         .navbar {
-            background-color: #ff9e1b; /* Color de la navbar */
+            background-color: rgba(255, 158, 27, 0.8); /* Fondo semi-transparente para que se vea la imagen */
             padding: 15px;
             color: white;
             display: flex;
@@ -48,6 +51,8 @@
             margin: 20px auto;
             max-width: 1200px; /* Aumenta el ancho máximo */
             padding: 20px;
+            background-color: rgba(249, 249, 249, 0.8); /* Fondo semi-transparente */
+            border-radius: 10px; /* Bordes redondeados */
         }
         .plato-list {
             flex: 3; /* Toma 3 partes del espacio */
@@ -144,7 +149,7 @@
 
                     <!-- Formulario de Encuesta -->
                     <div class="encuesta-form">
-                        <h3>Deja tu opinión</h3>
+                        <h3>Califica el plato </h3>
                         <form method="POST" action="{% url 'pagina_venta' %}">
                             {% csrf_token %}
                             <input type="hidden" name="plato_id" value="{{ plato.id }}">
@@ -157,15 +162,14 @@
                                 <option value="4">4⭐</option>
                                 <option value="5">5⭐</option>
                             </select><br>
-                            <label for="comentario">Comentario:</label><br>
-                            <textarea name="comentario" rows="3" cols="20"></textarea><br>
-                            <button type="submit">Enviar Encuesta</button>
+
+                            <button type="submit">¡Califica ahora!</button>
                         </form>
 
                         {% if plato.encuesta %}
                             <a class="edit-link" href="{% url 'editar_encuesta' plato.encuesta.id %}">Editar Encuesta</a>
                         {% else %}
-                            <p>No hay encuesta asociada a este plato.</p>
+
                         {% endif %}
                     </div>
                 </div>
@@ -213,12 +217,5 @@
             </ul>
         {% endif %}
     </div>
-    
-
-
-
-
-
-
 </body>
 </html>

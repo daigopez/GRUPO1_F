@@ -6,19 +6,23 @@
     <title>Modificar Datos</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background-image: url('/media/platos/modificardatos.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
         }
 
         .header {
             padding: 3px;
-            background-color: #ff9e1b; /* Color de fondo */
+            background-color: rgba(255, 158, 27, 0.8); /* Color de fondo con opacidad */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             display: flex; 
-            align-items: flex-end; 
-            justify-content: flex-start; 
+            align-items: center; 
+            justify-content: space-between; 
+            padding: 10px;
         }
 
         .btn-back {
@@ -30,7 +34,6 @@
             cursor: pointer;
             transition: background-color 0.3s;
             text-decoration: none; 
-            margin-bottom: 5px; 
         }
 
         .title-container {
@@ -48,7 +51,7 @@
             max-width: 400px;
             margin: 20px auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco con algo de transparencia */
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             text-align: center; 
@@ -59,7 +62,8 @@
         }
 
         form input {
-            width: 60%; /* 40% más pequeño que el 100% original */
+            width: 100%; /* Cambiado a 100% para que ocupe todo el ancho */
+            max-width: 300px; /* Máximo ancho para mantener un buen tamaño */
             padding: 10px; 
             border: 1px solid #ccc; 
             border-radius: 5px; 
@@ -99,11 +103,15 @@
             .form-container {
                 width: 90%; 
             }
+            .header {
+                flex-direction: column; /* Cambia la dirección en pantallas pequeñas */
+                align-items: flex-start; 
+            }
         }
 
         .title {
-            color: #ff9e1b;
-            margin: 20px 0;
+            color: #ffffff;
+            margin: 10px 0; /* Menos margen para pantallas pequeñas */
             font-size: 1.5em;
             text-align: center; 
         }
@@ -119,7 +127,7 @@
 </div>
 
 <div class="nav-logo">
-    <img src="/media/platos/logo2.png" alt="Logo" style="max-width: 300px;">
+    <img src="/media/platos/logo2.png" alt="Logo" style="max-width: 300px; width: 100%; height: auto;">
 </div>
 
 <div class="form-container">

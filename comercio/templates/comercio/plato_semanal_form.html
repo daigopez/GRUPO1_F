@@ -40,14 +40,20 @@
     button:hover {
         background-color: #e68a00; /* Color más oscuro al pasar el ratón */
     }
-    a {
-        color: #ff9e1b; /* Enlace en Papaya McLaren */
-        text-decoration: none;
-        margin-top: 10px;
-        display: inline-block; /* Para que el margen funcione */
+    .btn {
+        background-color: #28a745; /* Color de fondo del botón */
+        color: white; /* Color del texto */
+        border: none; /* Sin borde */
+        padding: 10px 20px; /* Espaciado interno */
+        border-radius: 5px; /* Bordes redondeados */
+        cursor: pointer; /* Cambiar el cursor al pasar */
+        transition: background-color 0.3s; /* Transición suave para el color de fondo */
+        text-decoration: none; /* Sin subrayado */
+        display: inline-block; /* Hacer que el enlace se comporte como un bloque */
+        margin-top: 10px; /* Espaciado superior */
     }
-    a:hover {
-        text-decoration: underline; /* Subrayar enlaces al pasar el ratón */
+    .btn:hover {
+        background-color: #218838; /* Color más oscuro al pasar el ratón */
     }
     .form-field {
         margin-bottom: 15px; /* Espaciado entre campos del formulario */
@@ -59,7 +65,7 @@
         form {
             padding: 15px; /* Menos padding en pantallas pequeñas */
         }
-        button {
+        button, .btn {
             width: 100%; /* Botón ocupa el ancho completo en pantallas pequeñas */
         }
     }
@@ -81,6 +87,6 @@
     {% endfor %}
     <button type="submit">Guardar</button>
 </form>
-<a href="{% url 'lista_platos_semanales' %}">Volver a la lista</a>
+<a href="{% url 'lista_platos_semanales' %}" class="btn">Volver a la lista</a>
 
 {% endblock %}

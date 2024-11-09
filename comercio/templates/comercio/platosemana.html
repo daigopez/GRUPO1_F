@@ -3,10 +3,13 @@
 {% block content %}
 <style>
     body {
-        font-family: Arial, sans-serif;
-        background-color: #EAEAEA; /* Color gris de fondo */
+        background-image: url('/media/platos/fondo2.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         margin: 0;
-        padding: 20px;
+        font-family: Arial, sans-serif;
+        min-height: 100vh;
     }
     h1 {
         color: #ff9e1b; /* Color Papaya McLaren */
@@ -16,6 +19,8 @@
         width: 100%;
         border-collapse: collapse;
         margin: 20px 0;
+        background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente para la tabla */
+        border-radius: 8px; /* Bordes redondeados para la tabla */
     }
     th, td {
         padding: 15px;
@@ -43,18 +48,25 @@
         padding: 10px 15px;
         cursor: pointer;
         border-radius: 5px;
+        margin-bottom: 10px; /* Espacio entre los botones y la tabla */
     }
     button:hover {
         background-color: #e68a00; /* Color más oscuro al pasar el ratón */
     }
     .message-list {
-        background-color: #fff; /* Fondo blanco para mensajes */
+        background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente para mensajes */
         border: 1px solid #ccc;
         padding: 10px;
         margin-top: 20px;
         border-radius: 5px;
     }
 </style>
+
+{% if user.is_staff %}
+<form action="{% url 'crear_plato_semanal' %}" method="get">
+    <button type="submit">Agregar Plato Semanal</button>
+</form>
+{% endif %}
 
 <table>
     <tr>
@@ -90,9 +102,13 @@
     </tr>
     {% endfor %}
 </table>
+
 {% if user.is_staff %}
-<a href="{% url 'crear_plato_semanal' %}">Agregar Plato Semanal</a>
+<form action="{% url 'crear_plato_semanal' %}" method="get">
+    <button type="submit">Agregar Plato Semanal</button>
+</form>
 {% endif %}
+
 <!-- Mensaje de éxito o error -->
 {% if messages %}
     <div class="message-list">

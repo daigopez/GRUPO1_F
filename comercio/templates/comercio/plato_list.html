@@ -6,13 +6,16 @@
     <title>Lista de Platos</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background-image: url('/media/platos/fondo2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             margin: 0;
-            padding: 0;
-            background-color: #EAEAEA; /* Fondo en color #EAEAEA */
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
         }
         header {
-            background-color: #ff9e1b; /* Color del navbar */
+            background-color: #ff9c1bae; /* Color del navbar */
             color: white;
             padding: 10px 20px;
             text-align: center;
@@ -38,7 +41,8 @@
             background-color: #e65c00; /* Naranja más oscuro al pasar el mouse */
         }
         .container {
-            width: 80%;
+            width: 90%; /* Ajuste para pantallas pequeñas */
+            max-width: 1200px; /* Ancho máximo */
             margin: auto;
             padding: 20px;
             background-color: white; /* Fondo blanco para el contenedor */
@@ -49,13 +53,15 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            justify-content: center; /* Centrar los platos */
         }
         .plato {
             background: white;
             border: 1px solid #ddd;
             border-radius: 8px;
             padding: 15px;
-            width: calc(33% - 40px); /* 3 items per row */
+            flex: 1 1 calc(33% - 20px); /* 3 items per row en pantallas grandes */
+            max-width: calc(33% - 20px); /* Ancho máximo */
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .plato img {
@@ -104,6 +110,26 @@
         }
         .add-button:hover {
             background-color: #218838; /* Color del botón al pasar el mouse */
+        }
+
+        /* Media queries para responsividad */
+        @media (max-width: 768px) {
+            .plato {
+                flex: 1 1 calc(50% - 20px); /* 2 items per row en pantallas medianas */
+                max-width: calc(50% - 20px);
+            }
+        }
+        @media (max-width: 480px) {
+            .plato {
+                flex: 1 1 100%; /* 1 item per row en pantallas pequeñas */
+                max-width: 100%;
+            }
+            .btn-primary {
+                position: relative; /* Cambiar a posición relativa para móviles */
+                left: auto; /* Sin desplazamiento lateral */
+                top: auto; /* Sin desplazamiento vertical */
+                transform: none; /* Sin transformación */
+            }
         }
     </style>
 </head>
