@@ -79,5 +79,7 @@ urlpatterns = [
 
 
     path('crear_pedido/', crear_pedido, name='crear_pedido'),
+
+    path('ocultar_plato/<int:plato_id>/', views.ocultar_plato, name='ocultar_plato'),
     
 ]

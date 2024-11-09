@@ -97,6 +97,18 @@
             background-color: #ff9e1b; /* Color del enlace al pasar el mouse */
             color: white;
         }
+        .btn-ocultar {
+            padding: 5px 10px;
+            background-color: #dc3545; /* Color del botón de ocultar */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        .btn-ocultar:hover {
+            background-color: #c82333; /* Color más oscuro al pasar el mouse */
+        }
         .add-button {
             display: block;
             margin: 20px auto;
@@ -154,7 +166,11 @@
                     <p class="description">{{ plato.descripcion }}</p> <!-- Descripción del plato -->
                     <div class="actions">
                         <a href="{% url 'plato_update' plato.pk %}">Editar</a>
-                        <a href="{% url 'plato_delete' plato.pk %}">Eliminar</a> <!-- Color para eliminar -->
+                        <a href="{% url 'plato_delete' plato.pk %}">Eliminar</a>
+                        <form action="{% url 'ocultar_plato' plato.pk %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-ocultar">Ocultar</button>
+                        </form>
                     </div>
                 </div>
             {% empty %}

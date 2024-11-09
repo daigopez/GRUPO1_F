@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
 from .models import DetallePedido, Pedido, Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
-from .forms import EstadoPedidoForm, PagoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
+from .forms import EstadoPedidoForm, PagoForm, PedidoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 
@@ -18,12 +18,10 @@ def es_administrador(user):
 def votar_plato_semanal(request, plato_semanal_id):
     plato_semanal = get_object_or_404(PlatoSemanal, pk=plato_semanal_id)
     
-    # Verificar si el usuario ya ha votado por este plato semanal
     if request.method == 'POST':
         if Voto.objects.filter(plato_semanal=plato_semanal, user=request.user).exists():
             messages.warning(request, 'Ya has votado por este plato.')
         else:
-            # Crear un nuevo voto
             Voto.objects.create(plato_semanal=plato_semanal, user=request.user)
             messages.success(request, '¡Gracias por tu voto!')
         return redirect('lista_platos_semanales')
@@ -81,12 +79,17 @@ def iniciar_sesion(request):
         return redirect('iniciada')
     return render(request, 'iniciar.html', {'form': AuthenticationForm()})
 
-def lista_de_platos(request):
-    platos = Plato.objects.all()
+# Nueva función para listar platos visibles
+def lista_platos(request):
+    platos = Plato.objects.filter(oculto=False)  # Solo platos visibles
     return render(request, 'comercio/lista_de_platos.html', {'platos': platos})
 
+# Modificar la función de listar todos los platos
+def lista_de_platos(request):
+    return lista_platos(request)  # Redirigir a la nueva función
+
 def pagina_venta(request):
-    platos = Plato.objects.all()
+    platos = Plato.objects.filter(oculto=False)  # Solo platos visibles
     total = 0
     platos_carrito = []
 
@@ -197,8 +200,10 @@ def comprar_plato(request, plato_id):
 @login_required
 @permission_required('is_superuser')
 def plato_list(request):
-    platos = Plato.objects.all()
+    platos = Plato.objects.filter(oculto=False)  # Solo obtener platos que no están ocultos
     return render(request, 'comercio/plato_list.html', {'platos': platos})
+
+
 
 @user_passes_test(es_administrador)
 @login_required
@@ -265,7 +270,7 @@ def eliminar_plato_semanal(request, pk):
         return redirect('lista_platos_semanales')
     return render(request, 'comercio/plato_semanal_confirm_delete.html', {'plato_semanal': plato_semanal})
 
-#Modificacion de registro de usuarios:
+# Modificación de registro de usuarios
 @login_required
 def modificar_datos(request):
     if request.method == 'POST':
@@ -276,21 +281,19 @@ def modificar_datos(request):
             if password:
                 user.set_password(password)
             user.save()
-            return redirect('/')  # Se redirecciona a la pagina de iniciar sesion
+            return redirect('/')  # Se redirecciona a la página de iniciar sesión
     else:
         form = UserUpdateForm(instance=request.user)
 
     return render(request, 'modificar_datos.html', {'form': form})
 
-# Fin Modificacion de registro de usuarios
-
+# Fin modificación de registro de usuarios
 
 ###################### pagos
 
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Pedido, Carrito
 from .forms import PagoForm
-
 from django.contrib import messages
 
 @login_required
@@ -334,14 +337,9 @@ def pago(request):
 @login_required
 def confirmacion_pedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
-#    return render(request, 'comercio/confirmacion_pedido.html', {'pedido': pedido})
     return redirect(f'/pedidos/detalle/{pedido_id}/')
 
 # Vista de pedidos para el admin
-
-from django.shortcuts import render
-from .models import Pedido
-
 @login_required
 @user_passes_test(es_administrador)
 def lista_pedidos(request):
@@ -357,9 +355,6 @@ def lista_pedidos(request):
         })
 
     return render(request, 'comercio/lista_pedidos.html', {'pedidos_info': pedidos_info})
-
-
-
 
 #### Estado de pedidos:
 
@@ -378,7 +373,6 @@ def actualizar_estado_pedido(request, pedido_id):
     
     return render(request, 'comercio/actualizar_estado_pedido.html', {'form': form, 'pedido': pedido})
 
-
 ###### Vista pedidos por usuario:
 
 def ver_detalle_pedido(request, pedido_id):
@@ -387,10 +381,6 @@ def ver_detalle_pedido(request, pedido_id):
     return render(request, 'detalle_pedido.html', {'pedido': pedido, 'detalles': detalles})
 
 # vista para el usuario
-# views.py
-from django.shortcuts import render
-from .models import Pedido
-
 def mis_pedidos(request):
     if request.user.is_authenticated:
         pedidos = request.user.pedidos.all()  # Obtiene todos los pedidos del usuario
@@ -399,18 +389,11 @@ def mis_pedidos(request):
 
     return render(request, 'mis_pedidos.html', {'pedidos': pedidos})
 
-
-#Crear pedidos:
-
-from django.shortcuts import render, redirect
-from .models import Pedido, DetallePedido, Carrito
-from .forms import PedidoForm
-
+# Crear pedidos
 def crear_pedido(request):
     if request.method == 'POST':
         form = PedidoForm(request.POST)
         if form.is_valid():
-            # Obtener datos del formulario
             direccion_envio = form.cleaned_data['direccion_envio']
             hora_entrega = form.cleaned_data['hora_entrega']
 
@@ -426,8 +409,8 @@ def crear_pedido(request):
             )
             nuevo_pedido.save()
 
-            # Agregar detalles al pedido (supongamos que ya tienes platos en el carrito)
-            for item in carrito.itemcarrito_set.all():  # Recorre los items del carrito
+            # Agregar detalles al pedido
+            for item in carrito.itemcarrito_set.all():
                 DetallePedido.objects.create(
                     pedido=nuevo_pedido,
                     plato=item.plato,
@@ -446,3 +429,16 @@ def crear_pedido(request):
         form = PedidoForm()
 
     return render(request, 'crear_pedido.html', {'form': form})
+
+
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import Plato
+
+def ocultar_plato(request, plato_id):
+    if request.method == 'POST':
+        plato = get_object_or_404(Plato, pk=plato_id)
+        plato.oculto = True  # O el método que uses para marcar como oculto
+        plato.save()
+    return redirect('plato_list')  # Redirigir a la lista de platos después de ocultar
+    

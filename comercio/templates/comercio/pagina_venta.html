@@ -137,42 +137,42 @@
     <div class="container">
         <div class="plato-list">
             {% for plato in platos %}
-                <div class="plato-item">
-                    <h2>{{ plato.nombre }}</h2>
-                    <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}">
-                    <p>{{ plato.descripcion }}</p>
-                    <p>Precio: ${{ plato.precio }}</p>
-                    <form action="{% url 'agregar_al_carrito' plato.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit">Agregar al Carrito</button>
-                    </form>
-
-                    <!-- Formulario de Encuesta -->
-                    <div class="encuesta-form">
-                        <h3>Califica el plato </h3>
-                        <form method="POST" action="{% url 'pagina_venta' %}">
+                {% if not plato.oculto %}  <!-- Verificar si el plato no está oculto -->
+                    <div class="plato-item">
+                        <h2>{{ plato.nombre }}</h2>
+                        <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}">
+                        <p>{{ plato.descripcion }}</p>
+                        <p>Precio: ${{ plato.precio }}</p>
+                        <form action="{% url 'agregar_al_carrito' plato.id %}" method="POST">
                             {% csrf_token %}
-                            <input type="hidden" name="plato_id" value="{{ plato.id }}">
-                            <label for="rating">Calificación (1-5)⭐:</label>
-                            <select name="rating" required>
-                                <option value="">Selecciona</option>
-                                <option value="1">1⭐</option>
-                                <option value="2">2⭐</option>
-                                <option value="3">3⭐</option>
-                                <option value="4">4⭐</option>
-                                <option value="5">5⭐</option>
-                            </select><br>
-
-                            <button type="submit">¡Califica ahora!</button>
+                            <button type="submit">Agregar al Carrito</button>
                         </form>
 
-                        {% if plato.encuesta %}
-                            <a class="edit-link" href="{% url 'editar_encuesta' plato.encuesta.id %}">Editar Encuesta</a>
-                        {% else %}
+                        <!-- Formulario de Encuesta -->
+                        <div class="encuesta-form">
+                            <h3>Califica el plato</h3>
+                            <form method="POST" action="{% url 'pagina_venta' %}">
+                                {% csrf_token %}
+                                <input type="hidden" name="plato_id" value="{{ plato.id }}">
+                                <label for="rating">Calificación (1-5)⭐:</label>
+                                <select name="rating" required>
+                                    <option value="">Selecciona</option>
+                                    <option value="1">1⭐</option>
+                                    <option value="2">2⭐</option>
+                                    <option value="3">3⭐</option>
+                                    <option value="4">4⭐</option>
+                                    <option value="5">5⭐</option>
+                                </select><br>
 
-                        {% endif %}
+                                <button type="submit">¡Califica ahora!</button>
+                            </form>
+
+                            {% if plato.encuesta %}
+                                <a class="edit-link" href="{% url 'editar_encuesta' plato.encuesta.id %}">Editar Encuesta</a>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
             {% empty %}
                 <p>No hay platos disponibles.</p>
             {% endfor %}
