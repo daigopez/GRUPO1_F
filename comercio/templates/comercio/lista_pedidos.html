@@ -60,6 +60,9 @@
 </head>
 <body>
     <h1>Lista de Pedidos</h1>
+    <div style="text-align: center; margin-bottom: 20px;">
+        <a href="{% url 'reporte_ventas' %}" class="btn-primary" style="background-color: #ff6f00; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Ver Reporte de Ventas</a>
+    </div>
     <table>
         <thead>
             <tr>
@@ -69,6 +72,8 @@
                 <th>Total</th>
                 <th>Estado de Pago</th>
                 <th>Fecha del Pedido</th>
+                <th>Estado del pedido</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -80,12 +85,13 @@
                 <td data-label="Total">${{ pedido_info.total }}</td>
                 <td data-label="Estado de Pago">{{ pedido_info.pedido.pagado|yesno:"Pagado,Pendiente" }}</td>
                 <td data-label="Fecha del Pedido">{{ pedido_info.pedido.fecha_pedido }}</td>
+                <td data-label="Estado del pedido">{{ pedido_info.pedido.estado }}</td>
                 <td data-label="Acciones">
                     <a href="{% url 'actualizar_estado_pedido' pedido_info.pedido.id %}">Actualizar Estado</a>
                 </td>
             </tr>
             <tr>
-                <td colspan="6" style="padding: 0;">
+                <td colspan="8" style="padding: 0;">
                     <div style="background-color: #f2f2f2; padding: 10px;">
                         <strong>Detalles del Pedido:</strong>
                         <ul>

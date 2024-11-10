@@ -63,9 +63,9 @@ class Voto(models.Model):
 
 class Pedido(models.Model):
     ESTADO_CHOICES = [
-        ('preparando', 'Preparando'),
-        ('en_entrega', 'En entrega'),
-        ('entregado', 'Entregado'),
+        ('Preparando', 'Preparando 🍲'),
+        ('En entrega ⛟', 'En entrega ⛟'),
+        ('Entregado ✅', 'Entregado ✅'),
     ]
     usuario = models.ForeignKey(User, null=True, on_delete=models.CASCADE, related_name='pedidos')
     carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE)
@@ -73,7 +73,7 @@ class Pedido(models.Model):
     hora_entrega = models.CharField(max_length=20)
     pagado = models.BooleanField(default=False)
     fecha_pedido = models.DateTimeField(auto_now_add=True)
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='preparando')
+    estado = models.CharField(max_length=50, choices=ESTADO_CHOICES, default='Preparando')
 
     def __str__(self):
         return f'Pedido {self.id} - {self.estado}'

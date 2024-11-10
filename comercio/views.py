@@ -343,7 +343,8 @@ def confirmacion_pedido(request, pedido_id):
 @login_required
 @user_passes_test(es_administrador)
 def lista_pedidos(request):
-    pedidos = Pedido.objects.all()
+    # Ordenar los pedidos por fecha de manera descendente
+    pedidos = Pedido.objects.all().order_by('-fecha_pedido')  # Cambiado aquí
     pedidos_info = []
 
     for pedido in pedidos:
@@ -374,11 +375,18 @@ def actualizar_estado_pedido(request, pedido_id):
     return render(request, 'comercio/actualizar_estado_pedido.html', {'form': form, 'pedido': pedido})
 
 ###### Vista pedidos por usuario:
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Sum
+from .models import Pedido
 
 def ver_detalle_pedido(request, pedido_id):
-    pedido = Pedido.objects.get(id=pedido_id)
+    pedido = get_object_or_404(Pedido, id=pedido_id)
     detalles = pedido.detalles.all()  # Obtiene los detalles del pedido
-    return render(request, 'detalle_pedido.html', {'pedido': pedido, 'detalles': detalles})
+    
+    # Calcular el total de la compra
+    total_compra = detalles.aggregate(total=Sum('subtotal'))['total'] or 0
+
+    return render(request, 'detalle_pedido.html', {'pedido': pedido, 'detalles': detalles, 'total_compra': total_compra})
 
 # vista para el usuario
 def mis_pedidos(request):
@@ -442,3 +450,34 @@ def ocultar_plato(request, plato_id):
         plato.save()
     return redirect('plato_list')  # Redirigir a la lista de platos después de ocultar
     
+
+############ Reportes de ventas
+
+from django.shortcuts import render
+from django.utils import timezone
+from django.db.models import Sum
+from .models import Pedido  # Asegúrate de que el modelo Pedido esté importado
+
+from django.shortcuts import render
+from django.utils import timezone
+from django.db.models import Sum
+from .models import Pedido, DetallePedido  # Importar el modelo DetallePedido
+
+def reporte_ventas(request):
+    hoy = timezone.now().date()
+
+    # Calcular el total de ventas del día de hoy
+    ventas_diarias = DetallePedido.objects.filter(
+        pedido__fecha_pedido__date=hoy
+    ).aggregate(total_ventas=Sum('subtotal'))
+
+    # Calcular el total de ventas de la última semana
+    ventas_semanales = DetallePedido.objects.filter(
+        pedido__fecha_pedido__gte=hoy - timezone.timedelta(days=7)
+    ).aggregate(total_ventas=Sum('subtotal'))
+
+    context = {
+        'ventas_diarias': ventas_diarias['total_ventas'] or 0,
+        'ventas_semanales': ventas_semanales['total_ventas'] or 0,
+    }
+    return render(request, 'comercio/reporte_ventas.html', context)

@@ -103,16 +103,6 @@
     </div>   
     {% endif %}
 
-    <div class="container mt-5">
-        <h1>Vota para la próxima semana</h1>
-        <a href="{% url 'lista_platos_semanales' %}" class="btn">Ir a votar</a>
-    </div> 
-    
-    <div class="container mt-5">
-        <h1>Modifica tus datos</h1>
-        <a href="{% url 'modificar_datos' %}" class="btn">Modificar datos</a>
-    </div>
-
     {% if user.is_authenticated %}
     <div class="container mt-5">
         <h1>Ver Detalle de tu Último Pedido</h1>
@@ -127,19 +117,18 @@
     {% endif %}
 
     <div class="container mt-5">
-        <h1>Ver mis pedidos</h1>
+        <h1>Ver mi historial de pedidos</h1>
         <a href="{% url 'mis_pedidos' %}" class="btn">Mis Pedidos</a>
     </div>
 
     <div class="container mt-5">
-        <h1>Ver estado de mi pedidito</h1>
-        {% with ultimo_pedido=user.pedidos.last %}
-            {% if ultimo_pedido %}
-                <a href="/pedidos/detalle/{{ ultimo_pedido.id }}/" class="btn">Ver estado de mi pedidito</a>
-            {% else %}
-                <p>No tienes pedidos registrados.</p>
-            {% endif %}
-        {% endwith %}
+        <h1>Vota para la próxima semana</h1>
+        <a href="{% url 'lista_platos_semanales' %}" class="btn">Ir a votar</a>
+    </div> 
+
+    <div class="container mt-5">
+        <h1>Modifica tus datos</h1>
+        <a href="{% url 'modificar_datos' %}" class="btn">Modificar datos</a>
     </div>
 
 </body>

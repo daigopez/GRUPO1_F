@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporte de Ventas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .reporte {
+            width: 80%;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .resultado {
+            margin: 20px 0;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Ventas</h1>
+    <div class="reporte">
+        <div class="resultado">
+            <strong>Ventas Diarias:</strong> ${{ ventas_diarias }}
+        </div>
+        <div class="resultado">
+            <strong>Ventas Semanales:</strong> ${{ ventas_semanales }}
+        </div>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{% url 'lista_pedidos' %}" class="btn-primary">Volver a la Lista de Pedidos</a>
+        </div>
+    </div>
+</body>
+</html>

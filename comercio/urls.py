@@ -32,6 +32,9 @@ from .views import (
 
 # Visualización admin de la lista de pedidos
     lista_pedidos,
+    #reporte venta
+    lista_pedidos,
+    reporte_ventas,
 )
 
 urlpatterns = [
@@ -81,5 +84,9 @@ urlpatterns = [
     path('crear_pedido/', crear_pedido, name='crear_pedido'),
 
     path('ocultar_plato/<int:plato_id>/', views.ocultar_plato, name='ocultar_plato'),
+
+    ## REporte de ventas
+    path('lista-pedidos/', lista_pedidos, name='lista_pedidos'),  # Asegúrate de tener esta vista
+    path('reporte-ventas/', reporte_ventas, name='reporte_ventas'),  # URL para el reporte de ventas
     
 ]
