@@ -15,7 +15,7 @@
             min-height: 100vh;
         }
         .navbar {
-            background-color: rgba(255, 158, 27, 0.8); /* Fondo semi-transparente para que se vea la imagen */
+            background-color: rgba(255, 158, 27, 0.8); /* Fondo semi-transparente */
             padding: 15px;
             color: white;
             display: flex;
@@ -48,11 +48,13 @@
         }
         .container {
             display: flex; /* Usamos flexbox */
+            flex-direction: row; /* Asegura que el carrito y los platos estén uno al lado del otro */
             margin: 20px auto;
             max-width: 1200px; /* Aumenta el ancho máximo */
             padding: 20px;
             background-color: rgba(249, 249, 249, 0.8); /* Fondo semi-transparente */
             border-radius: 10px; /* Bordes redondeados */
+            flex-wrap: wrap; /* Permitir que los elementos se apilen en pantallas pequeñas */
         }
         .plato-list {
             flex: 3; /* Toma 3 partes del espacio */
@@ -64,7 +66,7 @@
             border: 1px solid #ccc;
             margin: 10px;
             padding: 10px;
-            width: 200px;
+            width: 200px; /* Ancho fijo */
             text-align: center;
             border-radius: 8px;
             background-color: #f9f9f9;
@@ -107,8 +109,10 @@
             flex: 1; /* Toma 1 parte del espacio */
             margin-left: 20px; /* Espacio entre el contenido y el carrito */
             background-color: #f9f9f9;
-            padding: 15px;
+            padding: 10px; /* Reducido para que no sea tan alto */
             border-radius: 8px;
+            overflow-y: hidden; /* Eliminar desplazamiento */
+            min-width: 250px; /* Ancho mínimo para el carrito */
         }
         .carrito-item {
             margin-bottom: 15px; /* Espacio entre cada plato en el carrito */
@@ -122,6 +126,22 @@
         .carrito-actions {
             display: flex;
             justify-content: space-between; /* Espacio entre botones */
+        }
+        
+        /* Estilos Responsivos */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column; /* Apilar elementos en móviles */
+                align-items: center; /* Centrar en pantallas pequeñas */
+            }
+            .carrito {
+                margin-left: 0; /* Eliminar margen en pantallas pequeñas */
+                width: 100%; /* Ancho completo */
+                min-width: auto; /* Ancho mínimo automático */
+            }
+            .plato-list {
+                justify-content: center; /* Centrar platos en pantallas pequeñas */
+            }
         }
     </style>
 </head>
