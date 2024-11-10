@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Platos Congelados</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background-color: #f0f0f0;
@@ -16,17 +17,20 @@
             padding: 15px;
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
+            justify-content: space-between;
         }
         .navbar ul {
             list-style-type: none;
             margin: 0;
             padding: 0;
             display: flex;
-            flex-grow: 1;
+            flex-direction: row;
+            flex-wrap: wrap;
             justify-content: flex-end;
         }
         .navbar li {
-            margin: 0 15px;
+            margin: 0 10px;
         }
         .navbar a {
             color: white;
@@ -41,28 +45,52 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 800px;
-            margin: 20px auto;
+            flex: 0 1 calc(14.28% - 20px); /* 14.28% para 7 cuadraditos */
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 10px; /* Ajusta el margen para separación */
             text-align: center;
         }
         h1 {
             color: #333;
+            font-size: 16px; /* Ajusta el tamaño del texto */
             margin: 0;
         }
-        .btn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 15px;
+        .icon-btn {
+            background-color: transparent;
+            color: #4CAF50;
             border: none;
-            border-radius: 5px;
-            text-decoration: none;
             cursor: pointer;
-            display: inline-block;
-            transition: background-color 0.3s;
+            font-size: 62px; /* Tamaño del icono aumentado */
+            transition: color 0.3s;
+            margin: 10px; /* Añade un margen para separación */
         }
-        .btn:hover {
-            background-color: #45a049;
+        .icon-btn:hover {
+            color: #45a049;
+        }
+
+        /* Contenedor para las cajas */
+        .box-container {
+            display: flex;
+            flex-wrap: wrap; /* Permite que las cajas se envuelvan */
+            justify-content: center; /* Centra las cajas horizontalmente */
+        }
+
+        /* Media queries para hacer el navbar responsivo */
+        @media (max-width: 600px) {
+            .navbar ul {
+                flex-direction: column; /* Cambia a columna en pantallas pequeñas */
+                align-items: flex-start; /* Alinea a la izquierda */
+            }
+            .navbar li {
+                margin: 5px 0; /* Ajusta el margen en pantallas pequeñas */
+            }
+            .container {
+                flex: 0 1 calc(100% - 20px); /* Ocupa el 100% en pantallas pequeñas */
+            }
         }
     </style>
 </head>
@@ -81,54 +109,56 @@
     {% block conten %}
     {% endblock %}
 
-    {% if user.is_staff %}
-    <div class="container mt-5">
-        <h1>Bienvenido a la gestión de platos</h1>
-        <a href="{% url 'plato_list' %}" class="btn">Agregar, editar o eliminar platos</a>
-    </div>
-    <div class="container mt-5">
-        <a href="{% url 'visualizar_encuestas' %}" class="btn">Ver encuestas realizadas</a>
-    </div>
-    {% endif %}
+    <div class="box-container">
+        {% if user.is_staff %}
+        <div class="container">
+            <h1>Bienvenido a la gestión de platos</h1>
+            <button class="icon-btn" onclick="location.href='{% url 'plato_list' %}'"><i class="fas fa-utensils"></i></button>
+        </div>
+        <div class="container">
+            <button class="icon-btn" onclick="location.href='{% url 'visualizar_encuestas' %}'"><i class="fas fa-chart-bar"></i></button>
+        </div>
+        {% endif %}
 
-    <div class="container mt-5">
-        <h1>Ve nuestros platos disponibles</h1>
-        <a href="{% url 'pagina_venta' %}" class="btn">Ir a la lista de platos</a>
-    </div>    
+        <div class="container">
+            <h1>Ve nuestros platos disponibles</h1>
+            <button class="icon-btn" onclick="location.href='{% url 'pagina_venta' %}'"><i class="fas fa-list"></i></button>
+        </div>    
 
-    {% if user.is_staff %}
-    <div class="container mt-5">
-        <h1>Ver pedidos realizados</h1>
-        <a href="{% url 'lista_pedidos' %}" class="btn">Platos vendidos</a>
-    </div>   
-    {% endif %}
+        {% if user.is_staff %}
+        <div class="container">
+            <h1>Ver pedidos realizados</h1>
+            <button class="icon-btn" onclick="location.href='{% url 'lista_pedidos' %}'"><i class="fas fa-shopping-cart"></i></button>
+        </div>   
+        {% endif %}
 
-    {% if user.is_authenticated %}
-    <div class="container mt-5">
-        <h1>Ver Detalle de tu Último Pedido</h1>
-        {% with ultimo_pedido=user.pedidos.last %}
-            {% if ultimo_pedido %}
-                <a href="{% url 'ver_detalle_pedido' ultimo_pedido.id %}" class="btn">Ver Detalle del Pedido</a>
-            {% else %}
-                <p>No tienes pedidos registrados.</p>
-            {% endif %}
-        {% endwith %}
-    </div>
-    {% endif %}
+        {% if user.is_authenticated %}
+        <div class="container">
+            <h1>Ver Detalle de tu Último Pedido</h1>
+            {% with ultimo_pedido=user.pedidos.last %}
+                {% if ultimo_pedido %}
+                    <button class="icon-btn" onclick="location.href='{% url 'ver_detalle_pedido' ultimo_pedido.id %}'"><i class="fas fa-file-invoice"></i></button>
+                {% else %}
+                    <p>No tienes pedidos registrados.</p>
+                {% endif %}
+            {% endwith %}
+        </div>
+        {% endif %}
 
-    <div class="container mt-5">
-        <h1>Ver mi historial de pedidos</h1>
-        <a href="{% url 'mis_pedidos' %}" class="btn">Mis Pedidos</a>
-    </div>
+        <div class="container">
+            <h1>Ver mi historial de pedidos</h1>
+            <button class="icon-btn" onclick="location.href='{% url 'mis_pedidos' %}'"><i class="fas fa-history"></i></button>
+        </div>
 
-    <div class="container mt-5">
-        <h1>Vota para la próxima semana</h1>
-        <a href="{% url 'lista_platos_semanales' %}" class="btn">Ir a votar</a>
-    </div> 
+        <div class="container">
+            <h1>Vota para la próxima semana</h1>
+            <button class="icon-btn" onclick="location.href='{% url 'lista_platos_semanales' %}'"><i class="fas fa-vote-yea"></i></button>
+        </div> 
 
-    <div class="container mt-5">
-        <h1>Modifica tus datos</h1>
-        <a href="{% url 'modificar_datos' %}" class="btn">Modificar datos</a>
+        <div class="container">
+            <h1>Modifica tus datos</h1>
+            <button class="icon-btn" onclick="location.href='{% url 'modificar_datos' %}'"><i class="fas fa-edit"></i></button>
+        </div>
     </div>
 
 </body>

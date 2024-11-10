@@ -20,26 +20,25 @@
         color: #333;
         margin: 0; /* Eliminar margen superior del h1 */
     }
+    .big-text {
+        font-size: 2.5em; /* Aumentar el tamaño de la fuente solo para el texto grande */
+    }
 
-        /* Estilos para la imagen */
-        .nav-logo {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px; /* Espacio debajo de la imagen */
-        }
+    /* Estilos para la imagen */
+    .nav-logo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px; /* Espacio debajo de la imagen */
+    }
 
-        .nav-logo img {
-            max-width: 350px; /* Ajusta el tamaño máximo de la imagen */
-             
-            transition: transform 0.3s ease; /* Transición suave para animaciones */
-        }
+    .nav-logo img {
+        max-width: 350px; /* Ajusta el tamaño máximo de la imagen */
+        transition: transform 0.3s ease; /* Transición suave para animaciones */
+    }
 
-        .nav-logo img:hover {
-            transform: scale(1.1); /* Agranda ligeramente la imagen al pasar el ratón */
-        }
-
-
-
+    .nav-logo img:hover {
+        transform: scale(1.1); /* Agranda ligeramente la imagen al pasar el ratón */
+    }
 
     .link-cancel {
         color: #007BFF;
@@ -52,12 +51,12 @@
         text-decoration: underline;
     }
 </style>
-    <!-- Logo en el header -->
-    <div class="nav-logo">
-        <img src="/media/platos/logo2.png" alt="Logo">
-    </div>
+<!-- Logo en el header -->
+<div class="nav-logo">
+    <img src="/media/platos/logo2.png" alt="Logo">
+</div>
 
 <div class="container">
-    <h1>Hola, {{ user }}.</h1>
+    <h1><span class="big-text">Hola, {{ user }}.</span></h1>
 </div>
 {% endblock %}
