@@ -100,7 +100,7 @@ class EstadoPedidoForm(forms.ModelForm):
 # crear pedido
 
 
-
+# Formulario de envio y direccion
 class PedidoForm(forms.Form):
     direccion_envio = forms.CharField(max_length=255)
     hora_entrega = forms.CharField(max_length=20)
