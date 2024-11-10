@@ -19,84 +19,135 @@
 <body>
     <h1>Gráficos de Ventas de Comida</h1>
 
-    <h2>Gráfico de Tortas de Voto</h2>
-    <canvas id="votoChart"></canvas>
+    <h2>Gráfico de Tortas de Voto Diarios</h2>
+    <canvas id="votoDiarioChart"></canvas>
 
-    <h2>Gráfico de Barras de Pedidos</h2>
-    <canvas id="pedidoChart"></canvas>
+    <h2>Gráfico de Tortas de Voto Semanales</h2>
+    <canvas id="votoSemanalChart"></canvas>
+
+    <h2>Gráfico de Barras de Pedidos Diarios</h2>
+    <canvas id="pedidoDiarioChart"></canvas>
+
+    <h2>Gráfico de Barras de Pedidos Semanales</h2>
+    <canvas id="pedidoSemanalChart"></canvas>
 
     <script>
-        const votosData = {{ votos|safe }};
-        console.log("Votos Data:", votosData);  // Verificar el contenido de votosData
-        
-        const pedidosData = {{ pedidos|safe }};
-        console.log("Pedidos Data:", pedidosData);  // Verificar el contenido de pedidosData
+        const votosDiarios = {{ votos_diarios|safe }};
+        const votosSemanales = {{ votos_semanales|safe }};
+        const pedidosDiarios = {{ pedidos_diarios|safe }};
+        const pedidosSemanales = {{ pedidos_semanales|safe }};
 
-        if (Array.isArray(votosData) && votosData.length > 0) {
-            const votoLabels = votosData.map(voto => voto['plato_semanal__plato__nombre'] || 'Nombre Desconocido');
-            const votoCounts = votosData.map(voto => voto.total || 0);
+        // Gráfico de Voto Diarios
+        const votoDiarioLabels = votosDiarios.map(voto => voto['plato_semanal__plato__nombre'] || 'Nombre Desconocido');
+        const votoDiarioCounts = votosDiarios.map(voto => voto.total || 0);
 
-            const votoChart = new Chart(document.getElementById('votoChart'), {
-                type: 'pie',
-                data: {
-                    labels: votoLabels,
-                    datasets: [{
-                        data: votoCounts,
-                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    plugins: {
-                        legend: {
-                            position: 'top',
-                        },
-                        tooltip: {
-                            callbacks: {
-                                label: function(tooltipItem) {
-                                    const label = tooltipItem.label || '';
-                                    const value = tooltipItem.raw || 0;
-                                    const total = votoCounts.reduce((a, b) => a + b, 0);
-                                    const percentage = ((value / total) * 100).toFixed(2);
-                                    return `${label}: ${value} (${percentage}%)`;
-                                }
+        new Chart(document.getElementById('votoDiarioChart'), {
+            type: 'pie',
+            data: {
+                labels: votoDiarioLabels,
+                datasets: [{
+                    data: votoDiarioCounts,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: tooltipItem => {
+                                const label = tooltipItem.label || '';
+                                const value = tooltipItem.raw || 0;
+                                const total = votoDiarioCounts.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(2);
+                                return `${label}: ${value} (${percentage}%)`;
                             }
                         }
                     }
                 }
-            });
-        } else {
-            console.error("No hay datos para mostrar en el gráfico de votos.");
-        }
+            }
+        });
 
-        if (Array.isArray(pedidosData) && pedidosData.length > 0) {
-            const pedidoLabels = pedidosData.map(pedido => pedido['plato__nombre']);
-            const pedidoCounts = pedidosData.map(pedido => pedido['total_vendidos'] || 0); // Cambié 'total' a 'total_vendidos'
+        // Gráfico de Voto Semanales
+        const votoSemanalLabels = votosSemanales.map(voto => voto['plato_semanal__plato__nombre'] || 'Nombre Desconocido');
+        const votoSemanalCounts = votosSemanales.map(voto => voto.total || 0);
 
-            const pedidoChart = new Chart(document.getElementById('pedidoChart'), {
-                type: 'bar',
-                data: {
-                    labels: pedidoLabels,
-                    datasets: [{
-                        label: 'Total de Platos Vendidos', // Cambié el texto de la etiqueta
-                        data: pedidoCounts,
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true
+        new Chart(document.getElementById('votoSemanalChart'), {
+            type: 'pie',
+            data: {
+                labels: votoSemanalLabels,
+                datasets: [{
+                    data: votoSemanalCounts,
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        callbacks: {
+                            label: tooltipItem => {
+                                const label = tooltipItem.label || '';
+                                const value = tooltipItem.raw || 0;
+                                const total = votoSemanalCounts.reduce((a, b) => a + b, 0);
+                                const percentage = ((value / total) * 100).toFixed(2);
+                                return `${label}: ${value} (${percentage}%)`;
+                            }
                         }
                     }
                 }
-            });
-        } else {
-            console.error("No hay datos para mostrar en el gráfico de pedidos.");
-        }
+            }
+        });
+
+        // Gráfico de Pedidos Diarios
+        const pedidoDiarioLabels = pedidosDiarios.map(pedido => pedido['plato__nombre']);
+        const pedidoDiarioCounts = pedidosDiarios.map(pedido => pedido['total_vendidos'] || 0);
+
+        new Chart(document.getElementById('pedidoDiarioChart'), {
+            type: 'bar',
+            data: {
+                labels: pedidoDiarioLabels,
+                datasets: [{
+                    label: 'Total de Platos Vendidos',
+                    data: pedidoDiarioCounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        // Gráfico de Pedidos Semanales
+        const pedidoSemanalLabels = pedidosSemanales.map(pedido => pedido['plato__nombre']);
+        const pedidoSemanalCounts = pedidosSemanales.map(pedido => pedido['total_vendidos'] || 0);
+
+        new Chart(document.getElementById('pedidoSemanalChart'), {
+            type: 'bar',
+            data: {
+                labels: pedidoSemanalLabels,
+                datasets: [{
+                    label: 'Total de Platos Vendidos',
+                    data: pedidoSemanalCounts,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
     </script>
 </body>
 </html>

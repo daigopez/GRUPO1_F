@@ -484,19 +484,27 @@ def reporte_ventas(request):
 
 ######grafitcos#####
 
-from django.shortcuts import render
+from django.utils import timezone
 from django.db.models import Count, Sum
 from .models import Voto, Pedido, DetallePedido
-
+@login_required
+@user_passes_test(es_administrador)
 def graficos_view(request):
-    # Obtener el conteo de votos por plato semanal
-    votos = Voto.objects.values('plato_semanal__plato__nombre').annotate(total=Count('id'))
-    
-    # Obtener el total de platos vendidos sumando la cantidad en DetallePedido
-    pedidos = DetallePedido.objects.values('plato__nombre').annotate(total_vendidos=Sum('cantidad'))
+    hoy = timezone.now().date()
+    hace_una_semana = hoy - timezone.timedelta(days=7)
+
+    # Datos diarios
+    votos_diarios = Voto.objects.filter(fecha_voto__date=hoy).values('plato_semanal__plato__nombre').annotate(total=Count('id'))
+    pedidos_diarios = DetallePedido.objects.filter(pedido__fecha_pedido__date=hoy).values('plato__nombre').annotate(total_vendidos=Sum('cantidad'))
+
+    # Datos semanales
+    votos_semanales = Voto.objects.filter(fecha_voto__gte=hace_una_semana).values('plato_semanal__plato__nombre').annotate(total=Count('id'))
+    pedidos_semanales = DetallePedido.objects.filter(pedido__fecha_pedido__gte=hace_una_semana).values('plato__nombre').annotate(total_vendidos=Sum('cantidad'))
 
     context = {
-        'votos': list(votos),
-        'pedidos': list(pedidos),
+        'votos_diarios': list(votos_diarios),
+        'pedidos_diarios': list(pedidos_diarios),
+        'votos_semanales': list(votos_semanales),
+        'pedidos_semanales': list(pedidos_semanales),
     }
     return render(request, 'graficos.html', context)
