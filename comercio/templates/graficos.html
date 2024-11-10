@@ -9,14 +9,41 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #333;
+        }
+        .navbar {
+            background-color: #ff9c1b;
+            overflow: hidden;
+            padding: 10px 20px; /* Padding lateral para el navbar */
+            display: flex;
+            justify-content: flex-start; /* Alinear elementos a la izquierda */
+        }
+        .navbar .btn-volver {
+            background-color: #28a745; /* Color del botón "Volver" */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 20px; /* Margen inferior para separación */
+        }
+        .navbar .btn-volver:hover {
+            background-color: #218838; /* Color del botón "Volver" al pasar el mouse */
         }
         canvas {
             max-width: 600px;
-            margin: auto;
+            margin: 20px auto; /* Centrar gráficos con margen superior */
         }
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <a href="{% url 'lista_pedidos' %}" class="btn-volver">Volver a Lista de Pedidos</a>
+    </div>
+
     <h1>Gráficos de Ventas de Comida</h1>
 
     <h2>Gráfico de Tortas de Voto Diarios</h2>

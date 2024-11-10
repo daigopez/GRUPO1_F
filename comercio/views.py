@@ -359,20 +359,25 @@ def lista_pedidos(request):
 
 #### Estado de pedidos:
 
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+from django.views.decorators.http import require_POST
+from .models import Pedido
 @login_required
 @user_passes_test(es_administrador)
+@require_POST
 def actualizar_estado_pedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
-    if request.method == 'POST':
-        form = EstadoPedidoForm(request.POST, instance=pedido)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Estado del pedido actualizado con éxito.')
-            return redirect('lista_pedidos')
+    nuevo_estado = request.POST.get('estado')
+
+    if nuevo_estado in ['Preparando', 'En entrega', 'Entregado']:
+        pedido.estado = nuevo_estado
+        pedido.save()
+        messages.success(request, 'Estado del pedido actualizado.')
     else:
-        form = EstadoPedidoForm(instance=pedido)
-    
-    return render(request, 'comercio/actualizar_estado_pedido.html', {'form': form, 'pedido': pedido})
+        messages.error(request, 'Estado no válido.')
+
+    return redirect('lista_pedidos')  # Redirige de vuelta a la lista de pedidos
 
 ###### Vista pedidos por usuario:
 from django.shortcuts import render, get_object_or_404

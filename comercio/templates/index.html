@@ -126,15 +126,6 @@
         <a href="{% url 'lista_platos_semanales' %}" class="btn">Ir a votar</a>
     </div> 
 
-    {% if user.is_staff %}
-    <div class="container mt-5">
-        <h1>Ver estadisticas de Ventas</h1>
-        <a href="{% url 'graficos' %}" class="btn">Ver estadisticas</a>
-    </div>   
-    {% endif %}
-
-
-
     <div class="container mt-5">
         <h1>Modifica tus datos</h1>
         <a href="{% url 'modificar_datos' %}" class="btn">Modificar datos</a>

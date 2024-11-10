@@ -14,6 +14,45 @@
             text-align: center;
             color: #333;
         }
+        .navbar {
+            background-color: #ff9c1b;
+            overflow: hidden;
+            padding: 10px 20px; /* Aumentar el padding lateral del navbar */
+            display: flex;
+            align-items: center;
+        }
+        .navbar .btn-primary {
+            background-color: #007bff; /* Color azul eléctrico */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-left: 15px; /* Aumentar el margen izquierdo */
+        }
+        .navbar .btn-primary:hover {
+            background-color: #0056b3; /* Color azul eléctrico más oscuro al pasar el mouse */
+        }
+        .navbar .btn-volver {
+            background-color: #28a745; /* Color del botón "Volver" */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        .navbar .btn-volver:hover {
+            background-color: #218838; /* Color del botón "Volver" al pasar el mouse */
+        }
+        .navbar .btn-estadisticas {
+            background-color: #17a2b8; /* Color del botón "Ver Estadísticas de Venta" */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-left: 15px; /* Margen para separación */
+        }
+        .navbar .btn-estadisticas:hover {
+            background-color: #138496; /* Color más oscuro al pasar el mouse */
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -25,7 +64,7 @@
             text-align: left;
         }
         th {
-            background-color: #4CAF50;
+            background-color: #684caf;
             color: white;
         }
         tr:nth-child(even) {
@@ -58,11 +97,17 @@
         }
     </style>
 </head>
+
 <body>
-    <h1>Lista de Pedidos</h1>
-    <div style="text-align: center; margin-bottom: 20px;">
-        <a href="{% url 'reporte_ventas' %}" class="btn-primary" style="background-color: #ff6f00; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Ver Reporte de Ventas</a>
+    <div class="navbar">
+        <a href="{% url 'iniciada' %}" class="btn-volver">Volver</a>
+        {% if user.is_staff %}
+        <a href="{% url 'graficos' %}" class="btn-estadisticas">Ver Estadísticas de Venta</a>
+        {% endif %}
+        <a href="{% url 'reporte_ventas' %}" class="btn-primary">Ver Reporte de Ventas</a>
     </div>
+
+    <h1>Lista de Pedidos</h1>
     <table>
         <thead>
             <tr>
@@ -87,7 +132,14 @@
                 <td data-label="Fecha del Pedido">{{ pedido_info.pedido.fecha_pedido }}</td>
                 <td data-label="Estado del pedido">{{ pedido_info.pedido.estado }}</td>
                 <td data-label="Acciones">
-                    <a href="{% url 'actualizar_estado_pedido' pedido_info.pedido.id %}">Actualizar Estado</a>
+                    <form method="POST" action="{% url 'actualizar_estado_pedido' pedido_info.pedido.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <select name="estado" onchange="this.form.submit()" required>
+                            <option value="Preparando" {% if pedido_info.pedido.estado == 'Preparando' %}selected{% endif %}>Preparando</option>
+                            <option value="En entrega" {% if pedido_info.pedido.estado == 'En entrega' %}selected{% endif %}>En entrega</option>
+                            <option value="Entregado" {% if pedido_info.pedido.estado == 'Entregado' %}selected{% endif %}>Entregado</option>
+                        </select>
+                    </form>
                 </td>
             </tr>
             <tr>
