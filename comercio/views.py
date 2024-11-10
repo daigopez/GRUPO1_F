@@ -481,3 +481,22 @@ def reporte_ventas(request):
         'ventas_semanales': ventas_semanales['total_ventas'] or 0,
     }
     return render(request, 'comercio/reporte_ventas.html', context)
+
+######grafitcos#####
+
+from django.shortcuts import render
+from django.db.models import Count, Sum
+from .models import Voto, Pedido, DetallePedido
+
+def graficos_view(request):
+    # Obtener el conteo de votos por plato semanal
+    votos = Voto.objects.values('plato_semanal__plato__nombre').annotate(total=Count('id'))
+    
+    # Obtener el total de platos vendidos sumando la cantidad en DetallePedido
+    pedidos = DetallePedido.objects.values('plato__nombre').annotate(total_vendidos=Sum('cantidad'))
+
+    context = {
+        'votos': list(votos),
+        'pedidos': list(pedidos),
+    }
+    return render(request, 'graficos.html', context)

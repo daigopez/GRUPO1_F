@@ -1,6 +1,7 @@
 from django.urls import path
 from . import views
 from .views import (
+    graficos_view,
     # Estado de pedidos
     actualizar_estado_pedido,
     crear_pedido,
@@ -89,4 +90,5 @@ urlpatterns = [
     path('lista-pedidos/', lista_pedidos, name='lista_pedidos'),  # Asegúrate de tener esta vista
     path('reporte-ventas/', reporte_ventas, name='reporte_ventas'),  # URL para el reporte de ventas
     
+    path('graficos/', graficos_view, name='graficos'),
 ]

@@ -8,10 +8,17 @@ class Plato(models.Model):
     disponible = models.BooleanField(default=True)
     imagen = models.ImageField(upload_to='platos/', blank=True, null=True)
     oculto = models.BooleanField(default=False)
-    
 
     def __str__(self):
         return f"{self.nombre} - ${self.precio:.2f}"
+
+    def total_votos(self):
+        """Cuenta el total de votos para este plato."""
+        return Voto.objects.filter(plato_semanal__plato=self).count()
+
+    def total_pedidos(self):
+        """Cuenta el total de pedidos que incluyen este plato."""
+        return DetallePedido.objects.filter(plato=self).count()
         
 
 class Encuesta(models.Model):
