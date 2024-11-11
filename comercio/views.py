@@ -513,3 +513,8 @@ def graficos_view(request):
         'pedidos_semanales': list(pedidos_semanales),
     }
     return render(request, 'graficos.html', context)
+
+### Acerca de nosotros:
+
+def acerca_de_nosotros(request):
+    return render(request, 'acerca_de_nosotros.html')

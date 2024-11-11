@@ -127,7 +127,31 @@
             display: flex;
             justify-content: space-between; /* Espacio entre botones */
         }
-        
+
+        /* Estilos para el botón "Realizar Compra" */
+        .btn-realizar-compra {
+            background-color: #007BFF; /* Azul brillante */
+            color: white;
+            padding: 12px 20px; /* Espaciado */
+            border: none;
+            border-radius: 5px; /* Bordes redondeados */
+            text-align: center; /* Centrar texto */
+            text-decoration: none; /* Sin subrayado */
+            display: inline-block; /* Permitir margenes */
+            font-size: 16px; /* Tamaño de texto */
+            transition: background-color 0.3s, transform 0.3s; /* Transiciones suaves */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para efecto 3D */
+        }
+
+        .btn-realizar-compra:hover {
+            background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+            transform: translateY(-2px); /* Efecto de elevación */
+        }
+
+        .btn-realizar-compra:active {
+            transform: translateY(0); /* Efecto de pulsación */
+        }
+
         /* Estilos Responsivos */
         @media (max-width: 768px) {
             .container {
@@ -223,7 +247,7 @@
                 </div>
                 {% endfor %}
                 <h3>Total: ${{ total|floatformat:2 }}</h3>
-                <a href="{% url 'pago' %}" class="btn">Realizar Compra</a> <!-- Enlace para realizar la compra -->
+                <a href="{% url 'pago' %}" class="btn-realizar-compra">Realizar Compra</a> <!-- Enlace para realizar la compra -->
             {% else %}
                 <p>No hay platos en el carrito.</p>
             {% endif %}

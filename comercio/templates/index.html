@@ -111,10 +111,7 @@
 
     <div class="box-container">
         {% if user.is_staff %}
-        <div class="container">
-            <h1>Bienvenido a la gestión de platos</h1>
-            <button class="icon-btn" onclick="location.href='{% url 'plato_list' %}'"><i class="fas fa-utensils"></i></button>
-        </div>
+
         <div class="container">
             <button class="icon-btn" onclick="location.href='{% url 'visualizar_encuestas' %}'"><i class="fas fa-chart-bar"></i></button>
         </div>

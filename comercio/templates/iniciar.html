@@ -16,7 +16,7 @@
         }
 
         nav {
-            background-color: rgba(255, 158, 27, 0.8); /* Cambiado a color #ff9e1b con transparencia */
+            background-color: rgba(255, 158, 27, 0.8);
             padding: 10px;
             text-align: right;
         }
@@ -118,6 +118,32 @@
             font-size: 0.9em;
         }
 
+        .info-box {
+            max-width: 400px;
+            width: 90%;
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        footer {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        footer a {
+            color: #284ca7; /* Color del enlace */
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline; /* Subrayado al pasar el mouse */
+        }
+
         @media (max-width: 600px) {
             .form-container {
                 width: 80%;
@@ -182,6 +208,14 @@
         <div class="message">No estás registrado, clic en el botón azul para registrarte!</div>
         {% endif %}
     </div>
+    
+    <div class="info-box">
+        <a href="{% url 'acerca_de_nosotros' %}">Sobre nosotros</a>
+    </div>
+    
+    <footer>
+        <!-- Puedes añadir más información aquí si lo deseas -->
+    </footer>
     {% endblock %}
 </body>
 </html>

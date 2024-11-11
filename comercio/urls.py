@@ -91,4 +91,8 @@ urlpatterns = [
     path('reporte-ventas/', reporte_ventas, name='reporte_ventas'),  # URL para el reporte de ventas
     
     path('graficos/', graficos_view, name='graficos'),
+
+    #### Acerca de nosotros
+    path('acerca-de-nosotros/', views.acerca_de_nosotros, name='acerca_de_nosotros'),
+    
 ]
