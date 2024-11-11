@@ -327,7 +327,7 @@ def pago(request):
             # Limpiar el carrito después de la compra
             carrito.itemcarrito_set.all().delete()  # Eliminar todos los ítems del carrito
 
-            messages.success(request, 'Tu pedido ha sido realizado con éxito.')
+            messages.success(request, '')
             return redirect('confirmacion_pedido', pedido_id=pedido.id)
     else:
         form = PagoForm()
