@@ -15,31 +15,31 @@
             min-height: 100vh;
         }
         .navbar {
-            background-color: rgba(255, 158, 27, 0.8); /* Fondo semi-transparente */
+            background-color: rgba(255, 158, 27, 0.8);
             padding: 15px;
             color: white;
             display: flex;
             justify-content: space-between;
-            align-items: center; /* Alinear verticalmente */
+            align-items: center;
         }
         .navbar .btn-primary {
-            margin-right: 20px; /* Espacio entre el botón y el título */
-            background-color: #ff6f00; /* Naranja intenso */
+            margin-right: 20px;
+            background-color: #ff6f00;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            text-decoration: none; /* Sin subrayado */
-            transition: background-color 0.3s; /* Transición suave */
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
         .navbar .btn-primary:hover {
-            background-color: #e65c00; /* Naranja más oscuro al pasar el mouse */
+            background-color: #e65c00;
         }
         .navbar h1 {
-            flex: 1; /* Permitir que el título ocupe el espacio restante */
-            text-align: center; /* Centrar el título */
+            flex: 1;
+            text-align: center;
             margin: 0; 
-            font-size: 24px; /* Ajuste del tamaño del título */
+            font-size: 24px;
         }
         .navbar a {
             color: white;
@@ -47,17 +47,17 @@
             padding: 10px;
         }
         .container {
-            display: flex; /* Usamos flexbox */
-            flex-direction: row; /* Asegura que el carrito y los platos estén uno al lado del otro */
+            display: flex;
+            flex-direction: row;
             margin: 20px auto;
-            max-width: 1200px; /* Aumenta el ancho máximo */
+            max-width: 1200px;
             padding: 20px;
-            background-color: rgba(249, 249, 249, 0.8); /* Fondo semi-transparente */
-            border-radius: 10px; /* Bordes redondeados */
-            flex-wrap: wrap; /* Permitir que los elementos se apilen en pantallas pequeñas */
+            background-color: rgba(249, 249, 249, 0.8);
+            border-radius: 10px;
+            flex-wrap: wrap;
         }
         .plato-list {
-            flex: 3; /* Toma 3 partes del espacio */
+            flex: 3;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -66,29 +66,29 @@
             border: 1px solid #ccc;
             margin: 10px;
             padding: 10px;
-            width: 200px; /* Ancho fijo */
+            width: 200px;
             text-align: center;
             border-radius: 8px;
             background-color: #f9f9f9;
-            transition: transform 0.2s; /* Animación al pasar el mouse */
+            transition: transform 0.2s;
         }
         .plato-item:hover {
-            transform: scale(1.05); /* Efecto de zoom */
+            transform: scale(1.05);
         }
         .plato-item img {
             max-width: 100%;
             height: auto;
         }
         button {
-            background-color: #4CAF50; /* Verde */
+            background-color: #4CAF50;
             color: white;
             padding: 10px 15px;
             border: none;
-            border-radius: 5px; /* Bordes redondeados */
+            border-radius: 5px;
             cursor: pointer;
         }
         button:hover {
-            background-color: #45a049; /* Verde más oscuro */
+            background-color: #45a049;
         }
         .encuesta-form {
             margin-top: 10px;
@@ -99,80 +99,78 @@
         .edit-link {
             margin-top: 10px;
             display: inline-block;
-            color: #007BFF; /* Color azul para el enlace */
+            color: #007BFF;
             text-decoration: none;
         }
         .edit-link:hover {
             text-decoration: underline;
         }
         .carrito {
-            flex: 1; /* Toma 1 parte del espacio */
-            margin-left: 20px; /* Espacio entre el contenido y el carrito */
+            flex: 1;
+            margin-left: 20px;
             background-color: #f9f9f9;
-            padding: 10px; /* Reducido para que no sea tan alto */
+            padding: 10px;
             border-radius: 8px;
-            overflow-y: hidden; /* Eliminar desplazamiento */
-            min-width: 250px; /* Ancho mínimo para el carrito */
+            overflow-y: hidden;
+            min-width: 250px;
         }
         .carrito-item {
-            margin-bottom: 15px; /* Espacio entre cada plato en el carrito */
+            margin-bottom: 15px;
             border: 1px solid #ccc;
             padding: 10px;
             border-radius: 5px;
         }
         .carrito h3 {
-            margin-top: 0; /* Eliminar margen superior del título */
+            margin-top: 0;
         }
         .carrito-actions {
             display: flex;
-            justify-content: space-between; /* Espacio entre botones */
+            justify-content: space-between;
         }
 
-        /* Estilos para el botón "Realizar Compra" */
         .btn-realizar-compra {
-            background-color: #007BFF; /* Azul brillante */
+            background-color: #007BFF;
             color: white;
-            padding: 12px 20px; /* Espaciado */
+            padding: 12px 20px;
             border: none;
-            border-radius: 5px; /* Bordes redondeados */
-            text-align: center; /* Centrar texto */
-            text-decoration: none; /* Sin subrayado */
-            display: inline-block; /* Permitir margenes */
-            font-size: 16px; /* Tamaño de texto */
-            transition: background-color 0.3s, transform 0.3s; /* Transiciones suaves */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para efecto 3D */
+            border-radius: 5px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .btn-realizar-compra:hover {
-            background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
-            transform: translateY(-2px); /* Efecto de elevación */
+            background-color: #0056b3;
+            transform: translateY(-2px);
         }
 
         .btn-realizar-compra:active {
-            transform: translateY(0); /* Efecto de pulsación */
+            transform: translateY(0);
         }
 
-        /* Estilos Responsivos */
         @media (max-width: 768px) {
             .container {
-                flex-direction: column; /* Apilar elementos en móviles */
-                align-items: center; /* Centrar en pantallas pequeñas */
+                flex-direction: column;
+                align-items: center;
             }
             .carrito {
-                margin-left: 0; /* Eliminar margen en pantallas pequeñas */
-                width: 100%; /* Ancho completo */
-                min-width: auto; /* Ancho mínimo automático */
+                margin-left: 0;
+                width: 100%;
+                min-width: auto;
             }
             .plato-list {
-                justify-content: center; /* Centrar platos en pantallas pequeñas */
+                justify-content: center;
             }
         }
     </style>
 </head>
 <body>
     <div class="navbar">
-        <a href="{% url 'iniciada' %}" class="btn-primary">Volver</a> <!-- Botón para ir a iniciada -->
-        <h1>Página de Venta de Platos</h1> <!-- Título en el navbar -->
+        <a href="{% url 'iniciada' %}" class="btn-primary">Volver</a>
+        <h1>Página de Venta de Platos</h1>
         <div>
             <a href="{% url 'logout' %}">Cerrar Sesión</a>
         </div>
@@ -181,7 +179,7 @@
     <div class="container">
         <div class="plato-list">
             {% for plato in platos %}
-                {% if not plato.oculto %}  <!-- Verificar si el plato no está oculto -->
+                {% if not plato.oculto %}
                     <div class="plato-item">
                         <h2>{{ plato.nombre }}</h2>
                         <img src="{{ plato.imagen.url }}" alt="{{ plato.nombre }}">
@@ -192,7 +190,6 @@
                             <button type="submit">Agregar al Carrito</button>
                         </form>
 
-                        <!-- Formulario de Encuesta -->
                         <div class="encuesta-form">
 
                             <form method="POST" action="{% url 'pagina_venta' %}">
@@ -235,7 +232,7 @@
                 </div>
                 {% endfor %}
                 <h3>Total: ${{ total|floatformat:2 }}</h3>
-                <a href="{% url 'pago' %}" class="btn-realizar-compra">Realizar Compra</a> <!-- Enlace para realizar la compra -->
+                <a href="{% url 'pago' %}" class="btn-realizar-compra">Realizar Compra</a>
             {% else %}
                 <p>No hay platos en el carrito.</p>
             {% endif %}

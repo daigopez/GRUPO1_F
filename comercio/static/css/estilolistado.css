@@ -2,11 +2,11 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #EAEAEA; /* Fondo en color #EAEAEA */
+    background-color: #EAEAEA; 
 }
 
 header {
-    background-color: #ff9e1b; /* Color del navbar */
+    background-color: #ff9e1b; 
     color: white;
     padding: 10px 20px;
     text-align: center;
@@ -20,9 +20,9 @@ h1 {
     width: 80%;
     margin: auto;
     padding: 20px;
-    background-color: white; /* Fondo blanco para el contenedor */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    background-color: white; 
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .plato-list {
@@ -36,7 +36,7 @@ h1 {
     border: 1px solid #ddd;
     border-radius: 8px;
     padding: 15px;
-    width: calc(33% - 40px); /* 3 items per row */
+    width: calc(33% - 40px);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
@@ -57,7 +57,7 @@ h1 {
 
 .plato .description {
     font-size: 0.9em;
-    color: #777; /* Color más suave para la descripción */
+    color: #777;
     margin-top: 5px;
 }
 
@@ -68,15 +68,15 @@ h1 {
 .actions a {
     margin-right: 10px;
     padding: 5px 10px;
-    border: 1px solid #ff9e1b; /* Color del enlace */
+    border: 1px solid #ff9e1b;
     border-radius: 5px;
-    color: #ff9e1b; /* Color del enlace */
+    color: #ff9e1b;
     text-decoration: none;
-    transition: background-color 0.3s, color 0.3s; /* Transición suave */
+    transition: background-color 0.3s, color 0.3s;
 }
 
 .actions a:hover {
-    background-color: #ff9e1b; /* Color del enlace al pasar el mouse */
+    background-color: #ff9e1b;
     color: white;
 }
 
@@ -84,7 +84,7 @@ h1 {
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
-    background-color: #28a745; /* Color del botón */
+    background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
@@ -93,5 +93,5 @@ h1 {
 }
 
 .add-button:hover {
-    background-color: #218838; /* Color del botón al pasar el mouse */
+    background-color: #218838;
 }

@@ -15,38 +15,38 @@
             min-height: 100vh;
         }
         header {
-            background-color: #ff9c1baf; /* Color del navbar */
+            background-color: #ff9c1baf;
             color: white;
             padding: 10px 20px;
             text-align: center;
-            position: relative; /* Para posicionar el botón */
+            position: relative;
         }
         h1 {
             margin: 0;
         }
         .btn-primary {
-            position: absolute; /* Posicionamiento absoluto */
-            left: 20px; /* Espaciado desde la izquierda */
-            top: 50%; /* Centrado vertical */
-            transform: translateY(-50%); /* Ajuste para centrar */
-            background-color: #ff6f00; /* Naranja intenso */
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ff6f00;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            text-decoration: none; /* Sin subrayado */
-            transition: background-color 0.3s; /* Transición suave */
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
         .btn-primary:hover {
-            background-color: #e65c00; /* Naranja más oscuro al pasar el mouse */
+            background-color: #e65c00;
         }
         .container {
             width: 80%;
             margin: auto;
             padding: 20px;
-            background-color: white; /* Fondo blanco para el contenedor */
-            border-radius: 8px; /* Bordes redondeados */
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra suave */
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         .form-group {
             margin-bottom: 15px;
@@ -70,7 +70,7 @@
             height: 100px;
         }
         button {
-            background-color: #28a745; /* Color del botón */
+            background-color: #28a745;
             color: white;
             padding: 10px 20px;
             border: none;
@@ -79,13 +79,13 @@
             cursor: pointer;
         }
         button:hover {
-            background-color: #218838; /* Color del botón al pasar el mouse */
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
     <header>
-        <a href="{% url 'plato_list' %}" class="btn-primary">Volver</a> <!-- Botón para ir a la lista de platos -->
+        <a href="{% url 'plato_list' %}" class="btn-primary">Volver</a>
         <h1>Agregar Nuevo Plato</h1>
     </header>
     <div class="container">

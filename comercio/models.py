@@ -64,7 +64,7 @@ class PlatoSemanal(models.Model):
 class Voto(models.Model):
     plato_semanal = models.ForeignKey(PlatoSemanal, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    fecha_voto = models.DateTimeField(auto_now_add=True)  # Campo de fecha añadido
+    fecha_voto = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Voto de {self.user.username} para {self.plato_semanal.plato.nombre} en {self.plato_semanal.dia}'

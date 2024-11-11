@@ -16,49 +16,49 @@
         }
         .navbar {
             background-color: #ff9c1b;
-            padding: 10px 0; /* Padding vertical para la barra de navegación */
+            padding: 10px 0;
             display: flex;
-            flex-wrap: wrap; /* Permitir que los elementos se ajusten en pantallas pequeñas */
-            align-items: center; /* Alinear items verticalmente */
-            justify-content: flex-start; /* Alinear botones a la izquierda */
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: flex-start;
         }
         .navbar a {
             padding: 10px 15px;
             border-radius: 5px;
             text-decoration: none;
-            margin: 5px; /* Margen alrededor de los botones */
-            transition: background-color 0.3s; /* Transición suave */
-            flex: 1 1 auto; /* Permite que los botones ocupen espacio igual */
-            max-width: 200px; /* Ancho máximo para los botones */
-            text-align: center; /* Centrar texto en botones */
+            margin: 5px;
+            transition: background-color 0.3s;
+            flex: 1 1 auto;
+            max-width: 200px;
+            text-align: center;
         }
         .navbar .btn-volver {
-            background-color: #28a745; /* Color del botón "Volver" */
+            background-color: #28a745;
             color: white;
         }
         .navbar .btn-volver:hover {
-            background-color: #218838; /* Color al pasar el mouse */
+            background-color: #218838;
         }
         .navbar .btn-estadisticas {
-            background-color: #17a2b8; /* Color del botón "Ver Estadísticas de Venta" */
+            background-color: #17a2b8;
             color: white;
         }
         .navbar .btn-estadisticas:hover {
-            background-color: #138496; /* Color al pasar el mouse */
+            background-color: #138496;
         }
         .navbar .btn-primary {
-            background-color: #007bff; /* Color azul eléctrico */
+            background-color: #007bff;
             color: white;
         }
         .navbar .btn-primary:hover {
-            background-color: #0056b3; /* Color al pasar el mouse */
+            background-color: #0056b3;
         }
         .navbar .btn-lista-pedidos {
-            background-color: #ffc107; /* Color del botón "Lista de Pedidos" */
+            background-color: #ffc107;
             color: white;
         }
         .navbar .btn-lista-pedidos:hover {
-            background-color: #e0a800; /* Color al pasar el mouse */
+            background-color: #e0a800;
         }
         table {
             width: 100%;
@@ -82,19 +82,19 @@
         }
         @media (max-width: 600px) {
             .navbar {
-                flex-direction: column; /* Apilar los botones en móviles */
-                width: 100%; /* Asegurar que la barra ocupe el ancho completo */
+                flex-direction: column;
+                width: 100%;
             }
             .navbar a {
-                width: 95%; /* Botones ocupan casi todo el ancho, con un pequeño margen */
-                margin: 5px auto; /* Centrar botones con un margen automático */
-                text-align: left; /* Alinear texto a la izquierda en móviles */
+                width: 95%;
+                margin: 5px auto;
+                text-align: left;
             }
             table, thead, tbody, th, td, tr {
                 display: block;
             }
             th {
-                display: none; /* Ocultar encabezados en móviles */
+                display: none;
             }
             td {
                 text-align: right;
@@ -121,7 +121,7 @@
         <a href="{% url 'graficos' %}" class="btn-estadisticas">Ver Estadísticas de Venta</a>
         {% endif %}
         <a href="{% url 'reporte_ventas' %}" class="btn-primary">Ver Reporte de Ventas</a>
-        <a href="{% url 'plato_list' %}" class="btn-lista-pedidos">Ver Lista de Pedidos</a> <!-- Botón responsivo -->
+        <a href="{% url 'plato_list' %}" class="btn-lista-pedidos">Ver Lista de Pedidos</a>
     </div>
 
     <h1>Lista de Pedidos</h1>

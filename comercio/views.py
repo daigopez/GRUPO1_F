@@ -8,6 +8,9 @@ from .models import DetallePedido, Pedido, Plato, Encuesta, Carrito, ItemCarrito
 from .forms import EstadoPedidoForm, PagoForm, PedidoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
+from django.utils import timezone
+from django.db.models import Count, Sum
+from django.views.decorators.http import require_POST
 
 # Verificación de usuario administrador
 def es_administrador(user):
@@ -81,15 +84,15 @@ def iniciar_sesion(request):
 
 # Nueva función para listar platos visibles
 def lista_platos(request):
-    platos = Plato.objects.filter(oculto=False)  # Solo platos visibles
+    platos = Plato.objects.filter(oculto=False)
     return render(request, 'comercio/lista_de_platos.html', {'platos': platos})
 
 # Modificar la función de listar todos los platos
 def lista_de_platos(request):
-    return lista_platos(request)  # Redirigir a la nueva función
+    return lista_platos(request)
 
 def pagina_venta(request):
-    platos = Plato.objects.filter(oculto=False)  # Solo platos visibles
+    platos = Plato.objects.filter(oculto=False)
     total = 0
     platos_carrito = []
 
@@ -200,10 +203,8 @@ def comprar_plato(request, plato_id):
 @login_required
 @permission_required('is_superuser')
 def plato_list(request):
-    platos = Plato.objects.filter(oculto=False)  # Solo obtener platos que no están ocultos
+    platos = Plato.objects.filter(oculto=False)
     return render(request, 'comercio/plato_list.html', {'platos': platos})
-
-
 
 @user_passes_test(es_administrador)
 @login_required
@@ -226,7 +227,7 @@ def plato_update(request, pk):
         form = PlatoForm(request.POST, instance=plato)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Plato actualizado con éxito.')
+            messages.success(request, '')
             return redirect('plato_list')
     else:
         form = PlatoForm(instance=plato)
@@ -238,7 +239,7 @@ def plato_delete(request, pk):
     plato = get_object_or_404(Plato, pk=pk)
     if request.method == "POST":
         plato.delete()
-        messages.success(request, 'Plato eliminado con éxito.')
+        messages.success(request, '')
         return redirect('plato_list')
     return render(request, 'comercio/plato_confirm_delete.html', {'plato': plato})
 
@@ -270,7 +271,7 @@ def eliminar_plato_semanal(request, pk):
         return redirect('lista_platos_semanales')
     return render(request, 'comercio/plato_semanal_confirm_delete.html', {'plato_semanal': plato_semanal})
 
-# Modificación de registro de usuarios
+# esto de aca modificar el registro de usuarios
 @login_required
 def modificar_datos(request):
     if request.method == 'POST':
@@ -281,21 +282,14 @@ def modificar_datos(request):
             if password:
                 user.set_password(password)
             user.save()
-            return redirect('/')  # Se redirecciona a la página de iniciar sesión
+            return redirect('/')
     else:
         form = UserUpdateForm(instance=request.user)
 
     return render(request, 'modificar_datos.html', {'form': form})
-
 # Fin modificación de registro de usuarios
 
-###################### pagos
-
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import Pedido, Carrito
-from .forms import PagoForm
-from django.contrib import messages
-
+###################### pagos ######################
 @login_required
 def pago(request):
     carrito = get_object_or_404(Carrito, user=request.user)
@@ -304,17 +298,15 @@ def pago(request):
         if form.is_valid():
             direccion_envio = form.cleaned_data['direccion_envio']
             hora_entrega = form.cleaned_data['hora_entrega']
-
-            # Crear el pedido y asociarlo al usuario
+            ### Crear el pedido y asociarlo al usuario
             pedido = Pedido.objects.create(
-                usuario=request.user,  # Asociar el pedido al usuario actual
+                usuario=request.user,
                 carrito=carrito,
                 direccion_envio=direccion_envio,
                 hora_entrega=hora_entrega,
-                pagado=True  # Asumimos que el pago se ha realizado
+                pagado=True
             )
-
-            # Guardar los detalles del pedido
+            # ##Guardar los detalles del pedido
             for item in carrito.itemcarrito_set.all():
                 DetallePedido.objects.create(
                     pedido=pedido,
@@ -323,9 +315,8 @@ def pago(request):
                     precio_unitario=item.plato.precio,
                     subtotal=item.plato.precio * item.cantidad
                 )
-
-            # Limpiar el carrito después de la compra
-            carrito.itemcarrito_set.all().delete()  # Eliminar todos los ítems del carrito
+            ### Limpiar el carrito después de la compra
+            carrito.itemcarrito_set.all().delete() 
 
             messages.success(request, '')
             return redirect('confirmacion_pedido', pedido_id=pedido.id)
@@ -339,12 +330,12 @@ def confirmacion_pedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
     return redirect(f'/pedidos/detalle/{pedido_id}/')
 
-# Vista de pedidos para el admin
+### Vista de pedidos para el admin
 @login_required
 @user_passes_test(es_administrador)
 def lista_pedidos(request):
-    # Ordenar los pedidos por fecha de manera descendente
-    pedidos = Pedido.objects.all().order_by('-fecha_pedido')  # Cambiado aquí
+    # ##Ordenar los pedidos por fecha de manera descendente
+    pedidos = Pedido.objects.all().order_by('-fecha_pedido')
     pedidos_info = []
 
     for pedido in pedidos:
@@ -352,17 +343,12 @@ def lista_pedidos(request):
         pedidos_info.append({
             'pedido': pedido,
             'total': total,
-            'detalles': pedido.detalles.all(),  # Añadir detalles del pedido
+            'detalles': pedido.detalles.all(),
         })
 
     return render(request, 'comercio/lista_pedidos.html', {'pedidos_info': pedidos_info})
 
 #### Estado de pedidos:
-
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-from django.views.decorators.http import require_POST
-from .models import Pedido
 @login_required
 @user_passes_test(es_administrador)
 @require_POST
@@ -377,51 +363,41 @@ def actualizar_estado_pedido(request, pedido_id):
     else:
         messages.error(request, 'Estado no válido.')
 
-    return redirect('lista_pedidos')  # Redirige de vuelta a la lista de pedidos
+    return redirect('lista_pedidos')
 
 ###### Vista pedidos por usuario:
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Sum
-from .models import Pedido
-
 def ver_detalle_pedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
-    detalles = pedido.detalles.all()  # Obtiene los detalles del pedido
-    
-    # Calcular el total de la compra
+    detalles = pedido.detalles.all()    
+    # ##Calcular el total de la compra
     total_compra = detalles.aggregate(total=Sum('subtotal'))['total'] or 0
-
     return render(request, 'detalle_pedido.html', {'pedido': pedido, 'detalles': detalles, 'total_compra': total_compra})
 
-# vista para el usuario
+###vista para el usuario
 def mis_pedidos(request):
     if request.user.is_authenticated:
-        pedidos = request.user.pedidos.all()  # Obtiene todos los pedidos del usuario
+        pedidos = request.user.pedidos.all()
     else:
-        pedidos = []  # Si no está autenticado, no hay pedidos
-
+        pedidos = []
     return render(request, 'mis_pedidos.html', {'pedidos': pedidos})
 
-# Crear pedidos
+# ##Crear pedidos
 def crear_pedido(request):
     if request.method == 'POST':
         form = PedidoForm(request.POST)
         if form.is_valid():
             direccion_envio = form.cleaned_data['direccion_envio']
             hora_entrega = form.cleaned_data['hora_entrega']
-
-            # Obtener el carrito del usuario autenticado
-            carrito = Carrito.objects.get(user=request.user)  # Asumiendo que hay un carrito por usuario
-
-            # Crear el nuevo pedido asociado al usuario
+            ### Obtener el carrito del usuario autenticado
+            carrito = Carrito.objects.get(user=request.user)
+            ### Crear el nuevo pedido asociado al usuario
             nuevo_pedido = Pedido(
-                usuario=request.user,  # Asociar el pedido al usuario actual
+                usuario=request.user,
                 carrito=carrito,
                 direccion_envio=direccion_envio,
                 hora_entrega=hora_entrega
             )
             nuevo_pedido.save()
-
             # Agregar detalles al pedido
             for item in carrito.itemcarrito_set.all():
                 DetallePedido.objects.create(
@@ -431,56 +407,31 @@ def crear_pedido(request):
                     precio_unitario=item.plato.precio,
                     subtotal=item.cantidad * item.plato.precio
                 )
-
             # Opcional: Vaciar el carrito después de crear el pedido
             carrito.platos.clear()
-
             # Redirigir a la lista de pedidos
-            return redirect('mis_pedidos')  # Nombre de la URL para ver los pedidos
-
+            return redirect('mis_pedidos')
     else:
         form = PedidoForm()
-
     return render(request, 'crear_pedido.html', {'form': form})
-
-
-
-from django.shortcuts import get_object_or_404, redirect
-from .models import Plato
 
 def ocultar_plato(request, plato_id):
     if request.method == 'POST':
         plato = get_object_or_404(Plato, pk=plato_id)
-        plato.oculto = True  # O el método que uses para marcar como oculto
+        plato.oculto = True
         plato.save()
-    return redirect('plato_list')  # Redirigir a la lista de platos después de ocultar
-    
-
+    return redirect('plato_list')
 ############ Reportes de ventas
-
-from django.shortcuts import render
-from django.utils import timezone
-from django.db.models import Sum
-from .models import Pedido  # Asegúrate de que el modelo Pedido esté importado
-
-from django.shortcuts import render
-from django.utils import timezone
-from django.db.models import Sum
-from .models import Pedido, DetallePedido  # Importar el modelo DetallePedido
-
 def reporte_ventas(request):
     hoy = timezone.now().date()
-
     # Calcular el total de ventas del día de hoy
     ventas_diarias = DetallePedido.objects.filter(
         pedido__fecha_pedido__date=hoy
     ).aggregate(total_ventas=Sum('subtotal'))
-
     # Calcular el total de ventas de la última semana
     ventas_semanales = DetallePedido.objects.filter(
         pedido__fecha_pedido__gte=hoy - timezone.timedelta(days=7)
     ).aggregate(total_ventas=Sum('subtotal'))
-
     context = {
         'ventas_diarias': ventas_diarias['total_ventas'] or 0,
         'ventas_semanales': ventas_semanales['total_ventas'] or 0,
@@ -488,16 +439,11 @@ def reporte_ventas(request):
     return render(request, 'comercio/reporte_ventas.html', context)
 
 ######grafitcos#####
-
-from django.utils import timezone
-from django.db.models import Count, Sum
-from .models import Voto, Pedido, DetallePedido
 @login_required
 @user_passes_test(es_administrador)
 def graficos_view(request):
     hoy = timezone.now().date()
     hace_una_semana = hoy - timezone.timedelta(days=7)
-
     # Datos diarios
     votos_diarios = Voto.objects.filter(fecha_voto__date=hoy).values('plato_semanal__plato__nombre').annotate(total=Count('id'))
     pedidos_diarios = DetallePedido.objects.filter(pedido__fecha_pedido__date=hoy).values('plato__nombre').annotate(total_vendidos=Sum('cantidad'))
@@ -515,6 +461,5 @@ def graficos_view(request):
     return render(request, 'graficos.html', context)
 
 ### Acerca de nosotros:
-
 def acerca_de_nosotros(request):
     return render(request, 'acerca_de_nosotros.html')

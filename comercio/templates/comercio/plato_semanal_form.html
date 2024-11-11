@@ -6,12 +6,12 @@
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #EAEAEA; /* Color gris de fondo */
+        background-color: #EAEAEA;
         margin: 0;
         padding: 20px;
     }
     h2 {
-        color: #ff9e1b; /* Color Papaya McLaren */
+        color: #ff9e1b;
         text-align: center;
     }
     form {
@@ -19,16 +19,16 @@
         flex-direction: column;
         align-items: center;
         margin-top: 20px;
-        background-color: white; /* Fondo blanco para el formulario */
+        background-color: white;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-        max-width: 600px; /* Ancho máximo del formulario */
-        margin-left: auto; /* Centrar horizontalmente */
-        margin-right: auto; /* Centrar horizontalmente */
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
     }
     button {
-        background-color: #ff9e1b; /* Botón en Papaya McLaren */
+        background-color: #ff9e1b;
         color: white;
         border: none;
         padding: 10px 20px;
@@ -38,41 +38,40 @@
         margin-top: 10px;
     }
     button:hover {
-        background-color: #e68a00; /* Color más oscuro al pasar el ratón */
+        background-color: #e68a00;
     }
     .btn {
-        background-color: #28a745; /* Color de fondo del botón */
-        color: white; /* Color del texto */
-        border: none; /* Sin borde */
-        padding: 10px 20px; /* Espaciado interno */
-        border-radius: 5px; /* Bordes redondeados */
-        cursor: pointer; /* Cambiar el cursor al pasar */
-        transition: background-color 0.3s; /* Transición suave para el color de fondo */
-        text-decoration: none; /* Sin subrayado */
-        display: inline-block; /* Hacer que el enlace se comporte como un bloque */
-        margin-top: 10px; /* Espaciado superior */
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
     }
     .btn:hover {
-        background-color: #218838; /* Color más oscuro al pasar el ratón */
+        background-color: #218838;
     }
     .form-field {
-        margin-bottom: 15px; /* Espaciado entre campos del formulario */
-        width: 100%; /* Ancho completo */
+        margin-bottom: 15px;
+        width: 100%;
     }
 
-    /* Estilos responsivos */
     @media (max-width: 768px) {
         form {
-            padding: 15px; /* Menos padding en pantallas pequeñas */
+            padding: 15px;
         }
         button, .btn {
-            width: 100%; /* Botón ocupa el ancho completo en pantallas pequeñas */
+            width: 100%;
         }
     }
 
     @media (max-width: 480px) {
         h2 {
-            font-size: 1.5em; /* Tamaño de fuente más pequeño en pantallas muy pequeñas */
+            font-size: 1.5em;
         }
     }
 </style>
@@ -82,7 +81,7 @@
     {% csrf_token %}
     {% for field in form %}
         <div class="form-field">
-            {{ field.label_tag }} {{ field }} {{ field.errors }} <!-- Etiqueta, campo y errores -->
+            {{ field.label_tag }} {{ field }} {{ field.errors }}
         </div>
     {% endfor %}
     <button type="submit">Guardar</button>

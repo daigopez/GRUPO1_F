@@ -50,7 +50,7 @@
             margin-right: 10px;
         }
         .date-group input:last-child {
-            margin-right: 0; /* Sin margen derecho para el último elemento */
+            margin-right: 0;
         }
         button {
             width: 100%;
@@ -133,15 +133,13 @@
             const mes = document.getElementById('mes_expiracion').value;
             const anio = document.getElementById('anio_expiracion').value;
             const fechaExpiracion = mes + '/' + anio;
-
-            // Crear un campo oculto para enviar la fecha de expiración
             const fechaInput = document.createElement('input');
             fechaInput.type = 'hidden';
             fechaInput.name = 'fecha_expiracion';
             fechaInput.value = fechaExpiracion;
 
-            document.forms[0].appendChild(fechaInput); // Agregar el campo al formulario
-            return true; // Permitir el envío del formulario
+            document.forms[0].appendChild(fechaInput);
+            return true;
         }
     </script>
 </body>

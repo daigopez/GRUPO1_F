@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 class PlatoForm(forms.ModelForm):
     class Meta:
         model = Plato
-        fields = ['nombre', 'descripcion', 'precio', 'disponible', 'imagen']  # Agrega la imagen
+        fields = ['nombre', 'descripcion', 'precio', 'disponible', 'imagen']
 
 class EncuestaForm(forms.ModelForm):
     class Meta:
@@ -23,8 +23,6 @@ class PlatoSemanalForm(forms.ModelForm):
         model = PlatoSemanal
         fields = ['dia', 'plato', 'comentario']
 
-# Se actualiza el formulario con el nuevo campo de correo electronico
-
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
@@ -35,25 +33,18 @@ class RegistroForm(UserCreationForm):
         model = User
         fields = ['username', 'email', 'password1', 'password2']
 
-
-# modificación de los datos del usuario registrado:
-
 class UserUpdateForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, required=False, label='Nueva contraseña')
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']  # Incluye la contraseña
+        fields = ['username', 'email', 'password']
 
     def clean_username(self):
         username = self.cleaned_data.get('username')
-        # Comprobar si el nombre de usuario ya existe en la base de datos
         if User.objects.filter(username=username).exclude(id=self.instance.id).exists():
             raise ValidationError("No se puede cambiar a ese nombre de usuario porque ya está ocupado.")
         return username
-
-#Control de modifcacion de usuario si ya existe
-
 
 #### Formulario tarjeta de credito/debito:
 
@@ -72,7 +63,6 @@ class PagoForm(forms.Form):
 
     def clean_fecha_expiracion(self):
         fecha_expiracion = self.cleaned_data['fecha_expiracion']
-        # Validar el formato MM/AA
         try:
             mes, anio = map(int, fecha_expiracion.split('/'))
             if not (1 <= mes <= 12):
@@ -80,15 +70,12 @@ class PagoForm(forms.Form):
         except ValueError:
             raise forms.ValidationError("Formato inválido. Use MM/AA.")
         
-        # Validar que la tarjeta no haya expirado
         from datetime import datetime
         ahora = datetime.now()
         if anio < ahora.year % 100 or (anio == ahora.year % 100 and mes < ahora.month):
             raise forms.ValidationError("La tarjeta ha expirado.")
 
         return fecha_expiracion
-    
-
 
 ## formulario estado pedido
 
@@ -96,9 +83,6 @@ class EstadoPedidoForm(forms.ModelForm):
     class Meta:
         model = Pedido
         fields = ['estado']
-
-# crear pedido
-
 
 # Formulario de envio y direccion
 class PedidoForm(forms.Form):

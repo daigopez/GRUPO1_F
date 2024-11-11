@@ -18,24 +18,24 @@
         .navbar {
             background-color: #ff9c1b;
             overflow: hidden;
-            padding: 10px 20px; /* Padding lateral para el navbar */
+            padding: 10px 20px;
             display: flex;
-            justify-content: flex-start; /* Alinear elementos a la izquierda */
+            justify-content: flex-start;
         }
         .navbar .btn-volver {
-            background-color: #28a745; /* Color del botón "Volver" */
+            background-color: #28a745;
             color: white;
             padding: 10px 20px;
             border-radius: 5px;
             text-decoration: none;
-            margin-bottom: 20px; /* Margen inferior para separación */
+            margin-bottom: 20px; 
         }
         .navbar .btn-volver:hover {
-            background-color: #218838; /* Color del botón "Volver" al pasar el mouse */
+            background-color: #218838;
         }
         canvas {
             max-width: 600px;
-            margin: 20px auto; /* Centrar gráficos con margen superior */
+            margin: 20px auto;
         }
     </style>
 </head>
@@ -64,7 +64,6 @@
         const pedidosDiarios = {{ pedidos_diarios|safe }};
         const pedidosSemanales = {{ pedidos_semanales|safe }};
 
-        // Gráfico de Voto Diarios
         const votoDiarioLabels = votosDiarios.map(voto => voto['plato_semanal__plato__nombre'] || 'Nombre Desconocido');
         const votoDiarioCounts = votosDiarios.map(voto => voto.total || 0);
 
@@ -96,7 +95,6 @@
             }
         });
 
-        // Gráfico de Voto Semanales
         const votoSemanalLabels = votosSemanales.map(voto => voto['plato_semanal__plato__nombre'] || 'Nombre Desconocido');
         const votoSemanalCounts = votosSemanales.map(voto => voto.total || 0);
 
@@ -128,7 +126,6 @@
             }
         });
 
-        // Gráfico de Pedidos Diarios
         const pedidoDiarioLabels = pedidosDiarios.map(pedido => pedido['plato__nombre']);
         const pedidoDiarioCounts = pedidosDiarios.map(pedido => pedido['total_vendidos'] || 0);
 
@@ -152,7 +149,6 @@
             }
         });
 
-        // Gráfico de Pedidos Semanales
         const pedidoSemanalLabels = pedidosSemanales.map(pedido => pedido['plato__nombre']);
         const pedidoSemanalCounts = pedidosSemanales.map(pedido => pedido['total_vendidos'] || 0);
 

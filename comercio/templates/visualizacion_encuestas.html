@@ -6,62 +6,56 @@
     <title>Visualización de Encuestas</title>
     <style>
         body {
-            background-color: #EAEAEA; /* Fondo en color #EAEAEA */
+            background-color: #EAEAEA;
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
         }
         header {
-            background-color: #ff9e1b; /* Color del navbar */
+            background-color: #ff9e1b;
             color: white;
             padding: 10px 20px;
             text-align: center;
-            position: relative; /* Para posicionar el botón */
+            position: relative;
         }
         h1 {
             margin: 0;
         }
         .btn-primary {
-            position: absolute; /* Posicionamiento absoluto */
-            left: 20px; /* Espaciado desde la izquierda */
-            top: 50%; /* Centrado vertical */
-            transform: translateY(-50%); /* Ajuste para centrar */
-            background-color: #ff6f00; /* Naranja intenso */
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #ff6f00;
             color: white;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
-            text-decoration: none; /* Sin subrayado */
-            transition: background-color 0.3s; /* Transición suave */
+            text-decoration: none;
+            transition: background-color 0.3s;
         }
         .btn-primary:hover {
-            background-color: #e65c00; /* Naranja más oscuro al pasar el mouse */
+            background-color: #e65c00;
         }
-
-/*Orden de la lista de los platos */
 
         .plato-list {
             display: flex;
-            flex-wrap: wrap;  /* Permite que los elementos se envuelvan */
+            flex-wrap: wrap;
             margin-top: 20px;
-            padding: 10px;    /* Añade padding al contenedor */
-            background-color: #e0e0e0; /* Color de fondo del contenedor */
-            border: 1px solid #ccc; /* Borde del contenedor */
+            padding: 10px;
+            background-color: #e0e0e0;
+            border: 1px solid #ccc;
         }
 
         .plato-item {
-            flex: 0 0 300px;  /* Ancho fijo para todos los elementos */
+            flex: 0 0 300px;
             box-sizing: border-box;
-            margin: 10px;     /* Espacio entre elementos */
+            margin: 10px;
             padding: 20px;
             background-color: #f0f0f0;
             text-align: center;
             border: 1px solid #ccc;
         }
-/* Fin lista orden de los platos */
-
-
-
 
         .plato-item img {
             max-width: 100%;
@@ -71,7 +65,7 @@
 </head>
 <body>
     <header>
-        <a href="{% url 'iniciada' %}" class="btn-primary">Volver</a> <!-- Botón para ir a iniciada -->
+        <a href="{% url 'iniciada' %}" class="btn-primary">Volver</a>
         <h1>Encuestas Realizadas</h1>
     </header>
     <div class="plato-list">

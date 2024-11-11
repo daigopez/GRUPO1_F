@@ -12,15 +12,15 @@
         min-height: 100vh;
     }
     h1 {
-        color: #ff9e1b; /* Color Papaya McLaren */
+        color: #ff9e1b;
         text-align: center;
     }
     table {
         width: 100%;
         border-collapse: collapse;
         margin: 20px 0;
-        background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente para la tabla */
-        border-radius: 8px; /* Bordes redondeados para la tabla */
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 8px;
     }
     th, td {
         padding: 15px;
@@ -28,33 +28,33 @@
         border: 1px solid #ccc;
     }
     th {
-        background-color: #ff9e1b; /* Cabecera de tabla en Papaya McLaren */
+        background-color: #ff9e1b;
         color: white;
     }
     tr:nth-child(even) {
-        background-color: #f2f2f2; /* Color alternativo para filas */
+        background-color: #f2f2f2;
     }
     a {
-        color: #ff9e1b; /* Enlaces en Papaya McLaren */
+        color: #ff9e1b;
         text-decoration: none;
     }
     a:hover {
-        text-decoration: underline; /* Subrayar enlaces al pasar el ratón */
+        text-decoration: underline;
     }
     button {
-        background-color: #ff9e1b; /* Botones en Papaya McLaren */
+        background-color: #ff9e1b;
         color: white;
         border: none;
         padding: 10px 15px;
         cursor: pointer;
         border-radius: 5px;
-        margin-bottom: 10px; /* Espacio entre los botones y la tabla */
+        margin-bottom: 10px;
     }
     button:hover {
-        background-color: #e68a00; /* Color más oscuro al pasar el ratón */
+        background-color: #e68a00;
     }
     .message-list {
-        background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente para mensajes */
+        background-color: rgba(255, 255, 255, 0.9);
         border: 1px solid #ccc;
         padding: 10px;
         margin-top: 20px;
@@ -77,7 +77,7 @@
         {% if user.is_staff %}
         <th>Acciones</th>
         {% endif %}
-        <th>Total de Votos</th>  <!-- Nueva columna para mostrar el total de votos -->
+        <th>Total de Votos</th>
         <th>Votar</th>
     </tr>
     {% for plato_semanal in platos_semanales %}
@@ -92,7 +92,7 @@
             <a href="{% url 'eliminar_plato_semanal' plato_semanal.pk %}">Eliminar</a>
         </td>
         {% endif %}
-        <td>{{ plato_semanal.total_votos }} </td>  <!-- Mostrar total de votos -->
+        <td>{{ plato_semanal.total_votos }} </td>
         <td>
             <form action="{% url 'votar_plato_semanal' plato_semanal.pk %}" method="post">
                 {% csrf_token %}
@@ -109,7 +109,6 @@
 </form>
 {% endif %}
 
-<!-- Mensaje de éxito o error -->
 {% if messages %}
     <div class="message-list">
         <ul>

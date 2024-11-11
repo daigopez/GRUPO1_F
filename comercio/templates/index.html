@@ -49,18 +49,18 @@
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            flex: 0 1 calc(14.28% - 20px); /* 14.28% para 7 cuadraditos */
+            flex: 0 1 calc(14.28% - 20px);
             height: 150px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin: 10px; /* Ajusta el margen para separación */
+            margin: 10px;
             text-align: center;
         }
         h1 {
             color: #333;
-            font-size: 16px; /* Ajusta el tamaño del texto */
+            font-size: 16px;
             margin: 0;
         }
         .icon-btn {
@@ -68,32 +68,30 @@
             color: #4CAF50;
             border: none;
             cursor: pointer;
-            font-size: 62px; /* Tamaño del icono aumentado */
+            font-size: 62px;
             transition: color 0.3s;
-            margin: 10px; /* Añade un margen para separación */
+            margin: 10px;
         }
         .icon-btn:hover {
             color: #45a049;
         }
 
-        /* Contenedor para las cajas */
         .box-container {
             display: flex;
-            flex-wrap: wrap; /* Permite que las cajas se envuelvan */
-            justify-content: center; /* Centra las cajas horizontalmente */
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        /* Media queries para hacer el navbar responsivo */
         @media (max-width: 600px) {
             .navbar ul {
-                flex-direction: column; /* Cambia a columna en pantallas pequeñas */
-                align-items: flex-start; /* Alinea a la izquierda */
+                flex-direction: column;
+                align-items: flex-start;
             }
             .navbar li {
-                margin: 5px 0; /* Ajusta el margen en pantallas pequeñas */
+                margin: 5px 0;
             }
             .container {
-                flex: 0 1 calc(100% - 20px); /* Ocupa el 100% en pantallas pequeñas */
+                flex: 0 1 calc(100% - 20px);
             }
         }
     </style>
