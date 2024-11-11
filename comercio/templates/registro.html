@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background-image: url('/media/platos/fondo2.jpg');
@@ -88,14 +89,23 @@
 
         form div {
             margin-bottom: 15px;
+            position: relative; /* Para posicionar el ícono */
         }
 
         form input {
             width: 100%;
-            max-width: 200px;
-            padding: 10px;
+            padding: 10px 30px; /* Espacio para el ícono */
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .help-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: black; /* Color del ícono */
         }
 
         @media (max-width: 600px) {
@@ -130,28 +140,32 @@
 </div>
 
 <div class="form-container">
-    <h1 class="title">Registro</h1> <!-- Título centrado dentro de la caja del formulario -->
+    <h1 class="title">Registro</h1>
     
     {{ error }}
     <form action="/registro/" method="POST">
         {% csrf_token %}
         
         <div>
+            <i class="fas fa-user help-icon"></i>
             <input type="text" name="username" placeholder="Nombre de usuario" required>
             {{ form.username.errors }}
         </div>
         
         <div>
+            <i class="fas fa-envelope help-icon"></i>
             <input type="email" name="email" placeholder="Correo" required>
             {{ form.email.errors }}
         </div>
         
         <div>
+            <i class="fas fa-lock help-icon"></i>
             <input type="password" name="password1" placeholder="Contraseña" required>
             {{ form.password1.errors }}
         </div>
         
         <div>
+            <i class="fas fa-lock help-icon"></i>
             <input type="password" name="password2" placeholder="Confirmar contraseña" required>
             {{ form.password2.errors }}
         </div>
