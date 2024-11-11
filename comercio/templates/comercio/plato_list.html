@@ -166,10 +166,9 @@
                     <p class="description">{{ plato.descripcion }}</p> <!-- Descripción del plato -->
                     <div class="actions">
                         <a href="{% url 'plato_update' plato.pk %}">Editar</a>
-                        <a href="{% url 'plato_delete' plato.pk %}">Eliminar</a>
                         <form action="{% url 'ocultar_plato' plato.pk %}" method="POST" style="display:inline;">
                             {% csrf_token %}
-                            <button type="submit" class="btn-ocultar">Ocultar</button>
+                            <button type="submit" class="btn-ocultar">Eliminar</button>
                         </form>
                     </div>
                 </div>
