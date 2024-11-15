@@ -1,5 +1,9 @@
 {% extends 'comercio/base.html' %}
 
+{% block head %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
+
 {% block content %}
 <style>
     body {
@@ -14,6 +18,8 @@
     h1 {
         color: #ff9e1b;
         text-align: center;
+        font-size: 2em;
+        margin: 20px 0;
     }
     table {
         width: 100%;
@@ -21,11 +27,14 @@
         margin: 20px 0;
         background-color: rgba(255, 255, 255, 0.8);
         border-radius: 8px;
+        overflow: hidden;
+        word-wrap: break-word;
     }
     th, td {
-        padding: 15px;
+        padding: 10px;
         text-align: left;
         border: 1px solid #ccc;
+        overflow-wrap: break-word;
     }
     th {
         background-color: #ff9e1b;
@@ -60,6 +69,45 @@
         margin-top: 20px;
         border-radius: 5px;
     }
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 1.5em;
+        }
+        th, td {
+            padding: 8px;
+            font-size: 0.9em;
+        }
+        button {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+    @media (max-width: 480px) {
+        h1 {
+            font-size: 1.2em;
+        }
+        th, td {
+            padding: 5px;
+            font-size: 0.8em;
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        tr {
+            display: block;
+            margin-bottom: 10px;
+        }
+        th {
+            display: none;
+        }
+        td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            display: inline-block;
+            width: 50%;
+            box-sizing: border-box;
+        }
+    }
 </style>
 
 {% if user.is_staff %}
@@ -72,7 +120,6 @@
     <tr>
         <th>Día</th>
         <th>Plato</th>
-        <th>Precio</th>
         <th>Comentario</th>
         {% if user.is_staff %}
         <th>Acciones</th>
@@ -82,18 +129,17 @@
     </tr>
     {% for plato_semanal in platos_semanales %}
     <tr>
-        <td>{{ plato_semanal.dia }}</td>
-        <td>{{ plato_semanal.plato.nombre }}</td>
-        <td>${{ plato_semanal.plato.precio }}</td>
-        <td>{{ plato_semanal.comentario }}</td>
+        <td data-label="Día">{{ plato_semanal.dia }}</td>
+        <td data-label="Plato">{{ plato_semanal.plato.nombre }}</td>
+        <td data-label="Comentario">{{ plato_semanal.comentario }}</td>
         {% if user.is_staff %}
-        <td>
+        <td data-label="Acciones">
             <a href="{% url 'editar_plato_semanal' plato_semanal.pk %}">Editar</a>
             <a href="{% url 'eliminar_plato_semanal' plato_semanal.pk %}">Eliminar</a>
         </td>
         {% endif %}
-        <td>{{ plato_semanal.total_votos }} </td>
-        <td>
+        <td data-label="Total de Votos">{{ plato_semanal.total_votos }}</td>
+        <td data-label="Votar">
             <form action="{% url 'votar_plato_semanal' plato_semanal.pk %}" method="post">
                 {% csrf_token %}
                 <button type="submit">Votar</button>
