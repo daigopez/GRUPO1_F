@@ -315,35 +315,26 @@ def modificar_datos(request):
 # Fin modificación de registro de usuarios
 
 ###################### pagos ######################
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect
-from django.contrib import messages
-from .models import Carrito, Pedido, DetallePedido, Perfil
-from .forms import PagoForm
-
 @login_required
 def pago(request):
     carrito = get_object_or_404(Carrito, user=request.user)
     perfil = get_object_or_404(Perfil, user=request.user)
     direcciones = []
 
-    # Agregar la dirección del perfil al contexto
     if perfil.direccion:
         direcciones.append(perfil.direccion)
 
     if request.method == 'POST':
-        # Asegúrate de incluir el campo custom_address en el formulario
         form = PagoForm(request.POST)
         if form.is_valid():
             direccion_envio = form.cleaned_data['direccion_envio']
-            # Obtener custom_address si se seleccionó "otra"
             custom_address = request.POST.get('custom_address', '')
 
-            # Usar custom_address si 'direccion_envio' es 'otra'
             if direccion_envio == 'otra':
                 direccion_envio = custom_address
 
             hora_entrega = form.cleaned_data['hora_entrega']
+            comentarios = request.POST.get('comentarios', '')  # Captura el campo de comentarios
 
             # Crear el pedido
             pedido = Pedido.objects.create(
@@ -351,10 +342,10 @@ def pago(request):
                 carrito=carrito,
                 direccion_envio=direccion_envio,
                 hora_entrega=hora_entrega,
-                pagado=True
+                pagado=True,
+                comentarios=comentarios  # Guarda los comentarios en el pedido
             )
 
-            # Guardar los detalles del pedido
             for item in carrito.itemcarrito_set.all():
                 DetallePedido.objects.create(
                     pedido=pedido,
@@ -364,7 +355,6 @@ def pago(request):
                     subtotal=item.plato.precio * item.cantidad
                 )
 
-            # Limpiar el carrito después de la compra
             carrito.itemcarrito_set.all().delete() 
 
             messages.success(request, 'Pago realizado con éxito.')

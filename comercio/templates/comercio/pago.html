@@ -119,6 +119,10 @@
                 <label for="cvc">CVC:</label>
                 <input type="number" id="cvc" name="cvc" placeholder="Ej. 123" required>
             </div>
+            <div class="form-group">
+                <label for="comentarios">Comentarios:</label>
+                <textarea id="comentarios" name="comentarios" placeholder="Escribe tus comentarios aquí..." rows="4"></textarea>
+            </div>
             <button type="submit">Realizar Pago</button>
         </form>
         <a href="{% url 'pagina_venta' %}" class="back-link">Volver a la Página de Venta</a>

@@ -82,6 +82,7 @@ class Pedido(models.Model):
     pagado = models.BooleanField(default=False)
     fecha_pedido = models.DateTimeField(auto_now_add=True)
     estado = models.CharField(max_length=50, choices=ESTADO_CHOICES, default='Preparando')
+    comentarios = models.TextField(blank=True)  # Campo para comentarios del pedido
 
     def __str__(self):
         return f'Pedido {self.id} - {self.estado}'

@@ -63,6 +63,7 @@ class PagoForm(forms.Form):
     numero_tarjeta = forms.CharField(max_length=16, required=True)
     fecha_expiracion = forms.CharField(max_length=5, required=True)
     cvc = forms.CharField(max_length=3, required=True)
+    comentarios = forms.CharField(widget=forms.Textarea, required=False)  # Campo de comentarios
 
     def clean_fecha_expiracion(self):
         fecha_expiracion = self.cleaned_data['fecha_expiracion']
