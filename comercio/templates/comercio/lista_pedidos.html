@@ -135,7 +135,8 @@
                 <th>Estado de Pago</th>
                 <th>Fecha del Pedido</th>
                 <th>Estado del pedido</th>
-                <th>Comentarios</th>  <!-- Nueva columna para comentarios -->
+                <th>Comentarios</th>
+                <th>Número de Teléfono</th>  <!-- Nueva columna para el teléfono -->
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -149,7 +150,8 @@
                 <td data-label="Estado de Pago">{{ pedido_info.pedido.pagado|yesno:"Pagado,Pendiente" }}</td>
                 <td data-label="Fecha del Pedido">{{ pedido_info.pedido.fecha_pedido }}</td>
                 <td data-label="Estado del pedido">{{ pedido_info.pedido.estado }}</td>
-                <td data-label="Comentarios">{{ pedido_info.pedido.comentarios|default:"Sin comentarios" }}</td>  <!-- Mostrar comentarios -->
+                <td data-label="Comentarios">{{ pedido_info.pedido.comentarios|default:"Sin comentarios" }}</td>
+                <td data-label="Número de Teléfono">{{ pedido_info.pedido.usuario.perfil.telefono_celular|default:"Sin teléfono" }}</td>  <!-- Obtener el número de teléfono del perfil -->
                 <td data-label="Acciones">
                     <form method="POST" action="{% url 'actualizar_estado_pedido' pedido_info.pedido.id %}" style="display: inline;">
                         {% csrf_token %}
@@ -162,7 +164,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="9" style="padding: 0;">
+                <td colspan="10" style="padding: 0;">
                     <div style="background-color: #f2f2f2; padding: 10px;">
                         <strong>Detalles del Pedido:</strong>
                         <ul>
