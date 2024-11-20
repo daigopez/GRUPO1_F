@@ -34,7 +34,8 @@
             font-weight: bold;
         }
         input[type="text"],
-        input[type="number"] {
+        input[type="number"],
+        select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
@@ -89,7 +90,15 @@
             {% csrf_token %}
             <div class="form-group">
                 <label for="direccion_envio">Dirección de Envío:</label>
-                <input type="text" id="direccion_envio" name="direccion_envio" placeholder="Tu dirección 123" required>
+                <select id="direccion_envio" name="direccion_envio" onchange="toggleCustomAddress()">
+                    <option value="">Selecciona una dirección</option>
+                    {% for direccion in direcciones %}
+                        <option value="{{ direccion }}">{{ direccion }}</option>
+                    {% endfor %}
+                    <option value="{{ direccion_usuario }}">{{ direccion_usuario }}</option>
+                    <option value="otra">Enviar a otra dirección</option>
+                </select>
+                <input type="text" id="custom_address" name="custom_address" placeholder="Ingresa tu dirección" style="display: none;">
             </div>
             <div class="form-group">
                 <label for="hora_entrega">Hora de Entrega:</label>
@@ -140,6 +149,19 @@
 
             document.forms[0].appendChild(fechaInput);
             return true;
+        }
+
+        function toggleCustomAddress() {
+            const select = document.getElementById('direccion_envio');
+            const customAddressInput = document.getElementById('custom_address');
+            if (select.value === 'otra') {
+                customAddressInput.style.display = 'block';
+                customAddressInput.required = true; // Hacerlo requerido
+            } else {
+                customAddressInput.style.display = 'none';
+                customAddressInput.value = ''; // Limpiar el input
+                customAddressInput.required = false; // Quitar requerido
+            }
         }
     </script>
 </body>

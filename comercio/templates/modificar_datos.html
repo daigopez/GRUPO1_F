@@ -153,6 +153,20 @@
                 <div class="error">{{ form.email.errors }}</div>
             {% endif %}
         </div>
+
+        <div>
+            <input type="text" name="telefono_celular" placeholder="Teléfono Celular" required value="{{ perfil.telefono_celular }}">
+            {% if form.telefono_celular.errors %}
+                <div class="error">{{ form.telefono_celular.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div>
+            <input type="text" name="direccion" placeholder="Dirección" required value="{{ perfil.direccion }}">
+            {% if form.direccion.errors %}
+                <div class="error">{{ form.direccion.errors }}</div>
+            {% endif %}
+        </div>
         
         <div>
             <input type="password" name="password" placeholder="Nueva contraseña">
@@ -160,7 +174,7 @@
                 <div class="error">{{ form.password.errors }}</div>
             {% endif %}
         </div>
-        
+
         <button class="btn btn-success" style="background-color: #28a745; color: white;">
             Guardar Cambios
         </button>

@@ -22,17 +22,20 @@ class PlatoSemanalForm(forms.ModelForm):
     class Meta:
         model = PlatoSemanal
         fields = ['dia', 'plato', 'comentario']
-
+#registro con nuevo campo de telefono y dirección
+from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 class RegistroForm(UserCreationForm):
     email = forms.EmailField(required=True, label='Correo')
+    telefono_celular = forms.CharField(max_length=15, required=True, label='Teléfono Celular')
+    direccion = forms.CharField(max_length=255, required=True, label='Dirección')
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2']
-
+        fields = ['username', 'email', 'password1', 'password2', 'telefono_celular', 'direccion']
+# FIN REGISTRO
 class UserUpdateForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, required=False, label='Nueva contraseña')
 

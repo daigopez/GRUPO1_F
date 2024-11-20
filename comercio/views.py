@@ -41,12 +41,25 @@ def index(request):
     return render(request, 'index.html')
 
 # Registro de usuario
+from django.contrib.auth import login
+from django.shortcuts import render, redirect
+from django.db import IntegrityError
+from .forms import RegistroForm
+from .models import Perfil  # Asegúrate de importar tu modelo de perfil
+
+# Registro de usuario
 def registro(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():
             try:
                 user = form.save()
+                # Crear un perfil asociado al usuario
+                Perfil.objects.create(
+                    user=user,
+                    telefono_celular=form.cleaned_data['telefono_celular'],
+                    direccion=form.cleaned_data['direccion']
+                )
                 login(request, user)
                 return redirect('iniciada')
             except IntegrityError:
@@ -272,8 +285,14 @@ def eliminar_plato_semanal(request, pk):
     return render(request, 'comercio/plato_semanal_confirm_delete.html', {'plato_semanal': plato_semanal})
 
 # esto de aca modificar el registro de usuarios
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from .forms import UserUpdateForm
+from .models import Perfil  # Asegúrate de importar tu modelo de perfil
+
 @login_required
 def modificar_datos(request):
+    perfil = Perfil.objects.get(user=request.user)  # Obtener el perfil del usuario
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -282,17 +301,36 @@ def modificar_datos(request):
             if password:
                 user.set_password(password)
             user.save()
+            
+            # Actualizar los datos del perfil
+            perfil.telefono_celular = request.POST.get('telefono_celular')
+            perfil.direccion = request.POST.get('direccion')
+            perfil.save()
+            
             return redirect('/')
     else:
         form = UserUpdateForm(instance=request.user)
 
-    return render(request, 'modificar_datos.html', {'form': form})
+    return render(request, 'modificar_datos.html', {'form': form, 'perfil': perfil})
 # Fin modificación de registro de usuarios
 
 ###################### pagos ######################
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render, redirect
+from django.contrib import messages
+from .models import Carrito, Pedido, DetallePedido, Perfil  # Asegúrate de importar tu modelo de perfil
+from .forms import PagoForm
+
 @login_required
 def pago(request):
     carrito = get_object_or_404(Carrito, user=request.user)
+    perfil = get_object_or_404(Perfil, user=request.user)  # Obtén el perfil del usuario
+    direcciones = []
+
+    # Agregar la dirección del perfil al contexto
+    if perfil.direccion:
+        direcciones.append(perfil.direccion)
+
     if request.method == 'POST':
         form = PagoForm(request.POST)
         if form.is_valid():
@@ -318,12 +356,18 @@ def pago(request):
             ### Limpiar el carrito después de la compra
             carrito.itemcarrito_set.all().delete() 
 
-            messages.success(request, '')
+            messages.success(request, 'Pago realizado con éxito.')
             return redirect('confirmacion_pedido', pedido_id=pedido.id)
     else:
         form = PagoForm()
 
-    return render(request, 'comercio/pago.html', {'form': form})
+    return render(request, 'comercio/pago.html', {
+        'form': form,
+        'direccion_usuario': perfil.direccion,  # Pasa la dirección del usuario
+        'direcciones': direcciones  # Pasa las direcciones disponibles
+    })
+
+###############
 
 @login_required
 def confirmacion_pedido(request, pedido_id):

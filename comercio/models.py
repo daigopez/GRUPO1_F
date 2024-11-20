@@ -96,7 +96,14 @@ class DetallePedido(models.Model):
     def __str__(self):
         return f"{self.cantidad} x {self.plato.nombre} - {self.subtotal:.2f}"
     
+######################## se agrega la nueva tabla perfil para alamacenar los nuevos datos de usuario (telefono y direccion)
+from django.db import models
+from django.contrib.auth.models import User
 
+class Perfil(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    telefono_celular = models.CharField(max_length=15)
+    direccion = models.CharField(max_length=255)
 
 
 
