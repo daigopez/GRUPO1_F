@@ -96,7 +96,7 @@
             const pageWidth = doc.internal.pageSize.getWidth();
             const centerX = pageWidth / 2;
 
-            doc.setFontSize(16);
+            doc.setFontSize(23);
             doc.text('******* Delicias Caseras *******', centerX, 30, { align: 'center' });
 
             doc.setFontSize(22);
@@ -119,7 +119,7 @@
             doc.setFontSize(16);
             doc.text('Total de la Compra: ${{ total_compra }}', 10, y);
 
-            doc.text('******* Delicias Caseras *******', centerX, y + 10, { align: 'center' });
+            doc.text('------- Válido como Boleta -------', centerX, y + 10, { align: 'center' });
 
             doc.save('pedido_{{ pedido.id }}.pdf');
         }

@@ -33,13 +33,23 @@
     button:hover {
         background-color: #e68a00;
     }
-    a {
-        color: #ff9e1b;
-        text-decoration: none;
-        margin-top: 10px;
+    .centro {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px; /* Espacio para separar del formulario */
     }
-    a:hover {
-        text-decoration: underline;
+    a.cancelar {
+        background-color: red; /* Color de fondo rojo */
+        color: white; /* Color del texto */
+        padding: 10px 20px; /* Espaciado interno */
+        border-radius: 5px; /* Bordes redondeados */
+        text-decoration: none; /* Sin subrayado */
+        font-size: 16px; /* Tamaño de fuente */
+        margin-top: 10px; /* Margen superior */
+        transition: background-color 0.3s; /* Transición suave para hover */
+    }
+    a.cancelar:hover {
+        background-color: darkred; /* Color al hacer hover */
     }
 </style>
 
@@ -48,6 +58,8 @@
     {% csrf_token %}
     <button type="submit">Confirmar Eliminación</button>
 </form>
-<a href="{% url 'lista_platos_semanales' %}">Cancelar</a>
+<div class="centro">
+    <a class="cancelar" href="{% url 'lista_platos_semanales' %}">Cancelar</a>
+</div>
 
 {% endblock %}
