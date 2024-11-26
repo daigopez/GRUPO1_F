@@ -115,6 +115,7 @@
             display: flex;
             justify-content: flex-end;
             margin-top: 20px;
+            flex-wrap: wrap;
         }
         .report-buttons form {
             margin-left: 10px;
@@ -153,6 +154,17 @@
         <form method="POST" action="{% url 'imprimir_reporte_semanal' %}">
             {% csrf_token %}
             <button type="submit">Imprimir reporte semanal</button>
+        </form>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <label for="fecha_diaria">Filtrar por Fecha:</label>
+            <input type="date" id="fecha_diaria" name="fecha_diaria" required>
+            <button type="submit" name="filtro_diario">Filtrar Diario</button>
+        </form>
+        
+        <form method="POST" action="">
+            {% csrf_token %}
+            <button type="submit" name="filtro_semanal">Filtrar Semanal</button>
         </form>
     </div>
 

@@ -364,13 +364,30 @@ def confirmacion_pedido(request, pedido_id):
     return redirect(f'/pedidos/detalle/{pedido_id}/')
 
 ### Vista de pedidos para el admin
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.utils import timezone
+from .models import Pedido
+from django.views.decorators.http import require_POST
+from django.contrib import messages
+
 @login_required
 @user_passes_test(es_administrador)
 def lista_pedidos(request):
-    # ##Ordenar los pedidos por fecha de manera descendente
+    # Obtener todos los pedidos ordenados por fecha de manera descendente
     pedidos = Pedido.objects.all().order_by('-fecha_pedido')
-    pedidos_info = []
 
+    # Filtrar por fecha específica
+    if request.method == "POST":
+        if 'filtro_diario' in request.POST:
+            fecha_diaria = request.POST.get("fecha_diaria")
+            pedidos = pedidos.filter(fecha_pedido__date=fecha_diaria)
+        elif 'filtro_semanal' in request.POST:
+            fecha_semanal = timezone.now() - timezone.timedelta(days=timezone.now().weekday())
+            pedidos = pedidos.filter(fecha_pedido__gte=fecha_semanal)
+
+    # Crear la información de pedidos
+    pedidos_info = []
     for pedido in pedidos:
         total = sum(detalle.subtotal for detalle in pedido.detalles.all())
         pedidos_info.append({
@@ -380,7 +397,6 @@ def lista_pedidos(request):
         })
 
     return render(request, 'comercio/lista_pedidos.html', {'pedidos_info': pedidos_info})
-
 #### Estado de pedidos:
 @login_required
 @user_passes_test(es_administrador)
