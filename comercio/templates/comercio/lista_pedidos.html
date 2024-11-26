@@ -111,6 +111,25 @@
                 font-weight: bold;
             }
         }
+        .report-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+        .report-buttons form {
+            margin-left: 10px;
+        }
+        .report-buttons button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .report-buttons button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -125,6 +144,18 @@
     </div>
 
     <h1>Lista de Pedidos</h1>
+
+    <div class="report-buttons">
+        <form method="POST" action="{% url 'imprimir_reporte_diario' %}">
+            {% csrf_token %}
+            <button type="submit">Imprimir reporte diario</button>
+        </form>
+        <form method="POST" action="{% url 'imprimir_reporte_semanal' %}">
+            {% csrf_token %}
+            <button type="submit">Imprimir reporte semanal</button>
+        </form>
+    </div>
+
     <table>
         <thead>
             <tr>
@@ -151,7 +182,7 @@
                 <td data-label="Fecha del Pedido">{{ pedido_info.pedido.fecha_pedido }}</td>
                 <td data-label="Estado del pedido">{{ pedido_info.pedido.estado }}</td>
                 <td data-label="Comentarios">{{ pedido_info.pedido.comentarios|default:"Sin comentarios" }}</td>
-                <td data-label="Número de Teléfono">{{ pedido_info.pedido.usuario.perfil.telefono_celular|default:"Sin teléfono" }}</td>  <!-- Obtener el número de teléfono del perfil -->
+                <td data-label="Número de Teléfono">{{ pedido_info.pedido.usuario.perfil.telefono_celular|default:"Sin teléfono" }}</td>
                 <td data-label="Acciones">
                     <form method="POST" action="{% url 'actualizar_estado_pedido' pedido_info.pedido.id %}" style="display: inline;">
                         {% csrf_token %}

@@ -87,12 +87,16 @@ urlpatterns = [
     path('ocultar_plato/<int:plato_id>/', views.ocultar_plato, name='ocultar_plato'),
 
     ## REporte de ventas
-    path('lista-pedidos/', lista_pedidos, name='lista_pedidos'),  # Asegúrate de tener esta vista
-    path('reporte-ventas/', reporte_ventas, name='reporte_ventas'),  # URL para el reporte de ventas
+    path('lista-pedidos/', lista_pedidos, name='lista_pedidos'),
+    path('reporte-ventas/', reporte_ventas, name='reporte_ventas'),
     
     path('graficos/', graficos_view, name='graficos'),
 
     #### Acerca de nosotros
     path('acerca-de-nosotros/', views.acerca_de_nosotros, name='acerca_de_nosotros'),
+
+    ###reportes####
+    path('imprimir_reporte_diario/', views.imprimir_reporte_diario, name='imprimir_reporte_diario'),
+    path('imprimir_reporte_semanal/', views.imprimir_reporte_semanal, name='imprimir_reporte_semanal'),
     
 ]

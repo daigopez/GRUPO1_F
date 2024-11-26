@@ -4,13 +4,16 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth import login, logout, authenticate
 from django.db import IntegrityError
-from .models import DetallePedido, Pedido, Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto
+from .models import DetallePedido, Pedido, Plato, Encuesta, Carrito, ItemCarrito, PlatoSemanal, Voto, Perfil
 from .forms import EstadoPedidoForm, PagoForm, PedidoForm, PlatoForm, EncuestaForm, PlatoSemanalForm, RegistroForm, UserUpdateForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required, user_passes_test
 from django.utils import timezone
 from django.db.models import Count, Sum
 from django.views.decorators.http import require_POST
+from datetime import datetime, timedelta
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
 
 # Verificación de usuario administrador
 def es_administrador(user):
@@ -41,20 +44,12 @@ def index(request):
     return render(request, 'index.html')
 
 # Registro de usuario
-from django.contrib.auth import login
-from django.shortcuts import render, redirect
-from django.db import IntegrityError
-from .forms import RegistroForm
-from .models import Perfil  # Asegúrate de importar tu modelo de perfil
-
-# Registro de usuario
 def registro(request):
     if request.method == 'POST':
         form = RegistroForm(request.POST)
         if form.is_valid():
             try:
                 user = form.save()
-                # Crear un perfil asociado al usuario
                 Perfil.objects.create(
                     user=user,
                     telefono_celular=form.cleaned_data['telefono_celular'],
@@ -285,14 +280,10 @@ def eliminar_plato_semanal(request, pk):
     return render(request, 'comercio/plato_semanal_confirm_delete.html', {'plato_semanal': plato_semanal})
 
 # esto de aca modificar el registro de usuarios
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
-from .forms import UserUpdateForm
-from .models import Perfil  # Asegúrate de importar tu modelo de perfil
 
 @login_required
 def modificar_datos(request):
-    perfil = Perfil.objects.get(user=request.user)  # Obtener el perfil del usuario
+    perfil = Perfil.objects.get(user=request.user)
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -302,7 +293,6 @@ def modificar_datos(request):
                 user.set_password(password)
             user.save()
             
-            # Actualizar los datos del perfil
             perfil.telefono_celular = request.POST.get('telefono_celular')
             perfil.direccion = request.POST.get('direccion')
             perfil.save()
@@ -334,16 +324,15 @@ def pago(request):
                 direccion_envio = custom_address
 
             hora_entrega = form.cleaned_data['hora_entrega']
-            comentarios = request.POST.get('comentarios', '')  # Captura el campo de comentarios
+            comentarios = request.POST.get('comentarios', '')
 
-            # Crear el pedido
             pedido = Pedido.objects.create(
                 usuario=request.user,
                 carrito=carrito,
                 direccion_envio=direccion_envio,
                 hora_entrega=hora_entrega,
                 pagado=True,
-                comentarios=comentarios  # Guarda los comentarios en el pedido
+                comentarios=comentarios
             )
 
             for item in carrito.itemcarrito_set.all():
@@ -432,9 +421,7 @@ def crear_pedido(request):
         if form.is_valid():
             direccion_envio = form.cleaned_data['direccion_envio']
             hora_entrega = form.cleaned_data['hora_entrega']
-            ### Obtener el carrito del usuario autenticado
             carrito = Carrito.objects.get(user=request.user)
-            ### Crear el nuevo pedido asociado al usuario
             nuevo_pedido = Pedido(
                 usuario=request.user,
                 carrito=carrito,
@@ -442,7 +429,6 @@ def crear_pedido(request):
                 hora_entrega=hora_entrega
             )
             nuevo_pedido.save()
-            # Agregar detalles al pedido
             for item in carrito.itemcarrito_set.all():
                 DetallePedido.objects.create(
                     pedido=nuevo_pedido,
@@ -451,9 +437,7 @@ def crear_pedido(request):
                     precio_unitario=item.plato.precio,
                     subtotal=item.cantidad * item.plato.precio
                 )
-            # Opcional: Vaciar el carrito después de crear el pedido
             carrito.platos.clear()
-            # Redirigir a la lista de pedidos
             return redirect('mis_pedidos')
     else:
         form = PedidoForm()
@@ -507,3 +491,69 @@ def graficos_view(request):
 ### Acerca de nosotros:
 def acerca_de_nosotros(request):
     return render(request, 'acerca_de_nosotros.html')
+
+### reportes ####
+def imprimir_reporte_diario(request):
+    if request.method == 'POST':
+        hoy = datetime.now().date()
+        pedidos = Pedido.objects.filter(fecha_pedido__date=hoy)
+        return generar_pdf(pedidos, 'reporte_diario.pdf')
+
+def imprimir_reporte_semanal(request):
+    if request.method == 'POST':
+        hace_una_semana = datetime.now().date() - timedelta(days=7)
+        pedidos = Pedido.objects.filter(fecha_pedido__date__gte=hace_una_semana)
+        return generar_pdf(pedidos, 'reporte_semanal.pdf')
+
+def generar_pdf(pedidos, nombre_archivo):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
+
+    p = canvas.Canvas(response, pagesize=letter)
+    p.setFont("Helvetica", 10)
+
+    p.drawString(100, 750, "Reporte de Pedidos")
+    y = 720
+
+    pedidos_por_pagina = 3
+    contador_pedidos = 0
+
+    for pedido in pedidos:
+        total_pedido = sum(detalle.subtotal for detalle in pedido.detalles.all())
+               
+        p.drawString(100, y, f"ID del Pedido: {pedido.id}")
+        y -= 15
+        p.drawString(100, y, f"Dirección de Envío: {pedido.direccion_envio}")
+        y -= 15
+        p.drawString(100, y, f"Hora de Entrega: {pedido.hora_entrega}")
+        y -= 15
+        p.drawString(100, y, f"Estado de Pago: {'Pagado' if pedido.pagado else 'Pendiente'}")
+        y -= 15
+        p.drawString(100, y, f"Fecha del Pedido: {pedido.fecha_pedido.strftime('%d de %B de %Y a las %H:%M')}")
+        y -= 15
+        p.drawString(100, y, f"Comentarios: {pedido.comentarios or 'Sin comentarios'}")
+        y -= 15
+        p.drawString(100, y, f"Número de Teléfono: {pedido.usuario.perfil.telefono_celular or 'Sin teléfono'}")
+        y -= 20  # Espacio antes de la línea de separación
+
+        detalles = pedido.detalles.all()
+        if detalles:
+            p.drawString(100, y, "Detalles del Pedido:")
+            y -= 15
+            for detalle in detalles:
+                p.drawString(100, y, f"{detalle.cantidad} x {detalle.plato.nombre} - ${detalle.subtotal:.2f}")
+                y -= 15
+        p.drawString(100, y, f"Total: ${total_pedido:.2f}")
+        y -= 15      
+        p.line(100, y, 500, y)
+        y -= 10
+        contador_pedidos += 1
+        if contador_pedidos >= pedidos_por_pagina:
+            p.showPage()
+            p.setFont("Helvetica", 10)
+            y = 750
+            contador_pedidos = 0
+
+    p.showPage()
+    p.save()
+    return response
