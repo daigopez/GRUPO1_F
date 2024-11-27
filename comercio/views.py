@@ -91,6 +91,7 @@ def iniciar_sesion(request):
     return render(request, 'iniciar.html', {'form': AuthenticationForm()})
 
 # Nueva función para listar platos visibles
+@login_required
 def lista_platos(request):
     platos = Plato.objects.filter(oculto=False)
     return render(request, 'comercio/lista_de_platos.html', {'platos': platos})
@@ -98,7 +99,7 @@ def lista_platos(request):
 # Modificar la función de listar todos los platos
 def lista_de_platos(request):
     return lista_platos(request)
-
+@login_required
 def pagina_venta(request):
     platos = Plato.objects.filter(oculto=False)
     total = 0
@@ -168,6 +169,8 @@ def eliminar_del_carrito(request, plato_id):
 
     return redirect('pagina_venta')
 
+@user_passes_test(es_administrador)
+@login_required
 def editar_encuesta(request, encuesta_id):
     encuesta = get_object_or_404(Encuesta, id=encuesta_id)
     
@@ -250,7 +253,8 @@ def plato_delete(request, pk):
         messages.success(request, '')
         return redirect('plato_list')
     return render(request, 'comercio/plato_confirm_delete.html', {'plato': plato})
-
+@login_required
+@permission_required('is_superuser')
 def crear_plato_semanal(request):
     if request.method == 'POST':
         form = PlatoSemanalForm(request.POST)
@@ -260,7 +264,8 @@ def crear_plato_semanal(request):
     else:
         form = PlatoSemanalForm()
     return render(request, 'comercio/plato_semanal_form.html', {'form': form})
-
+@login_required
+@permission_required('is_superuser')
 def editar_plato_semanal(request, pk):
     plato_semanal = get_object_or_404(PlatoSemanal, pk=pk)
     if request.method == 'POST':
@@ -271,7 +276,8 @@ def editar_plato_semanal(request, pk):
     else:
         form = PlatoSemanalForm(instance=plato_semanal)
     return render(request, 'comercio/plato_semanal_form.html', {'form': form})
-
+@login_required
+@permission_required('is_superuser')
 def eliminar_plato_semanal(request, pk):
     plato_semanal = get_object_or_404(PlatoSemanal, pk=pk)
     if request.method == 'POST':
@@ -415,6 +421,7 @@ def actualizar_estado_pedido(request, pedido_id):
     return redirect('lista_pedidos')
 
 ###### Vista pedidos por usuario:
+@login_required
 def ver_detalle_pedido(request, pedido_id):
     pedido = get_object_or_404(Pedido, id=pedido_id)
     detalles = pedido.detalles.all()    
@@ -423,6 +430,7 @@ def ver_detalle_pedido(request, pedido_id):
     return render(request, 'detalle_pedido.html', {'pedido': pedido, 'detalles': detalles, 'total_compra': total_compra})
 
 ###vista para el usuario
+@login_required
 def mis_pedidos(request):
     if request.user.is_authenticated:
         pedidos = request.user.pedidos.all()
@@ -431,6 +439,8 @@ def mis_pedidos(request):
     return render(request, 'mis_pedidos.html', {'pedidos': pedidos})
 
 # ##Crear pedidos
+@login_required
+@user_passes_test(es_administrador)
 def crear_pedido(request):
     if request.method == 'POST':
         form = PedidoForm(request.POST)
@@ -466,6 +476,8 @@ def ocultar_plato(request, plato_id):
         plato.save()
     return redirect('plato_list')
 ############ Reportes de ventas
+@login_required
+@permission_required('is_superuser')
 def reporte_ventas(request):
     hoy = timezone.now().date()
     # Calcular el total de ventas del día de hoy
@@ -526,9 +538,12 @@ def generar_pdf(pedidos, nombre_archivo):
     response['Content-Disposition'] = f'attachment; filename="{nombre_archivo}"'
 
     p = canvas.Canvas(response, pagesize=letter)
-    p.setFont("Helvetica", 10)
 
+    
+    p.setFont("Helvetica", 16) # Letra n°16
     p.drawString(100, 750, "Reporte de Pedidos")
+
+    p.setFont("Helvetica", 10)  # Letra n° 10
     y = 720
 
     pedidos_por_pagina = 3
@@ -566,7 +581,7 @@ def generar_pdf(pedidos, nombre_archivo):
         contador_pedidos += 1
         if contador_pedidos >= pedidos_por_pagina:
             p.showPage()
-            p.setFont("Helvetica", 10)
+            p.setFont("Helvetica", 10)  # Asegurarse de que se vuelve a 10 en la nueva página
             y = 750
             contador_pedidos = 0
 
