@@ -521,15 +521,26 @@ def acerca_de_nosotros(request):
     return render(request, 'acerca_de_nosotros.html')
 
 ### reportes ####
+from datetime import datetime, timedelta
+import pytz
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+
+# Asegúrate de definir la zona horaria de Santiago de Chile
+santiago_tz = pytz.timezone('America/Santiago')
+
 def imprimir_reporte_diario(request):
     if request.method == 'POST':
-        hoy = datetime.now().date()
+        # Obtener la fecha actual en Santiago
+        hoy = datetime.now(santiago_tz).date()
         pedidos = Pedido.objects.filter(fecha_pedido__date=hoy)
         return generar_pdf(pedidos, 'reporte_diario.pdf')
 
 def imprimir_reporte_semanal(request):
     if request.method == 'POST':
-        hace_una_semana = datetime.now().date() - timedelta(days=7)
+        # Obtener la fecha de hace una semana en Santiago
+        hace_una_semana = datetime.now(santiago_tz).date() - timedelta(days=7)
         pedidos = Pedido.objects.filter(fecha_pedido__date__gte=hace_una_semana)
         return generar_pdf(pedidos, 'reporte_semanal.pdf')
 
@@ -539,8 +550,7 @@ def generar_pdf(pedidos, nombre_archivo):
 
     p = canvas.Canvas(response, pagesize=letter)
 
-    
-    p.setFont("Helvetica", 16) # Letra n°16
+    p.setFont("Helvetica", 16)  # Letra n°16
     p.drawString(100, 750, "Reporte de Pedidos")
 
     p.setFont("Helvetica", 10)  # Letra n° 10
@@ -551,7 +561,7 @@ def generar_pdf(pedidos, nombre_archivo):
 
     for pedido in pedidos:
         total_pedido = sum(detalle.subtotal for detalle in pedido.detalles.all())
-               
+        
         p.drawString(100, y, f"ID del Pedido: {pedido.id}")
         y -= 15
         p.drawString(100, y, f"Dirección de Envío: {pedido.direccion_envio}")

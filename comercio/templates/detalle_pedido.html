@@ -6,24 +6,30 @@
     <title>Detalle del Pedido #{{ pedido.id }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             background-color: #f4f4f4;
             color: #333;
             margin: 0;
             padding: 20px;
+            line-height: 1.5;
         }
         h1 {
             color: #2c3e50;
             text-align: center;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+            text-transform: uppercase;
         }
         h2 {
             color: #34495e;
+            margin-top: 30px;
+            font-size: 1.8em;
         }
         .pedido-info {
-            background: #fff;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
         .detalles {
@@ -32,22 +38,28 @@
         }
         .detalles li {
             background: #e7e9eb;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 4px;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid #2980b9;
+            transition: background-color 0.3s;
+        }
+        .detalles li:hover {
+            background: #d1d1d1;
         }
         .total {
             font-weight: bold;
-            font-size: 1.2em;
+            font-size: 1.5em;
             margin-top: 15px;
+            color: #000; /* Total en negro */
         }
         .links {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 30px;
         }
         .btn {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 20px;
             margin: 5px;
             font-size: 16px;
             color: #fff;
@@ -55,11 +67,12 @@
             border: none;
             border-radius: 5px;
             text-decoration: none;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.2s;
             cursor: pointer;
         }
         .btn:hover {
             background-color: #1a5f8a;
+            transform: translateY(-2px);
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

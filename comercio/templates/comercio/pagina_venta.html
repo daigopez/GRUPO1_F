@@ -10,6 +10,7 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            background-attachment: fixed;
             margin: 0;
             font-family: Arial, sans-serif;
             min-height: 100vh;
@@ -127,7 +128,6 @@
             display: flex;
             justify-content: space-between;
         }
-
         .btn-realizar-compra {
             background-color: #007BFF;
             color: white;
@@ -141,16 +141,13 @@
             transition: background-color 0.3s, transform 0.3s;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-
         .btn-realizar-compra:hover {
             background-color: #0056b3;
             transform: translateY(-2px);
         }
-
         .btn-realizar-compra:active {
             transform: translateY(0);
         }
-
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
@@ -191,11 +188,8 @@
                         </form>
 
                         <div class="encuesta-form">
-
                             <form method="POST" action="{% url 'pagina_venta' %}">
-
                             </form>
-
                             {% if plato.encuesta %}
                                 <a class="edit-link" href="{% url 'editar_encuesta' plato.encuesta.id %}">Editar Encuesta</a>
                             {% endif %}
